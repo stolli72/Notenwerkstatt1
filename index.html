@@ -773,6 +773,8 @@ body.modal{overflow:hidden}
   .place-svg{max-height:26vh!important}
   #board:has(.drop) .kbd-svg,#board:has(.kslot) .kbd-svg{max-height:30vh}
 }
+.si-mode{display:block;width:100%;margin-top:14px;min-height:56px;font-size:19px;background:#fff6dc;border:2px solid #f2c66b;color:#7a5a12;box-shadow:0 4px 0 #e6b85a}
+.si-mode:hover{background:#ffefc2}
 </style>
 </head>
 <body>
@@ -828,17 +830,19 @@ body.modal{overflow:hidden}
     <div class="signin card" role="dialog" aria-modal="true" aria-labelledby="si-h">
       <div class="si-badge" aria-hidden="true">📜</div>
       <h2 id="si-h">Bevor es losgeht …</h2>
-      <p class="si-lead">Trag deinen Vornamen und deine Klasse ein. Damit bekommst du deinen persönlichen Nachweis.</p>
+      <p class="si-lead" id="si-lead">Trag deinen Vornamen und deine Klasse ein.</p>
       <label class="pf-label" for="si-first">Vorname</label>
       <input id="si-first" class="pf-input big" maxlength="20" placeholder="z. B. Lena" autocomplete="off" autocapitalize="words">
       <p class="si-err" id="si-first-err"></p>
       <label class="pf-label" for="si-class">Klasse</label>
       <input id="si-class" class="pf-input big cls" maxlength="3" placeholder="z. B. 3b" autocomplete="off" autocapitalize="none">
       <p class="si-err" id="si-class-err"></p>
-      <details class="si-more" id="si-more"><summary>Ich habe schon einen Fortschrittscode</summary>
-        <input id="si-code" class="pf-input code" maxlength="10" placeholder="z. B. K7Q-4MX" autocomplete="off">
-        <p class="si-err" id="si-code-err"></p></details>
+      <div id="si-codebox" hidden>
+        <label class="pf-label" for="si-code">Zugangscode</label>
+        <input id="si-code" class="pf-input big code" maxlength="10" placeholder="z. B. K7Q-4MX" autocomplete="off" autocapitalize="characters">
+        <p class="si-err" id="si-code-err"></p></div>
       <div class="controls"><button class="btn ghost" id="si-cancel" hidden>Abbrechen</button><button class="btn go" id="si-go" disabled>Los geht’s ▶</button></div>
+      <button class="btn si-mode" id="si-mode">🔑 Ich habe schon einen Zugangscode</button>
     </div>
   </div>
 
@@ -846,8 +850,8 @@ body.modal{overflow:hidden}
     <div class="signin card" role="dialog" aria-modal="true" aria-labelledby="hf-h">
       <div class="si-badge" aria-hidden="true">📒</div>
       <h2 id="hf-h">Hallo!</h2>
-      <p class="si-lead">Bevor du startest: Steht dein <strong>Name</strong> und dein <strong>Fortschrittscode</strong> sicher in deinem Heft?</p>
-      <div class="hf-box"><span class="pf-label">Name</span><b id="hf-name">–</b><span class="pf-label">Fortschrittscode</span><b class="pf-code" id="hf-code">–</b></div>
+      <p class="si-lead">Bevor du startest: Steht dein <strong>Name</strong> und dein <strong>Zugangscode</strong> sicher in deinem Heft?</p>
+      <div class="hf-box"><span class="pf-label">Name</span><b id="hf-name">–</b><span class="pf-label">Zugangscode</span><b class="pf-code" id="hf-code">–</b></div>
       <label class="hf-check"><input type="checkbox" id="hf-ok"> <span>Ja, ich habe Name und Code ins Heft geschrieben.</span></label>
       <div class="controls"><button class="btn ghost" id="hf-other">Das bin nicht ich</button><button class="btn go" id="hf-go" disabled>Los geht’s ▶</button></div>
     </div>
@@ -857,12 +861,12 @@ body.modal{overflow:hidden}
   <section id="proof" hidden>
     <div class="toprow"><button class="homebtn" id="proof-home">🏠 Übersicht</button></div>
     <h1>📜 Mein Nachweis</h1>
-    <p class="lead">Deine geschafften Levels und dein Fortschrittscode.</p>
+    <p class="lead">Deine geschafften Levels und dein Zugangscode.</p>
     <div class="card proof-card">
       <div class="pf-who"><span class="pf-label">Angemeldet als</span><b id="pf-who">–</b><button class="btn ghost small" id="pf-change">Name ändern</button></div>
       <div class="pf-sum" id="pf-sum"></div>
       <div class="pf-code-box">
-        <span class="pf-label">Dein Fortschrittscode</span>
+        <span class="pf-label">Dein Zugangscode</span>
         <div class="pf-code" id="pf-code">–</div>
         <div class="controls"><button class="btn brass" id="pf-copy">Code kopieren</button></div>
         <p class="pf-hint">Schreib den Code ins Heft oder schick ihn deiner Lehrkraft. Er passt nur zu deinem Namen.</p>
@@ -1681,33 +1685,39 @@ function renderHome(again){if(!again)WBOX={};
   $('coverstaff').innerHTML=s+'</svg>';
 })();
 
-/* ================= Nachweis / Fortschrittscode ================= */
+/* ================= Nachweis / Zugangscode ================= */
 const B32='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-const PL=()=>LEVELS.map((L,i)=>[L,i]).filter(([L])=>!L.game).map(([L,i])=>[i,allEx(i).length]);  // Levels und Tests
-const cntOf=([i,n])=>n?allEx(i).filter(([st,k])=>exDone(i,st,k)).length:(levelDone(i)?1:0);
+/* Zugangscode für das ganze Abenteuer: alle Levels, Übungen und Tests (Spiele zählen nicht) */
+const PL=()=>LEVELS.map((L,i)=>[i,allEx(i).length,false,L]).filter(e=>!e[3].game);
+const RADIX=([,n,g])=>g?2**n:Math.max(n,1)+1;
+const cntOf=([i,n,g])=>g?allEx(i).reduce((m,[st,k],b)=>m|(exDone(i,st,k)?1<<b:0),0):n?allEx(i).filter(([st,k])=>exDone(i,st,k)).length:(levelDone(i)?1:0);
+const bits=x=>{let c=0;while(x){c+=x&1;x>>=1}return c};
+const gotOf=(e,c)=>e[2]?bits(c):c;
 function hashStr(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 const normName=n=>n.trim().toLowerCase().replace(/\s+/g,' ');
-const SPACE=()=>PL().reduce((m,[,n])=>m*(Math.max(n,1)+1),1);
-const salt=name=>hashStr(normName(name)+'|notenwerkstatt-v4');
+const SPACE=()=>PL().reduce((m,e)=>m*BigInt(RADIX(e)),1n);
+const CL=4,MOD=32n**BigInt(CL);                       // 4 Zeichen Levelstand + 2 Zeichen Prüfung
+const salt=name=>BigInt(hashStr(normName(name)+'|nw-v5'))*7919n+BigInt(hashStr('|'+normName(name)));
+const chk=(name,s)=>{const h=hashStr(normName(name)+'|'+s+'|chk5');return B32[h&31]+B32[(h>>5)&31]};
 function makeCode(name,cnt){
-  let v=0;PL().forEach(([,n],k)=>{v=v*(Math.max(n,1)+1)+cnt[k]});
-  const M=32**4;v=(v+salt(name))%M;let s='';for(let k=0;k<4;k++){s=B32[v%32]+s;v=Math.floor(v/32)}
-  const h=hashStr(normName(name)+'|'+s+'|chk');return s.slice(0,3)+'-'+s[3]+B32[h&31]+B32[(h>>5)&31];
+  let v=0n;PL().forEach((e,k)=>{v=v*BigInt(RADIX(e))+BigInt(cnt[k]||0)});
+  v=(v+salt(name))%MOD;let s='';for(let k=0;k<CL;k++){s=B32[Number(v%32n)]+s;v/=32n}
+  const c=s+chk(name,s);return c.slice(0,3)+'-'+c.slice(3);
 }
 function readCode(name,code){
-  const raw=code.toUpperCase().replace(/[^A-Z0-9]/g,'');if(raw.length!==6)return null;
-  const s=raw.slice(0,4),h=hashStr(normName(name)+'|'+s+'|chk');if(raw.slice(4)!==B32[h&31]+B32[(h>>5)&31])return null;
-  let v=0;for(const c of s){const x=B32.indexOf(c);if(x<0)return null;v=v*32+x}
-  const M=32**4;v=((v-salt(name))%M+M)%M;if(v>=SPACE())return null;
-  const pl=PL(),cnt=[];for(let k=pl.length-1;k>=0;k--){const r=Math.max(pl[k][1],1)+1;cnt[k]=v%r;v=Math.floor(v/r)}
+  const raw=code.toUpperCase().replace(/[^A-Z0-9]/g,'');if(raw.length!==CL+2)return null;
+  const s=raw.slice(0,CL);if(raw.slice(CL)!==chk(name,s))return null;
+  let v=0n;for(const c of s){const x=B32.indexOf(c);if(x<0)return null;v=v*32n+BigInt(x)}
+  v=((v-salt(name))%MOD+MOD)%MOD;if(v>=SPACE())return null;
+  const pl=PL(),cnt=[];for(let k=pl.length-1;k>=0;k--){const r=BigInt(RADIX(pl[k]));cnt[k]=Number(v%r);v/=r}
   return cnt;
 }
 function proofList(cnt){
-  return PL().map(([i,n],k)=>{const L=LEVELS[i],tot=Math.max(n,1),got=cnt[k],full=got===tot;
+  return PL().map((e,k)=>{const [i,n]=e,L=LEVELS[i],tot=Math.max(n,1),got=gotOf(e,cnt[k]),full=got===tot;
     return `<div class="pf-row${full?' ok':''}"><span class="pf-ic">${full?'✅':got?'🟡':'⬜'}</span><span class="pf-t"><b>${tagOf(L)}</b> ${L.title}</span><span class="pf-st">${n?'★'.repeat(got)+'☆'.repeat(n-got):''}</span></div>`}).join('');
 }
 const myCnt=()=>PL().map(cntOf);
-const sumTxt=cnt=>{const pl=PL(),ex=pl.reduce((a,[,n])=>a+n,0),got=pl.reduce((a,[,n],k)=>a+(n?cnt[k]:0),0);return[got,ex]};
+const sumTxt=cnt=>{const pl=PL();let ex=0,got=0;pl.forEach((e,k)=>{if(e[1]){ex+=e[1];got+=gotOf(e,cnt[k])}});return[got,ex]};
 let NAME='';try{NAME=localStorage.getItem('violin-name')||''}catch(_){}
 const RX_FIRST=/^[A-ZÄÖÜ][a-zäöüß]+(-[A-ZÄÖÜ][a-zäöüß]+)?$/,RX_CLASS=/^[1-9][0-9]?[a-z]$/;
 const firstOk=v=>RX_FIRST.test(v.trim())&&v.trim().length>=2,classOk=v=>RX_CLASS.test(v.trim());
@@ -1728,29 +1738,37 @@ let SI_AFTER=null;
 function openSignin(after){
   SI_AFTER=after||null;const m=(NAME||'').trim().split(' ');
   $('si-first').value=nameOk(NAME)?m[0]:'';$('si-class').value=nameOk(NAME)?m[1]:'';$('si-code').value='';
-  $('si-cancel').hidden=!nameOk(NAME);$('si-h').textContent=nameOk(NAME)?'Name ändern':'Bevor es losgeht …';
+  $('si-cancel').hidden=!nameOk(NAME);setSiMode(false);if(nameOk(NAME))$('si-h').textContent='Name ändern';
   $('signin').hidden=false;document.body.classList.add('modal');siCheck();setTimeout(()=>$('si-first').focus(),50);
 }
 function closeSignin(){$('signin').hidden=true;document.body.classList.remove('modal')}
+let SI_CODE=false;
+function setSiMode(code){SI_CODE=code;$('si-codebox').hidden=!code;
+  $('si-h').textContent=code?'Willkommen zurück!':'Bevor es losgeht …';
+  $('si-lead').textContent=code?'Trag deinen Vornamen, deine Klasse und deinen Zugangscode ein.':'Trag deinen Vornamen und deine Klasse ein.';
+  $('si-go').textContent=code?'Weiterspielen ▶':'Los geht’s ▶';$('si-mode').textContent=code?'✨ Ich bin neu hier':'🔑 Ich habe schon einen Zugangscode';
+  if(!code)$('si-code').value='';siCheck();}
+$('si-mode').onclick=()=>{setSiMode(!SI_CODE);(SI_CODE&&$('si-first').value?$('si-code'):$('si-first')).focus()};
 function siCheck(){
   const f=$('si-first').value,c=$('si-class').value;
   $('si-first-err').textContent=firstMsg(f);$('si-class-err').textContent=classMsg(c);
   $('si-first').classList.toggle('bad',!!firstMsg(f));$('si-class').classList.toggle('bad',!!classMsg(c));
   $('si-first').classList.toggle('good',firstOk(f));$('si-class').classList.toggle('good',classOk(c));
-  $('si-code-err').textContent='';$('si-go').disabled=!(firstOk(f)&&classOk(c));
+  $('si-code-err').textContent='';$('si-go').disabled=!(firstOk(f)&&classOk(c)&&(!SI_CODE||$('si-code').value.replace(/[^A-Za-z0-9]/g,'').length>=6));
 }
 ['si-first','si-class','si-code'].forEach(id=>$(id).oninput=siCheck);
 ['si-first','si-class'].forEach(id=>$(id).onkeydown=e=>{if(e.key==='Enter'&&!$('si-go').disabled)$('si-go').click()});
 $('si-cancel').onclick=closeSignin;
 $('si-go').onclick=()=>{
   const n=$('si-first').value.trim()+' '+$('si-class').value.trim();if(!nameOk(n))return;
-  const code=$('si-code').value.trim();
-  if(code){const cnt=readCode(n,code);if(!cnt){$('si-code-err').textContent='Dieser Code passt nicht zu diesem Namen. Prüfe Vorname, Klasse und Code.';return}applyCnt(cnt)}
+  const code=SI_CODE?$('si-code').value.trim():'';
+  if(code){const cnt=readCode(n,code);if(!cnt){$('si-code-err').textContent='Dieser Zugangscode passt nicht zu diesem Namen. Prüfe Vorname, Klasse und Code.';return}applyCnt(cnt)}
   const viaCode=!!code;
   const wasProof=!$('proof').hidden&&!$('si-cancel').hidden;setName(n);closeSignin();
   if(wasProof)renderProof();else if(viaCode){goHome();window.scrollTo({top:0})}else openHeft();   // mit gültigem Code: keine Heft-Frage
 };
-function applyCnt(cnt){PL().forEach(([i,n],k)=>{const c=cnt[k];if(!n){if(c)prog['seen-'+i]=true;return}allEx(i).slice(0,c).forEach(([st,e])=>prog[exKey(i,st,e)]=true)});saveProg()}
+function applyCnt(cnt){PL().forEach(([i,n,g],k)=>{const c=cnt[k];if(!n){if(c)prog['seen-'+i]=true;return}
+  allEx(i).forEach(([st,e],b)=>{if(g?(c>>b)&1:b<c)prog[exKey(i,st,e)]=true})});saveProg()}
 /* Vor dem Start: Name und Code im Heft? */
 function openHeft(){
   $('hf-h').textContent='Hallo '+NAME.split(' ')[0]+'!';$('hf-name').textContent=NAME.replace(' ',' · Klasse ');
