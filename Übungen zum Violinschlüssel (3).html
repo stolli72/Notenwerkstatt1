@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Übungen zum Violinschlüssel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f1e6;--paper-2:#efe7d6;--card:#fffdf8;--ink:#1c2333;--ink-soft:#4a5266;--muted:#857e70;
+  --line:#2a3142;--rule:#e2d8c4;--brass:#c4862a;--brass-soft:#f4e3c4;
+  --good:#2d7a4c;--good-soft:#d8efdf;--bad:#c13d36;--bad-soft:#f8dcd8;
+  --radius:22px;--shadow:0 1px 0 #fff inset,0 18px 40px -22px #3a2c1080;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:Nunito,system-ui,sans-serif;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(0deg,transparent 0 31px,#e9dfcb55 31px 32px);}
+main{max-width:980px;margin:auto;padding:22px 20px 40px}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+[hidden]{display:none!important}
+
+/* Header */
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:12px;font-family:Fredoka,Georgia,serif;font-weight:600;font-size:20px;letter-spacing:-.2px}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--ink);display:grid;place-items:center;box-shadow:0 6px 14px -6px #1c233390}
+.brand-mark svg{width:22px;height:22px}
+.head-right{display:flex;align-items:center;gap:10px}
+.chip{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--ink-soft);border:1px solid var(--rule);background:#fffaf0;border-radius:99px;padding:7px 12px}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--rule);background:#fffaf0;display:grid;place-items:center;cursor:pointer}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn[aria-pressed="false"] .wave{display:none}
+.icon-btn[aria-pressed="true"] .mute{display:none}
+
+/* Learn */
+.hero{display:grid;gap:8px;margin:18px 0 22px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brass)}
+h1{font-family:Fredoka,Georgia,serif;font-weight:800;font-size:clamp(28px,4.6vw,46px);line-height:1.08;letter-spacing:-1px;margin:6px 0 4px}
+h1 .ini{color:var(--brass)}
+.lead{font-size:20px;line-height:1.55;color:var(--ink-soft);max-width:640px;margin:4px 0 0}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow)}
+.staff-card{padding:26px 22px 18px;position:relative;overflow:hidden}
+.staff-card .tagline{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin:0 6px 6px}
+.staff-learn{display:block;width:100%;height:auto}
+.staff-learn .n{cursor:pointer}
+.staff-learn .n .head{transition:transform .2s}
+.staff-learn .n:hover .head,.staff-learn .n:focus .head{transform:scale(1.15)}
+.staff-learn .n:focus{outline:none}
+.staff-learn .n:focus-visible .ring{stroke:var(--brass);stroke-width:3}
+.pop{opacity:0;animation:pop .5s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.explain{display:flex;gap:14px;align-items:flex-start;margin:16px 6px 4px;padding:16px 18px;background:var(--paper);border-radius:14px;border:1px dashed var(--rule)}
+.explain .badge{flex:none;width:34px;height:34px;border-radius:10px;background:var(--brass-soft);color:#8a5a12;display:grid;place-items:center;font-weight:800;font-family:Fredoka,serif}
+.explain p{margin:0;line-height:1.6;color:var(--ink-soft);font-size:17px}
+.explain strong{color:var(--ink)}
+.letters{font-family:Fredoka,serif;font-weight:800;letter-spacing:2px;color:var(--ink)}
+
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.level{text-align:left;cursor:pointer;padding:22px 22px 20px;display:grid;gap:6px;transition:transform .15s,box-shadow .15s;border:1px solid var(--rule)}
+.level:hover{transform:translateY(-3px);box-shadow:0 24px 44px -24px #3a2c10a0}
+.level .num{font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}
+.level .ttl{font-family:Fredoka,serif;font-weight:600;font-size:28px;letter-spacing:-.5px}
+.level .desc{color:var(--ink-soft);line-height:1.5;font-size:15px}
+.level .go{margin-top:8px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
+.level.primary{background:var(--ink);color:#fbf6ea;border-color:var(--ink)}
+.level.primary .num{color:#d9b679}.level.primary .desc{color:#c9cbd3}
+.foot{font-size:13px;text-align:center;color:var(--muted);margin:28px 0 0}
+
+/* Game */
+.gamebar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 14px}
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;color:var(--ink-soft);font-weight:600;padding:8px 4px;border-radius:8px}
+.lvl-pill{font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;padding:7px 12px;border-radius:99px;background:var(--ink);color:#fbf6ea}
+.game-title{font-family:Fredoka,serif;font-weight:600;font-size:clamp(22px,3.4vw,30px);letter-spacing:-.4px;margin:0 0 6px}
+.game-rule{margin:0 0 16px;color:var(--ink-soft);font-size:17px;line-height:1.5}
+.board{padding:22px;display:grid;gap:16px}
+.status{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.round{font-weight:700;font-size:15px}
+.round:focus{outline:none}.round span{color:var(--muted);font-weight:500}
+.segs{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;flex:1;min-width:180px;max-width:360px}
+.seg{height:8px;border-radius:9px;background:var(--paper-2);transition:background .3s}
+.seg.cur{background:var(--brass-soft);box-shadow:inset 0 0 0 2px var(--brass)}
+.seg.ok{background:var(--good)}.seg.no{background:var(--bad)}
+.tally{font-weight:600;color:var(--ink-soft);font-size:15px}
+
+.score{display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap}
+.score-btn{display:inline-flex;align-items:baseline;gap:10px;padding:10px 22px;border-radius:16px;border:2px solid var(--rule);background:var(--paper);cursor:pointer;transition:background .25s,color .25s,border-color .25s,transform .25s}
+.score-btn .cap{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.score-btn .val{font-family:Fredoka,serif;font-weight:800;font-size:40px;line-height:1}
+.score-btn.up{background:var(--good);border-color:var(--good);color:#fff;transform:scale(1.05)}
+.score-btn.down{background:var(--bad);border-color:var(--bad);color:#fff;transform:scale(1.05)}
+.score-btn.up .cap,.score-btn.down .cap{color:#ffffffc0}
+.score-rule{font-size:13px;color:var(--ink-soft);margin:0}
+
+.stage{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px;align-items:center}
+.staff-box{background:#fff;border:1px solid var(--rule);border-radius:16px;padding:10px 8px}
+.staff-game{display:block;width:100%;height:auto}
+.staff-game .hl{stroke:var(--brass);stroke-width:5;opacity:.0;transition:opacity .3s}
+.staff-game.reveal .hl{opacity:.55}
+.staff-game .lbl{font:700 15px Nunito,sans-serif;fill:var(--brass);opacity:0;transition:opacity .3s}
+.staff-game.reveal .lbl{opacity:1}
+.note-in{animation:drop .45s cubic-bezier(.2,1.3,.4,1)}
+@keyframes drop{from{transform:translateY(-18px);opacity:0}to{transform:none;opacity:1}}
+
+.answer-zone{display:grid;justify-items:center;gap:10px}
+.answer-zone .q{font-size:13px;color:var(--muted);font-weight:600}
+.slot{width:104px;height:104px;border-radius:20px;border:2.5px dashed #cdbf9f;background:var(--paper);font:800 54px Fredoka,Georgia,serif;color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.slot.empty::after{content:'?';color:#cdbf9f;font-size:44px}
+.slot.armed{border-color:var(--brass);background:var(--brass-soft)}
+.slot.over{border-style:solid;border-color:var(--brass);background:var(--brass-soft);transform:scale(1.06)}
+.slot.filled{border-style:solid;background:#fff}
+.slot.good{border:3px solid var(--good);background:var(--good-soft);color:var(--good);animation:yes .5s}
+.slot.bad{border:3px solid var(--bad);background:var(--bad-soft);color:var(--bad);animation:no .45s}
+@keyframes yes{40%{transform:scale(1.12)}}
+@keyframes no{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+
+.bank{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.tile{width:68px;height:72px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font:800 36px Fredoka,Georgia,serif;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 5px 0 var(--line);transition:transform .1s,box-shadow .1s,background .15s}
+.tile:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+.tile.selected{background:var(--brass);color:#fff;border-color:#8a5a12;box-shadow:0 5px 0 #8a5a12;transform:translateY(-4px)}
+.tile.right{background:var(--good-soft);border-color:var(--good);color:var(--good);box-shadow:0 5px 0 var(--good)}
+.tile:disabled{cursor:default;opacity:.55}
+.tile.right:disabled{opacity:1}
+.helper{text-align:center;font-size:13px;color:var(--muted);margin:0}
+.kbd{display:inline-block;border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:0 5px;font-size:12px;background:#fff}
+.feedback{min-height:28px;text-align:center;font-weight:700;font-size:17px;margin:0}
+.feedback.ok{color:var(--good)}.feedback.no{color:var(--bad)}
+
+.help{padding:18px;border-radius:16px;background:var(--brass-soft);border:1px solid #e8cf9f;display:grid;gap:10px}
+.help h2{margin:0;font-family:Fredoka,serif;font-weight:600;font-size:20px}
+.help p{margin:0;color:#5c4a2a;line-height:1.5}
+.help-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.timer{height:4px;border-radius:4px;background:#e8cf9f;overflow:hidden}
+.timer span{display:block;height:100%;background:var(--brass);width:100%}
+.timer.run span{animation:shrink linear forwards}
+@keyframes shrink{to{width:0}}
+.btn{border:0;border-radius:12px;padding:14px 22px;font-weight:700;font-size:15px;cursor:pointer;background:var(--ink);color:#fbf6ea;box-shadow:0 4px 0 #000}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #000}
+.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--rule);box-shadow:0 4px 0 var(--rule)}
+.btn.brass{background:var(--brass);box-shadow:0 4px 0 #8a5a12}
+
+.drag-ghost{position:fixed;z-index:20;pointer-events:none;width:68px;height:72px;border-radius:14px;background:var(--brass);color:#fff;display:grid;place-items:center;font:800 36px Fredoka,serif;box-shadow:0 16px 30px -8px #0006;transform:rotate(-4deg)}
+
+/* Result */
+.result{padding:38px 26px;text-align:center;display:grid;gap:10px;justify-items:center}
+.result .big{font-family:Fredoka,serif;font-weight:800;font-size:clamp(64px,13vw,104px);line-height:1;letter-spacing:-3px;color:var(--ink)}
+.result .big small{font-size:.4em;color:var(--muted);letter-spacing:0}
+.result .sub{color:var(--ink-soft);margin:0}
+.dots{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;justify-content:center}
+.dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--bad)}
+.dot.ok{background:var(--good)}
+.result h2{font-family:Fredoka,serif;font-weight:600;font-size:30px;margin:8px 0 0;letter-spacing:-.4px}
+.result p.txt{color:var(--ink-soft);max-width:440px;line-height:1.6;margin:0 0 12px}
+.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+@media (max-width:720px){
+  main{padding:16px 14px 32px}
+  .chip{display:none}
+  .levels{grid-template-columns:1fr}
+  .stage{grid-template-columns:1fr}
+  .board{padding:16px}
+  .slot{width:88px;height:88px;font-size:46px}
+  .tile{width:54px;height:62px;font-size:30px}
+  .bank{gap:9px}
+  .lead{font-size:17px}
+  .explain p{font-size:16px}
+  .game-rule{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.pop{opacity:1}}
+
+/* Aufgaben-Tabs */
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:5px;background:var(--paper-2);border:1px solid var(--rule);border-radius:16px;width:max-content;max-width:100%;margin:4px 0 6px}
+.tab{flex:none;white-space:nowrap;border:0;background:none;border-radius:12px;padding:10px 16px;font-weight:700;font-size:14px;color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;gap:8px}
+.tab .no{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:var(--rule);color:var(--ink);font-size:12px}
+.tab[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 4px 12px -6px #3a2c1060}
+.tab[aria-selected="true"] .no{background:var(--brass);color:#fff}
+.explain + .explain{margin-top:10px}
+.scale{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.scale span{font:800 17px Fredoka,Georgia,serif;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;border:1.5px solid var(--rule);background:#fff;color:var(--ink-soft)}
+.scale span.sp{background:var(--brass);border-color:var(--brass);color:#fff}
+.levels.single{grid-template-columns:1fr}
+.staff-game .band{fill:var(--brass);opacity:0;transition:opacity .3s}
+.staff-game.reveal .band{opacity:.3}
+.legend{display:flex;gap:18px;justify-content:center;font-size:13px;color:var(--muted);margin:2px 0 4px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px;background:var(--ink)}
+.legend i.nw{background:var(--brass)}
+/* Notenreihen */
+.stage.rows{grid-template-columns:1fr}
+.rowwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--rule);border-radius:16px;padding:10px 10px 14px}
+.rowinner{min-width:700px}
+.staff-row{display:block;width:100%;height:auto}
+.staff-row .cur ellipse{fill:var(--brass)}
+.staff-row .done-ok ellipse{fill:var(--good)}
+.staff-row .done-no ellipse{fill:var(--bad)}
+.staff-row .cur-mark{fill:var(--brass-soft)}
+.boxes{display:grid;grid-template-columns:repeat(10,1fr);gap:0;padding-left:11%;padding-right:1%}
+.box{justify-self:center;width:min(58px,88%);aspect-ratio:1;border:2px solid #cdbf9f;border-radius:10px;display:grid;place-items:center;font:800 28px Fredoka,Georgia,serif;background:#fff;color:var(--ink);padding:0}
+.box.slot{width:min(58px,88%);height:auto;font-size:28px;border-radius:10px}
+.box.slot.empty::after{font-size:24px}
+.box.ok{border-color:var(--good);background:var(--good-soft);color:var(--good)}
+.box{position:relative}
+.box.no{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.box.no small{position:absolute;top:-9px;right:-7px;font:700 10px Nunito,sans-serif;background:var(--bad);color:#fff;border-radius:6px;padding:2px 5px;white-space:nowrap}
+.board>*,.stage>*{min-width:0}
+.dots.many .dot{width:20px;height:20px;font-size:9px}
+.brand{cursor:pointer;background:none;border:0;padding:4px;border-radius:12px;color:inherit}
+.crumb{display:inline-flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;color:var(--ink-soft);font-weight:600;padding:6px 2px;margin-bottom:6px}
+.gb-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.skip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);background:#fffaf0;color:var(--ink-soft);border-radius:99px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.skip:hover{background:var(--brass-soft);color:var(--ink);border-color:#e8cf9f}
+.skip svg{width:12px;height:12px}
+/* Titelseite */
+.cover{position:relative;overflow:hidden;padding:clamp(28px,5vw,52px) clamp(22px,5vw,52px) 26px;background:var(--ink);color:#fbf6ea;border:0;border-radius:28px;box-shadow:0 30px 60px -30px #1c2333a0}
+.cover .eyebrow{color:#d9b679}
+.cover h1{color:#fbf6ea;font-size:clamp(34px,6vw,64px);margin:10px 0 14px;max-width:760px}
+.cover h1 em{font-style:italic;font-weight:600;color:#e9b866}
+.cover .lead{color:#c9cbd3;max-width:620px;font-size:20px}
+.cover-staff{display:block;width:100%;height:auto;margin:22px 0 4px}
+.cover-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:13px;color:#c9cbd3}
+.cover-legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.cover-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:24px}
+.cover .btn.brass{font-size:16px;padding:16px 26px}
+.cover .meta{font-size:13px;color:#9ea2ad}
+.tasks{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:16px;margin-top:20px}
+.task{text-align:left;cursor:pointer;padding:22px;display:grid;gap:8px;align-content:start;transition:transform .15s,box-shadow .15s;position:relative}
+.task:hover{transform:translateY(-3px);box-shadow:0 24px 44px -24px #3a2c10a0}
+.task .top{display:flex;justify-content:space-between;align-items:center}
+.task .no{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:800 17px Fredoka,serif;color:#fff}
+.task .done{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--good);background:var(--good-soft);border-radius:99px;padding:4px 9px}
+.task{padding:18px!important}.task .ttl{font-family:Fredoka,serif;font-weight:600;font-size:20px;letter-spacing:-.4px;margin-top:4px}
+.task .ms{font-family:Fredoka,serif;font-style:italic;color:var(--ink-soft);font-size:16px;line-height:1.4}
+.task .nn{font:800 16px Fredoka,serif;letter-spacing:3px;color:var(--ink)}
+.task .what{font-size:14px;color:var(--muted);line-height:1.5}
+.task .go{font-weight:700;font-size:14px;margin-top:4px}
+@media (max-width:720px){.tasks{grid-template-columns:1fr}.cover-staff{margin-top:14px}}
+.tile.long{width:84px;font-size:26px}
+.drag-ghost.long{width:84px;font-size:26px}
+.slot.long{font-size:38px}
+.box.long{font-size:19px}
+.sharp-rule{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 2px}
+.sharp-rule .pair{display:inline-flex;align-items:center;gap:0;background:#fff;border:1px solid var(--rule);border-radius:12px;padding:6px 12px;font:800 20px Fredoka,Georgia,serif}
+.sharp-rule .pair em{font-style:normal;color:var(--brass)}
+.sharp-rule .arr{color:var(--muted);font-weight:400;margin:0 8px}
+@media (max-width:720px){.tile.long{width:66px;font-size:21px}}
+.breakdown{display:grid;gap:8px;width:100%;max-width:440px;margin:6px 0 4px}
+.bd-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;font-size:14px;text-align:left}
+.bd-row .bar{grid-column:1/-1;height:8px;border-radius:8px;background:var(--paper-2);overflow:hidden}
+.bd-row .bar span{display:block;height:100%;border-radius:8px;background:var(--good)}
+.bd-row .bar span.mid{background:var(--brass)}.bd-row .bar span.low{background:var(--bad)}
+.bd-row b{font-weight:700}
+.test-card{width:100%;margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 24px;cursor:pointer;text-align:left;border:2px solid var(--ink);background:var(--card)}
+.test-card:hover{transform:translateY(-2px)}
+.test-card .ttl{font-family:Fredoka,serif;font-weight:600;font-size:24px}
+.test-card .what{font-size:14px;color:var(--ink-soft)}
+.test-card .go{font-weight:700}
+.areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:6px 6px 4px}
+.area{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:14px}
+.area b{display:block;font-family:Fredoka,serif;font-size:18px}
+.area span{font-size:13px;color:var(--muted)}
+.section-head{margin:40px 0 4px}
+.section-head h2{font-family:Fredoka,serif;font-weight:600;font-size:clamp(26px,4vw,34px);letter-spacing:-.5px;margin:4px 0 2px}
+.section-head p{margin:0;color:var(--ink-soft)}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:14px}
+.game-card{padding:22px;display:grid;gap:10px;align-content:start}
+.game-card .gico{width:100%;height:auto;display:block;border-radius:12px;background:#fff;border:1px solid var(--rule)}
+.game-card .ttl{font-family:Fredoka,serif;font-weight:600;font-size:24px;letter-spacing:-.4px}
+.game-card .desc{color:var(--ink-soft);line-height:1.5;font-size:15px;margin:0}
+.gbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.btn.small{padding:11px 16px;font-size:14px}
+.target{text-align:center;font-size:15px;font-weight:600;color:var(--muted)}
+.target b{display:block;font:800 clamp(40px,7vw,56px) Fredoka,Georgia,serif;color:var(--ink);line-height:1.1;margin-top:2px}
+.place-box{background:#fff;border:1px solid var(--rule);border-radius:16px;padding:6px 8px}
+.place-svg{display:block;width:100%;max-width:640px;margin:auto;height:auto;cursor:pointer;touch-action:none;border-radius:10px}
+.place-svg:focus{outline:none}.place-svg:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.word-svg{display:block;width:100%;max-width:760px;height:auto;margin:auto}
+.accs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.acc{border:1.5px solid var(--rule);background:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:15px;cursor:pointer}
+.acc[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.word-reveal{text-align:center;font:800 clamp(40px,9vw,68px) Fredoka,Georgia,serif;letter-spacing:8px;color:var(--good);animation:yes .5s}
+#wbank .tile{font-size:32px}
+.task.game{background:linear-gradient(180deg,#fffaf0,#fbf3e2);cursor:pointer}
+.task.game .gno{background:var(--brass)!important;border-radius:50%}
+.task .tagg{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#8a5a12;background:var(--brass-soft);border-radius:99px;padding:4px 9px}
+.task .tags{display:flex;gap:6px;align-items:center}
+.task .tags .done{padding:4px 8px}
+.task.game .gbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.task.game .btn.small{padding:9px 12px;font-size:13px}
+.bank.extra{margin-top:10px}
+.bank.extra .tile{background:var(--brass-soft)}
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:640px;width:100%;margin:auto}
+.mem-card{aspect-ratio:4/3.4;border:0;padding:0;background:none;cursor:pointer;perspective:700px}
+.mem-inner{position:relative;display:block;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.mem-card.up .mem-inner{transform:rotateY(180deg)}
+.mem-back,.mem-face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center}
+.mem-back{background:var(--ink);color:#e9b866;font-size:34px;box-shadow:0 5px 0 #0b0f18;background-image:repeating-linear-gradient(0deg,transparent 0 9px,#ffffff10 9px 10px)}
+.mem-face{transform:rotateY(180deg);background:#fff;border:2px solid var(--brass);box-shadow:0 5px 0 #e8cf9f}
+.mem-card.done .mem-face{border-color:var(--good);background:var(--good-soft);box-shadow:0 5px 0 #b6dcc2}
+.mem-card:disabled{cursor:default}
+.mem-svg{width:92%;height:auto}
+.mem-name{font:800 clamp(30px,6vw,44px) Fredoka,Georgia,serif;color:var(--ink)}
+.mem-name.long{font-size:clamp(24px,5vw,36px)}
+@media (max-width:720px){.mem-grid{grid-template-columns:repeat(3,1fr);gap:9px}.mem-card{aspect-ratio:1/1}}
+.staff-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.swipe-hint{display:none}
+@media (max-width:720px){
+  .staff-scroll .staff-learn{min-width:560px}
+  #helpstaff .staff-learn{min-width:440px}
+  .swipe-hint{display:block;text-align:center;font-size:13px;color:var(--muted);margin:2px 0 0}
+  .gamebar{flex-wrap:wrap;row-gap:8px}
+  .back,.crumb{white-space:nowrap;min-height:44px}
+  .skip{min-height:40px;padding:8px 14px;font-size:13px}
+  .lvl-pill{font-size:11px;letter-spacing:1px}
+  .staff-card .tagline{flex-direction:column;gap:2px;font-size:13px}
+  .staff-box{padding:6px 2px}
+  .word-svg{min-width:0}
+}
+@media (max-width:720px){.tab{padding:9px 11px;font-size:13px}.tab .lbl-long{display:none}}
+
+/* ---- Violinschlüssel: Ergänzungen ---- */
+.lvl-nav{display:flex;justify-content:space-between;gap:10px;margin-top:22px;flex-wrap:wrap}
+.task .lvtag{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;border-radius:99px;padding:4px 9px;color:#8a5a12;background:var(--brass-soft)}
+.task .lvtag.new{color:#fff;background:var(--bad)}
+.task .tags{display:flex;gap:6px;align-items:center}
+.task .tags .done{padding:4px 8px}
+.kbd-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 0 2px}
+.kbd-svg{display:block;margin:auto;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.kbd-svg .key{cursor:pointer;transition:fill .2s}
+.kbd-svg .key.white{fill:#fff;stroke:#2a3142;stroke-width:1.4}
+.kbd-svg .key.black{fill:#1c2333}
+.kbd-svg .key.white.hit{fill:#f4e3c4}.kbd-svg .key.black.hit{fill:#c4862a}
+.kbd-svg .key.white.ok{fill:#d8efdf}.kbd-svg .key.black.ok{fill:#2d7a4c}
+.kbd-svg .key.white.no{fill:#f8dcd8}.kbd-svg .key.black.no{fill:#c13d36}
+.kbd-svg .key.white.target{fill:#fffaf0}
+.kbd-svg .key.white.over{fill:#f4e3c4}
+.kbd-svg .key.dim{opacity:.55}
+.kbd-svg text{pointer-events:none}
+.kbd-svg .grp{fill:none;stroke:#c4862a;stroke-width:3;stroke-dasharray:6 5}
+.staff-learn .n{cursor:pointer}
+.learn-sec{margin-top:16px}
+.learn-sec h3{font-family:Fredoka,serif;font-weight:600;font-size:22px;margin:0 0 8px;letter-spacing:-.3px}
+.learn-sec h3 .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--brass);color:#fff;font:800 15px Fredoka,serif;margin-right:8px;vertical-align:2px}
+.pair-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.pair-row .pair{display:inline-flex;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:12px;padding:6px 12px;font:800 20px Fredoka,Georgia,serif}
+.pair-row .pair em{font-style:normal;color:var(--brass)}
+.pair-row .pair .arr{color:var(--muted);font-weight:400;margin:0 8px}
+.pair-row .pair.warn{border-color:var(--bad);background:#fff5f4}
+.task-note{text-align:center;font-size:15px;font-weight:600;color:var(--muted)}
+.task-note b{display:block;font:800 clamp(34px,6vw,48px) Fredoka,Georgia,serif;color:var(--ink);margin-top:2px}
+.ex-stage{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:center}
+.ex-stage.single{grid-template-columns:1fr}
+.staff-ex{display:block;width:100%;max-width:520px;margin:auto;height:auto}
+.staff-ex .lbl{font:700 16px Nunito,sans-serif;fill:var(--good)}
+.selected-hint{font-size:14px;color:var(--brass);font-weight:700;text-align:center;min-height:20px;margin:0}
+@media (max-width:720px){
+  .half-svg{min-width:600px}
+  .ex-stage{grid-template-columns:1fr}
+  .learn-sec h3{font-size:19px}
+  .lvl-nav .btn{flex:1}
+}
+
+.stepnav{display:flex;gap:8px;overflow-x:auto;margin:0 0 14px;padding-bottom:4px;scrollbar-width:none}
+.stp{flex:none;display:flex;align-items:center;gap:8px;border:1.5px solid var(--rule);background:#fffaf0;border-radius:12px;padding:8px 12px;font:600 13px Nunito,sans-serif;color:var(--ink-soft);cursor:pointer;min-height:44px}
+.stp b{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--rule);color:var(--ink);font:800 13px Fredoka,serif}
+.stp.on{background:var(--ink);color:#fbf6ea;border-color:var(--ink)}.stp.on b{background:var(--brass);color:#fff}
+.prompt-q{min-height:180px;display:grid;place-items:center;text-align:center;font:600 22px Nunito,sans-serif;color:var(--ink-soft);padding:20px}
+.prompt-q b{font:800 56px Fredoka,Georgia,serif;color:var(--ink);display:block}
+.merk-peek{background:#fffaf0;border:1px dashed var(--rule);border-radius:12px;padding:8px 12px}
+.merk-peek summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--ink-soft)}
+@media (max-width:720px){.stp span{display:none}.stp.on span{display:inline}}
+.half-svg{max-width:760px}
+.anim-cap{text-align:center;min-height:48px;font-weight:600;font-size:16px;color:var(--ink-soft);margin:8px 0 4px;line-height:1.45}
+
+.match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;max-width:720px;width:100%;margin:6px auto}
+.mrow{display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:1px solid var(--rule);border-radius:14px;padding:10px 14px}
+.mbase{font:800 32px Fredoka,Georgia,serif;color:var(--good);min-width:28px;text-align:center}
+.mop{font:700 18px Nunito,sans-serif;color:var(--muted);white-space:nowrap}
+.mslot{width:84px;height:56px;border-radius:12px;border:2.5px dashed #cdbf9f;background:var(--paper);font:800 26px Fredoka,Georgia,serif;color:#cdbf9f;cursor:pointer;transition:all .2s}
+.mslot.over{border-style:solid;border-color:var(--brass);background:var(--brass-soft)}
+.mslot.good{border:2.5px solid var(--good);background:var(--good-soft);color:var(--good)}
+.mslot.bad{border:2.5px solid var(--bad);background:var(--bad-soft);animation:no .45s}
+@media (max-width:720px){.match-grid{grid-template-columns:1fr 1fr}.mrow{padding:8px;gap:6px}.mbase{font-size:26px}.mop{font-size:14px}.mslot{width:64px;height:48px;font-size:21px}}
+
+.half-svg .n{cursor:pointer}.half-svg .n:focus{outline:none}.half-svg .n:focus-visible ellipse{stroke:#c4862a;stroke-width:3}
+
+.task .lvtag{font-size:12px;letter-spacing:1.2px;color:#fff;background:var(--ink);padding:5px 10px}
+.task.complete{border-color:#b6dcc2;background:linear-gradient(180deg,#fff,#f1f8f2)}
+.task .done{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--good);background:var(--good-soft);border-radius:99px;padding:4px 9px}
+.task .ttl{font-size:21px}
+.exprog{display:flex;gap:5px;margin-top:4px}
+.exprog i{width:14px;height:14px;border-radius:50%;background:var(--paper-2);border:1.5px solid var(--rule)}
+.exprog i.ok{background:var(--good);border-color:var(--good)}
+.tasks{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.level[disabled]{opacity:.5;cursor:not-allowed;transform:none!important}
+.level.passed{border-color:#b6dcc2}
+.stp[disabled]{opacity:.45;cursor:not-allowed}
+.stp.ok b{background:var(--good);color:#fff}
+.lock-hint{text-align:center;color:var(--muted);font-size:14px;margin:10px 0 0}
+.lvl-nav .btn[disabled]{opacity:.4;cursor:not-allowed}
+@media (max-width:720px){.tasks{grid-template-columns:1fr 1fr!important;gap:10px}.task{padding:14px!important}.task .ttl{font-size:17px}}
+.task .lvtag{white-space:nowrap}@media (max-width:720px){.task .dw{display:none}}
+
+.task .lvtag{font-size:12px}
+.tasks.single{grid-template-columns:1fr!important;margin-top:16px}
+.task.testcard{border:2px solid var(--ink);padding:20px 22px!important}
+.task.testcard .lvtag{background:var(--brass)}
+.task.locked{opacity:.55;cursor:not-allowed}
+.task.locked:hover{transform:none}
+.lockic{font-size:16px}
+.section-head{margin:34px 0 6px}
+.section-head h2{font-family:Fredoka,serif;font-weight:600;font-size:clamp(22px,3.4vw,28px);margin:0 0 4px}
+.section-head p{margin:0;color:var(--muted);font-size:15px}
+.mem-lab{position:absolute;bottom:4px;left:0;right:0;text-align:center;font:800 15px Fredoka,serif;color:var(--good)}
+.mem-face{position:relative}
+.mel-opts{display:grid;gap:10px;max-width:560px;width:100%;margin:auto}
+.mel-opt{display:flex;align-items:center;gap:10px;border:2px solid var(--rule);background:#fff;border-radius:14px;padding:6px 10px;cursor:pointer}
+.mel-opt:hover{border-color:var(--brass)}
+.mel-opt.right{border-color:var(--good);background:var(--good-soft)}
+.mel-opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.mel-tag{font:800 20px Fredoka,serif;color:var(--brass);width:22px}
+.mel-svg{flex:1;min-width:0;height:auto;max-height:120px}
+.accs{display:flex;justify-content:center;gap:8px}
+.acc{border:1.5px solid var(--rule);background:#fff;border-radius:12px;padding:10px 22px;font-weight:800;font-size:20px;cursor:pointer;min-width:64px}
+.acc[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.acc:first-child{font-size:15px}
+.lvl-pill{font-size:12px}
+@media (max-width:720px){.kbd-svg.tapkb{min-width:0}.lvl-pill{font-size:11.5px}}
+
+.task.testcard{grid-column:1/-1}
+.fly-wrap{background:#fffbe2;border:1px solid var(--rule);border-radius:16px;overflow:hidden}
+.fly-svg{display:block;width:100%;height:auto}
+.fly-kbd .kbd-svg{max-width:100%!important}
+.fly-kbd .key{touch-action:manipulation}
+.task:not(.testcard) .dw{display:none}
+.fly-kbd .kbd-svg{min-width:0!important;width:100%}
+
+.bk-top{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.bk-box{border-radius:16px;padding:10px 12px;text-align:center;background:#eef4ff;border:2px solid #cfe0ff}
+.bk-box b{display:block;font:700 13px Nunito,sans-serif;color:#2f6fe0}
+.bk-box span{font:800 32px Fredoka,Georgia,serif;color:#1c2333}
+.bk-box.pts{background:#f4efff;border-color:#d8c9ff}.bk-box.pts b{color:#6c4bd1}
+.bk-box.tim{background:#eafaf2;border-color:#bfe9d3}.bk-box.tim b{color:#1f9d63}
+.bk-box.tim.low{background:#fdecea;border-color:#f3b6b1}.bk-box.tim.low b,.bk-box.tim.low span{color:#c13d36}
+.bk-high{text-align:center;font-weight:700;color:#6c4bd1;font-size:14px}
+.bk-cards{display:flex;justify-content:center;gap:14px}
+.bk-card{width:84px;height:116px;border-radius:10px;border:2px solid #4a5266;display:grid;place-items:center;
+  background:radial-gradient(ellipse 70% 42% at 50% 50%,#fff 98%,transparent 100%),#ffc21a;transition:transform .5s,opacity .3s}
+.bk-card span{font:700 24px Nunito,sans-serif;color:#1c2333}
+.bk-card.cur{transform:translateY(-8px);box-shadow:0 10px 18px -8px #0006;border-color:#6c4bd1}
+.bk-card.beat{background:radial-gradient(ellipse 70% 42% at 50% 50%,#fff 98%,transparent 100%),#5bc28b;opacity:.75}
+.bk-card.flip{animation:bkflip .5s}
+@keyframes bkflip{50%{transform:rotateY(90deg) translateY(-8px)}}
+.bk-staff{max-width:440px;margin:auto;width:100%}
+.bk-ans{display:grid;gap:10px;max-width:440px;margin:auto;width:100%;justify-items:center}
+.bk-btn{width:100%;border:0;border-radius:999px;padding:14px;background:#173a5e;color:#fff;font:700 24px Nunito,sans-serif;cursor:pointer}
+.bk-btn.good{background:#2d7a4c}.bk-btn.bad{background:#c13d36;animation:no .45s}
+@media (max-width:720px){.bk-box span{font-size:24px}.bk-card{width:66px;height:92px}.bk-btn{font-size:20px;padding:11px}}
+
+.br-svg{display:block;width:100%;max-width:600px;margin:auto;height:auto}
+.br-svg .runner{transition:x .6s}
+.br-bar{display:block;height:6px;border-radius:6px;background:#2f6fd6;margin-top:4px;overflow:hidden}
+.br-bar i{display:block;height:100%;background:#f2b705;transition:width 1s linear}
+.br-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:460px;width:100%;margin:auto}
+.br-tile{aspect-ratio:1/1;border-radius:14px;border:2px solid #4a78c9;background:#f7f9ff;box-shadow:0 4px 0 #c7d6f2;cursor:pointer;display:grid;place-items:center;padding:6px}
+.br-tile span{font:600 32px Nunito,sans-serif;color:#1c2333}
+.br-tile.sel{border-color:var(--brass);background:var(--brass-soft);transform:translateY(-3px)}
+.br-tile.done{opacity:.25;border-color:var(--good);background:var(--good-soft)}
+.br-tile.bad{border-color:var(--bad);background:var(--bad-soft);animation:no .45s}
+@media (max-width:720px){.br-grid{gap:8px}.br-tile span{font-size:26px}}
+.br-svg .runner{transform-box:fill-box;transform-origin:center;transform:scaleX(-1)}
+.mel-svg{max-height:136px}
+
+/* ===== Abenteuer-Look ===== */
+:root{--paper:#eaf6ff;--paper-2:#d9ecfb;--card:#ffffff;--ink:#1f2a4d;--ink-soft:#44527a;--muted:#6f7ea3;--rule:#cfe0f2;--brass:#ff9f1c;--brass-soft:#ffe8c2;--good:#2fa35a;--good-soft:#dff5e6;--bad:#e5484d;--bad-soft:#ffe2e3;--radius:24px;--shadow:0 6px 0 #c4d7ee,0 14px 30px -18px #1f2a4d55}
+body{background:linear-gradient(180deg,#9fd8ff 0,#d7f0ff 320px,#effaf0 900px,#e5f6dc 100%);background-attachment:fixed;font-family:Nunito,system-ui,sans-serif}
+h1,h2,h3,.ttl,.game-title,.brand,.big,.tile,.slot,.letters{font-family:Fredoka,Nunito,sans-serif!important}
+h1{letter-spacing:-.3px;font-weight:700}
+.brand-mark{background:linear-gradient(135deg,#7b5cff,#4a3ad1);border-radius:14px}
+.card{border:2px solid var(--rule);box-shadow:var(--shadow)}
+.btn{border-radius:16px;font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:17px;background:#4a3ad1;box-shadow:0 5px 0 #2d2190}
+.btn.brass,.btn.go{background:#ff9f1c;box-shadow:0 5px 0 #c96f00;color:#fff}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--rule);box-shadow:0 5px 0 var(--rule)}
+.tile{border-radius:16px;border:2px solid #4a3ad1;box-shadow:0 5px 0 #4a3ad1;color:var(--ink)}
+.tile.selected{background:#ff9f1c;border-color:#c96f00;box-shadow:0 5px 0 #c96f00}
+.lvl-pill{background:#4a3ad1;border-radius:12px}
+.seg.ok{background:var(--good)}.seg.cur{box-shadow:inset 0 0 0 2px #ff9f1c;background:#ffe8c2}
+.eyebrow{color:#4a3ad1}
+h1 .ini,.ini{color:#ff7a00}
+.explain{background:#f4f9ff;border:2px dashed #cfe0f2}
+.explain .badge{background:#ffe8c2;color:#c96f00}
+.result .big{color:#4a3ad1}
+/* Startseite */
+.hero-adv{position:relative;border-radius:28px;padding:26px 26px 22px;color:#fff;overflow:hidden;
+  background:linear-gradient(160deg,#5b3df5 0%,#3a6df0 55%,#2bb3c9 100%);box-shadow:0 8px 0 #2d2190,0 24px 40px -20px #1f2a4d}
+.hero-adv::after{content:'';position:absolute;inset:auto -10% -40px -10%;height:90px;background:radial-gradient(ellipse at 30% 0,#6fd17a 40%,transparent 42%),radial-gradient(ellipse at 75% 10%,#4fbf63 38%,transparent 40%);opacity:.9}
+.hero-adv h1{color:#fff;font-size:clamp(30px,5.4vw,50px);margin:10px 0 8px}
+.hero-adv h1 em{font-style:normal;color:#ffd23f}
+.hero-adv .lead{color:#e7ecff;max-width:600px;font-size:18px}
+.hero-adv #coverstaff{position:relative;z-index:1}
+.hero-adv .btn.go{position:relative;z-index:2;font-size:20px;padding:15px 26px;margin-top:6px}
+.hud{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.hud-star{background:#ffffff26;border-radius:999px;padding:6px 14px;font:700 16px Fredoka,sans-serif}
+.hud-star b{color:#ffd23f}
+.hud-bar{flex:1;max-width:260px;height:12px;border-radius:12px;background:#ffffff33;overflow:hidden}
+.hud-bar i{display:block;height:100%;background:linear-gradient(90deg,#ffd23f,#ff9f1c);border-radius:12px;transition:width .6s}
+.world{margin-top:26px;padding:18px 18px 22px;border-radius:26px;background:#ffffffcc;border:2px solid #cfe0f2;box-shadow:var(--shadow)}
+.world h2{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:clamp(21px,3.2vw,26px);color:var(--ink)}
+.world h2 span{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#e9f2ff;font-size:24px}
+.world.w1{background:linear-gradient(180deg,#f2fff1,#ffffffcc)}.world.w1 h2 span{background:#d8f5d4}
+.world.w2{background:linear-gradient(180deg,#f3f0ff,#ffffffcc)}.world.w2 h2 span{background:#e4dcff}
+.world.gate{background:linear-gradient(180deg,#fff6e6,#ffffffcc)}.world.gate h2 span{background:#ffe8c2}
+.world.play{background:linear-gradient(180deg,#e9f8ff,#ffffffcc)}
+.wnote{margin:0 0 6px;color:var(--muted);font-size:14px}
+.trail{position:relative;display:flex;flex-wrap:wrap;gap:18px 10px;justify-content:flex-start;padding-top:14px}
+.trail::before{content:'';position:absolute;left:30px;right:30px;top:52px;border-top:5px dotted #b9cbe4;z-index:0}
+.node{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;width:118px;background:none;border:0;cursor:pointer;padding:0;text-align:center}
+.node:nth-child(even){margin-top:26px}
+.node .bub{display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:#fff;border:4px solid #4a3ad1;box-shadow:0 6px 0 #2d2190;font:700 28px Fredoka,sans-serif;color:#4a3ad1;transition:transform .15s}
+.node:hover .bub{transform:translateY(-3px) scale(1.04)}
+.node.done .bub{background:#2fa35a;border-color:#1f7a41;box-shadow:0 6px 0 #1f7a41;color:#fff}
+.node.cur .bub{background:#ff9f1c;border-color:#c96f00;box-shadow:0 6px 0 #c96f00;color:#fff;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.node.locked{cursor:not-allowed}.node.locked .bub{background:#e8edf5;border-color:#b7c3d6;box-shadow:0 6px 0 #b7c3d6;font-size:24px}
+.node.gm .bub{border-radius:20px;border-color:#2bb3c9;box-shadow:0 6px 0 #1b8798;color:#1b8798}
+.node.gm.done .bub{color:#fff}
+.nlab{font:600 14px/1.25 Nunito,sans-serif;color:var(--ink)}
+.nlab b{display:block;font:700 11px Nunito,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.node.locked .nlab{color:#9aa6bb}
+.stars{font-size:14px;letter-spacing:1px;color:#ffb000}
+.here{position:absolute;top:-30px;white-space:nowrap;background:#ff9f1c;color:#fff;font:700 12px Fredoka,sans-serif;padding:4px 10px;border-radius:999px;box-shadow:0 3px 0 #c96f00}
+.world.gate .trail::before,.world.gate.gold .trail::before{display:none}
+.fly-svg .wave{animation:wv 2.4s ease-in-out infinite}.fly-svg .w2{animation-delay:-1.2s}
+@keyframes wv{50%{transform:translateX(8px)}}
+.fly-svg .splash{animation:spl .8s ease-out forwards}
+@keyframes spl{from{opacity:1;transform:scale(.4)}to{opacity:0;transform:scale(1.6)}}
+.fly-svg .splash{transform-box:fill-box;transform-origin:center}
+.fly-wrap{background:#bfe6ff;border:2px solid #cfe0f2}
+@media (max-width:720px){
+  .node{width:96px}.node .bub{width:60px;height:60px;font-size:24px}
+  .trail::before{top:44px}
+  .hero-adv{padding:20px 18px 18px}.hero-adv .lead{font-size:16px}
+}
+.trail{padding-top:30px}.trail::before{top:68px}.here{top:-26px}@media (max-width:720px){.trail::before{top:60px}}
+.homebtn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 20px;border-radius:16px;border:2px solid #4a3ad1;background:#fff;color:#4a3ad1;font:600 17px Fredoka,Nunito,sans-serif;box-shadow:0 4px 0 #4a3ad1;cursor:pointer;margin-bottom:8px}.homebtn:active{transform:translateY(2px);box-shadow:0 2px 0 #4a3ad1}
+.gamebar .homebtn{margin:0}
+.merk-pop{background:#fff8e6;border:2px solid #ffc861;border-radius:18px;padding:10px 14px;text-align:center;animation:pop .35s}.merk-pop b{display:block;font:700 15px Fredoka,sans-serif;color:#c96f00;margin-bottom:6px}.merk-pop p{margin:6px 0 0;font-size:14px;color:var(--ink-soft)}.merk-pop .kbd-svg{max-width:520px;margin:auto}
+.stars{font-size:24px;letter-spacing:2px;line-height:1;text-shadow:0 2px 0 #c96f0055}.hud-star{font-size:20px;padding:8px 16px}
+.lvl-nav{justify-content:space-between}.lvl-nav #l-next{margin-left:auto}
+@media (max-width:720px){.stars{font-size:20px}}
+
+.scene{position:relative;margin-top:8px;border-radius:18px;overflow:visible}
+.scene>svg{position:absolute;inset:0;display:block;border-radius:18px}
+.spot{position:absolute;transform:translate(-50%,-40px);z-index:2}
+.spot .node{margin-top:0!important;width:120px}
+.spot .nlab{background:#ffffffe6;border-radius:12px;padding:3px 8px;box-shadow:0 2px 0 #0000001a}
+.scene.gate .node .bub,.scene.castle .node .bub{width:84px;height:84px;font-size:36px}
+.scene.castle .node .bub{border-color:#c99a00;box-shadow:0 6px 0 #a07800}
+.scene .spark{animation:tw 2.2s ease-in-out infinite}.scene .spark:nth-of-type(2n){animation-delay:-1.1s}
+@keyframes tw{50%{opacity:.25}}
+.world.gate,.world.gate.gold{padding-bottom:16px}
+@media (max-width:720px){.spot .node{width:104px}.world{padding:14px 10px 16px}}
+
+/* Kopfzeile nur auf der Startseite */
+body:not([data-view="home"]) header{display:none}
+body:not([data-view="home"]) main{padding-top:16px}
+.toprow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.toprow .homebtn{margin:0}.toprow .snd{margin-left:auto}
+.gb-right .snd{width:48px;height:48px}
+/* Weltfarben der Stationen */
+.world.w1 .node .bub{border-color:#2f8f46;color:#2f8f46;box-shadow:0 6px 0 #1f6b33}
+.world.w2 .node .bub{border-color:#7b4fd8;color:#7b4fd8;box-shadow:0 6px 0 #5532a8}
+.world.gate .node .bub{border-color:#8a6a4a;box-shadow:0 6px 0 #5e4630}
+.world.castle .node .bub,.world.gold .node .bub{border-color:#c99a00;box-shadow:0 6px 0 #a07800}
+.world.play .node .bub{border-color:#e5484d;color:#e5484d;box-shadow:0 6px 0 #b02e33;border-radius:20px}
+.world.w1 .node.done .bub{background:#2f8f46;color:#fff}
+.world.w2 .node.done .bub{background:#7b4fd8;color:#fff}
+.world.play .node.done .bub{background:#e5484d;color:#fff}
+.world.gate .node.done .bub{background:#8a6a4a;color:#fff}
+.world.castle .node.done .bub,.world.gold .node.done .bub{background:#c99a00;color:#fff}
+.world .node.cur .bub{background:#ff9f1c;border-color:#c96f00;box-shadow:0 6px 0 #c96f00;color:#fff}
+.world .node.locked .bub{background:#e8edf5;border-color:#b7c3d6;box-shadow:0 6px 0 #b7c3d6;color:#9aa6bb}
+.world.play{background:linear-gradient(180deg,#fff0f6,#ffffffcc)}.world.play h2 span{background:#ffd9e6}
+.scene .balloon{animation:bob 3s ease-in-out infinite}.scene .balloon:nth-of-type(2n){animation-delay:-1.5s}
+@keyframes bob{50%{transform:translateY(-8px)}}
+/* Level-Seiten: Weltfarbe als Pastell-Hintergrund */
+body[data-world="w1"]{background:linear-gradient(180deg,#dff5d8 0,#f1fbec 60%,#e6f7df 100%)}
+body[data-world="w2"]{background:linear-gradient(180deg,#e7e0ff 0,#f4f1ff 60%,#ebe6ff 100%)}
+body[data-world="gate"]{background:linear-gradient(180deg,#ffe9d2 0,#fff6ec 60%,#ffeedd 100%)}
+body[data-world="gold"]{background:linear-gradient(180deg,#fff1bf 0,#fffbea 60%,#fff4cc 100%)}
+body[data-world="play"]{background:linear-gradient(180deg,#ffe0ec 0,#fff3f8 60%,#ffe7f0 100%)}
+body[data-world]{background-attachment:fixed}
+
+/* Szenen füllen die ganze Welt-Karte */
+.world{position:relative;padding:0!important;overflow:hidden}
+.world h2{position:absolute;z-index:3;top:12px;left:12px;margin:0;background:#ffffffe0;padding:6px 16px 6px 6px;border-radius:16px;box-shadow:0 3px 0 #0000001a}
+.world .wnote{position:absolute;z-index:3;top:64px;left:14px;background:#ffffffe0;padding:4px 10px;border-radius:10px}
+.world .scene{margin:0;border-radius:0}.world .scene>svg{border-radius:0}
+.world .scene>svg>rect:first-of-type{rx:0}
+
+/* größere Sterne und Beschriftungen auf der Karte */
+.spot .node{width:146px}
+.nlab{font-size:17px;line-height:1.25}
+.nlab b{font-size:12.5px}
+.stars{font-size:32px;letter-spacing:3px;text-shadow:0 2px 0 #c96f0066}
+.node .bub{width:82px;height:82px;font-size:32px}
+.spot{transform:translate(-50%,-44px)}
+.scene.gate .node .bub,.scene.castle .node .bub{width:96px;height:96px;font-size:42px}
+@media (max-width:720px){.spot .node{width:120px}.nlab{font-size:15px}.stars{font-size:26px;letter-spacing:2px}.node .bub{width:68px;height:68px;font-size:27px}}
+
+/* Nachweis */
+.proofbtn{position:relative;z-index:2;margin:6px 0 0 8px;background:#fff;color:#4a3ad1;box-shadow:0 5px 0 #2d2190}
+#proof h1{font-size:clamp(28px,5vw,42px);margin:6px 0}
+.proof-card{padding:20px;margin-top:16px;display:grid;gap:10px}
+.proof-card h2{margin:0;font-size:22px}
+.pf-label{font:700 14px Nunito,sans-serif;color:var(--ink-soft)}
+.pf-input{font:600 18px Nunito,sans-serif;padding:12px 14px;border-radius:14px;border:2px solid var(--rule);background:#fff;color:var(--ink);width:100%}
+.pf-input.code{font-family:ui-monospace,Menlo,monospace;letter-spacing:2px;text-transform:uppercase}
+.pf-input:focus{outline:3px solid #ffd23f;border-color:#4a3ad1}
+.pf-sum{display:flex;flex-wrap:wrap;gap:8px}
+.pf-sum span{background:#eef3ff;border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px}
+.pf-list{display:grid;gap:6px}
+.pf-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:#f6f8fc;font-size:16px}
+.pf-row.ok{background:#e6f6ea}
+.pf-row b{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-right:4px}
+.pf-st{color:#ffb000;font-size:20px;letter-spacing:1px;white-space:nowrap}
+.pf-code-box{margin-top:6px;padding:16px;border-radius:18px;background:#fff8e6;border:2px dashed #ffc861;text-align:center;display:grid;gap:8px}
+.pf-code{font:700 clamp(20px,4.5vw,30px) ui-monospace,Menlo,monospace;letter-spacing:3px;color:#1f2a4d;word-break:break-all}
+.pf-hint{margin:0;color:var(--muted);font-size:14px}
+@media (max-width:720px){.proofbtn{margin:10px 0 0 0}.pf-row{font-size:15px}}
+/* Lesbarkeit kleiner Beschriftungen */
+.lvl-pill{font-size:13.5px!important;letter-spacing:.8px;padding:8px 14px}
+.level .num{font-size:13px}
+.here{font-size:13px}
+.pf-row b{font-size:13px}
+.nlab b{font-size:13px}
+.back{min-height:48px;font-size:17px;padding:10px 6px}
+.staff-card .tagline{font-size:14px}.anim-cap{font-size:17px}
+.world .wnote{font-weight:700;color:#5a4a2a;font-size:15px;max-width:calc(100% - 28px)}.world .wnote.open{color:#1f6b3d}
+.prompt-q.small{font-size:16px;margin:4px 0 0}.staff-ex.word-q{max-width:100%}
+.pf-code{letter-spacing:.12em}
+.tile.wordt{width:auto!important;min-width:120px;padding:0 16px;font-size:21px!important}.slot.wide{width:auto!important;min-width:150px;padding:0 14px;font-size:22px}
+#exstaff .prompt-q.small{position:static}
+#exstaff:has(.word-q){display:flex;flex-direction:column;justify-content:center;gap:4px}
+.stars.many{font-size:24px;letter-spacing:0;white-space:nowrap}@media (max-width:720px){.stars.many{font-size:19px}}
+
+/* Anmeldung */
+body.modal{overflow:hidden}
+.signin-back{position:fixed;inset:0;z-index:100;background:#1f2a4dcc;display:grid;place-items:center;padding:16px;overflow:auto}
+.signin{width:min(460px,100%);padding:26px 24px 22px;display:grid;gap:6px;text-align:left;position:relative}
+.signin h2{margin:4px 0 2px;font-size:28px;text-align:center}
+.si-badge{font-size:44px;text-align:center;line-height:1}
+.si-lead{margin:0 0 10px;font-size:17px;line-height:1.45;color:var(--ink-soft);text-align:center}
+.signin .pf-label{font-size:16px;margin-top:4px}
+.pf-input.big{font-size:22px;padding:14px 16px}
+.pf-input.cls{max-width:160px}
+.pf-input.good{border-color:#2e9b57;background:#f2fbf5}.pf-input.bad{border-color:#d64545;background:#fff5f4}
+.si-err{margin:0;min-height:20px;color:#c03535;font-size:15px;font-weight:700}
+.si-more summary{cursor:pointer;font-size:16px;font-weight:700;color:#4a3ad1;padding:6px 0}
+.si-more .pf-input{margin-top:6px}
+.signin .controls{margin-top:8px;justify-content:center}
+.pf-who{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:20px}
+.pf-who b{font-size:22px;color:var(--ink)}
+.btn.small{min-height:40px;padding:6px 14px;font-size:15px}
+.pf-two{display:flex;gap:10px;flex-wrap:wrap}.pf-two .pf-input{flex:1 1 160px}.pf-two .cls{flex:0 1 140px}
+.pf-code.empty{font:700 18px Nunito,sans-serif;letter-spacing:0;color:var(--muted)}
+.pf-hint{font-size:15px}
+/* Nachweis: besser lesbar */
+#proof .lead{font-size:18px}
+#proof .pf-label{font-size:16px}
+#proof .pf-hint{font-size:16px;line-height:1.45}
+#proof h2{font-size:24px}
+.pf-sum span{font-size:16px!important;padding:6px 12px}
+.pf-row{font-size:17px;padding:10px 12px}.pf-row b{font-size:14px!important}.pf-st{font-size:19px}
+.pf-code{font-size:clamp(28px,7vw,38px)}
+#proof .pf-input{font-size:19px}
+.pf-input.code::placeholder{text-transform:none;letter-spacing:0;font-family:Nunito,sans-serif}
+.pf-two .cls{flex:0 1 190px}
+
+.topic-chip{display:inline-block;margin:0 0 8px;padding:6px 14px;border-radius:999px;background:#eef0ff;color:#3b2fb8;font-size:16px;font-weight:700}
+.topic-chip b{color:#1f2a4d}
+.hf-box{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:center;background:#fff7e3;border:2px dashed #f2c66b;border-radius:16px;padding:14px 16px;margin:6px 0 10px}
+.hf-box b{font-size:22px}.hf-box .pf-code{font-size:26px;letter-spacing:.12em}
+.hf-check{display:flex;gap:12px;align-items:flex-start;font-size:18px;font-weight:700;line-height:1.35;cursor:pointer;padding:6px 2px}
+.hf-check input{width:28px;height:28px;flex:none;accent-color:#2e9b57;margin-top:1px}
+
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.duo>.world{margin-top:26px}
+
+.duo{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.merk-err{margin:8px 0 4px;padding:10px 12px;border:2px solid #f2c66b;border-radius:16px;background:#fff8e6}.merk-err b{display:block;font-size:15px;color:#7a5a12;margin-bottom:4px}
+.merk-err .staff-learn{min-width:0!important;max-width:520px;margin:0 auto}
+
+.bk-top.two{grid-template-columns:1fr 1fr;margin-bottom:12px}
+.bk-box.big{padding:12px 14px}.bk-box.big b{font-size:17px}.bk-box.big span{font-size:48px;line-height:1.1}
+.bk-box.hs{background:#fff6dc;border-color:#f2d27a}.bk-box.hs b{color:#a87a00}
+.bk-box.up{animation:ptsUp .6s}.bk-box.down{animation:ptsDown .6s}
+@keyframes ptsUp{40%{transform:scale(1.08);background:#e3f7ea;border-color:#7bd39a}}
+@keyframes ptsDown{40%{transform:scale(.96);background:#fde3e1;border-color:#f0948c}}
+@media (max-width:720px){.bk-box.big span{font-size:40px}}
+
+/* Handy: kompakte Kopfzeile – Zurück, Übersicht und Ton in einer Zeile, Levelname klein darunter */
+@media (max-width:560px){
+  .gamebar{flex-wrap:wrap;gap:8px;margin:4px 0 8px}
+  .gamebar .gb-right{display:contents}
+  .gamebar .back{order:1;min-height:44px;padding:6px 4px;font-size:16px}
+  .gamebar #g-home{order:2;margin-left:auto!important}
+  .gamebar .snd{order:3}
+  .gamebar #pill,.toprow #l-pill{order:4;flex-basis:100%;width:auto;align-self:flex-start;justify-self:start;text-align:left;font-size:13px!important;padding:5px 12px;margin:0;max-width:max-content}
+  .toprow{gap:8px}.toprow .homebtn{order:1}.toprow .snd{order:2}
+  .homebtn{min-height:44px;padding:6px 14px;font-size:16px}
+  .game-title{margin:4px 0 8px}
+}
+.hf-box{grid-template-columns:1fr!important;gap:2px!important;text-align:center}.hf-box .pf-label{margin-top:6px}.hf-box .pf-code{white-space:nowrap}
+.words-hint,.word-help{margin-top:12px}
+.helper{margin-top:14px}
+@media (max-width:560px){
+  .stepnav{overflow:visible;flex-wrap:nowrap}
+  .stepnav>*{flex:0 1 auto;min-width:0;white-space:normal!important;text-align:left;line-height:1.2}
+  .explain{margin:12px 0 4px;padding:12px 12px;gap:10px}
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <button class="brand" id="home-link" aria-label="Zur Titelseite">
+      <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18.5a3 3 0 1 1-2-2.83V4l12-2v13.5a3 3 0 1 1-2-2.83V5.4l-8 1.33z" fill="#f4e3c4"/></svg></div>
+      Notenwerkstatt
+    </button>
+    <div class="head-right">
+      <span class="chip">Violinschlüssel</span>
+      <button class="icon-btn snd" id="sound" aria-pressed="true" aria-label="Ton an oder aus" title="Ton an/aus">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1c2333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="#1c2333"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="M17 9l5 6M22 9l-5 6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- TITELSEITE -->
+  <section id="home">
+    <div class="hero-adv">
+      <div class="hud"><span class="hud-star">⭐ <b id="hud-stars">0</b> / <span id="hud-max">0</span></span><span class="hud-bar"><i id="hud-bar"></i></span></div>
+      <h1>Notenwerkstatt-<em>Abenteuer</em></h1>
+      <p class="lead">Reise durch den Notenwald, über das Tor und die Vorzeichen-Gipfel bis zur Schatzburg. Jede geschaffte Übung bringt dir einen Stern.</p>
+      <div id="coverstaff"></div>
+      <button class="btn go" id="cover-start">Abenteuer starten ▶</button>
+      <button class="btn proofbtn" id="proof-open">📜 Mein Nachweis</button>
+    </div>
+    <div id="worlds"></div>
+    <div hidden><div id="levelcards"></div><div id="testcards"></div><div id="gamecards"></div><p id="gamelock"></p></div>
+  </section>
+
+  <!-- LERNEN -->
+  <section id="learn" hidden>
+    <div class="toprow"><button class="homebtn" id="tohome">🏠 Übersicht</button><span class="lvl-pill" id="l-pill"></span><button class="icon-btn snd" aria-pressed="true" aria-label="Ton an oder aus" title="Ton an/aus"><svg viewBox="0 0 24 24" fill="none" stroke="#1c2333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="#1c2333"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="M17 9l5 6M22 9l-5 6"/></svg></button></div>
+    <div class="hero">
+      <div class="eyebrow" id="l-eyebrow"></div>
+      <h1 id="l-title"></h1>
+      <p class="lead" id="l-lead"></p>
+    </div>
+    <div id="l-body"></div>
+    <div class="levels" id="l-ex"></div>
+    <div class="lvl-nav">
+      <button class="btn ghost" id="l-prev">← vorheriges Level</button>
+      <button class="btn ghost" id="l-next">nächstes Level →</button>
+    </div>
+    <p class="lock-hint" id="l-lock" hidden>🔒 Weiter geht es, wenn du die Übung mit höchstens 2 Fehlern geschafft hast.</p>
+    <div hidden>
+    </div>
+  </section>
+
+  <!-- ANMELDUNG -->
+  <div class="signin-back" id="signin" hidden>
+    <div class="signin card" role="dialog" aria-modal="true" aria-labelledby="si-h">
+      <div class="si-badge" aria-hidden="true">📜</div>
+      <h2 id="si-h">Bevor es losgeht …</h2>
+      <p class="si-lead">Trag deinen Vornamen und deine Klasse ein. Damit bekommst du deinen persönlichen Nachweis.</p>
+      <label class="pf-label" for="si-first">Vorname</label>
+      <input id="si-first" class="pf-input big" maxlength="20" placeholder="z. B. Lena" autocomplete="off" autocapitalize="words">
+      <p class="si-err" id="si-first-err"></p>
+      <label class="pf-label" for="si-class">Klasse</label>
+      <input id="si-class" class="pf-input big cls" maxlength="3" placeholder="z. B. 3b" autocomplete="off" autocapitalize="none">
+      <p class="si-err" id="si-class-err"></p>
+      <details class="si-more" id="si-more"><summary>Ich habe schon einen Fortschrittscode</summary>
+        <input id="si-code" class="pf-input code" maxlength="10" placeholder="z. B. K7Q-4MX" autocomplete="off">
+        <p class="si-err" id="si-code-err"></p></details>
+      <div class="controls"><button class="btn ghost" id="si-cancel" hidden>Abbrechen</button><button class="btn go" id="si-go" disabled>Los geht’s ▶</button></div>
+    </div>
+  </div>
+
+  <div class="signin-back" id="heft" hidden>
+    <div class="signin card" role="dialog" aria-modal="true" aria-labelledby="hf-h">
+      <div class="si-badge" aria-hidden="true">📒</div>
+      <h2 id="hf-h">Hallo!</h2>
+      <p class="si-lead">Bevor du startest: Steht dein <strong>Name</strong> und dein <strong>Fortschrittscode</strong> sicher in deinem Heft?</p>
+      <div class="hf-box"><span class="pf-label">Name</span><b id="hf-name">–</b><span class="pf-label">Fortschrittscode</span><b class="pf-code" id="hf-code">–</b></div>
+      <label class="hf-check"><input type="checkbox" id="hf-ok"> <span>Ja, ich habe Name und Code ins Heft geschrieben.</span></label>
+      <div class="controls"><button class="btn ghost" id="hf-other">Das bin nicht ich</button><button class="btn go" id="hf-go" disabled>Los geht’s ▶</button></div>
+    </div>
+  </div>
+
+  <!-- NACHWEIS -->
+  <section id="proof" hidden>
+    <div class="toprow"><button class="homebtn" id="proof-home">🏠 Übersicht</button></div>
+    <h1>📜 Mein Nachweis</h1>
+    <p class="lead">Deine geschafften Levels und dein Fortschrittscode.</p>
+    <div class="card proof-card">
+      <div class="pf-who"><span class="pf-label">Angemeldet als</span><b id="pf-who">–</b><button class="btn ghost small" id="pf-change">Name ändern</button></div>
+      <div class="pf-sum" id="pf-sum"></div>
+      <div class="pf-code-box">
+        <span class="pf-label">Dein Fortschrittscode</span>
+        <div class="pf-code" id="pf-code">–</div>
+        <div class="controls"><button class="btn brass" id="pf-copy">Code kopieren</button></div>
+        <p class="pf-hint">Schreib den Code ins Heft oder schick ihn deiner Lehrkraft. Er passt nur zu deinem Namen.</p>
+      </div>
+    </div>
+    <div class="card proof-card">
+      <h2>Code eingeben</h2>
+      <p class="pf-hint">Auf einem neuen Gerät weiterspielen oder als Lehrkraft einen Code prüfen.</p>
+      <div class="pf-two"><input id="in-first" class="pf-input" maxlength="20" placeholder="Vorname, z. B. Lena" autocomplete="off" autocapitalize="words"><input id="in-class" class="pf-input cls" maxlength="3" placeholder="Klasse (3b)" autocomplete="off" autocapitalize="none"></div>
+      <input id="in-code" class="pf-input code" maxlength="40" placeholder="Code, z. B. K7Q-4MX" autocomplete="off">
+      <div class="controls"><button class="btn" id="in-check">Code prüfen</button><button class="btn brass" id="in-load" hidden>Fortschritt übernehmen</button></div>
+      <p class="feedback" id="in-fb" role="status" aria-live="polite"></p>
+      <div class="pf-list" id="in-list"></div>
+    </div>
+    <div class="card proof-card">
+      <h2>Meine Levels</h2>
+      <div class="pf-list" id="pf-list"></div>
+    </div>
+  </section>
+
+  <!-- ÜBUNG -->
+  <section id="game" hidden>
+    <div class="gamebar">
+      <button class="back" id="back">← Merkbild</button>
+      <div class="gb-right">
+        <span class="lvl-pill" id="pill"></span>
+        <button class="homebtn" id="g-home">🏠 Übersicht</button><button class="icon-btn snd" aria-pressed="true" aria-label="Ton an oder aus" title="Ton an/aus"><svg viewBox="0 0 24 24" fill="none" stroke="#1c2333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="#1c2333"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+      </div>
+    </div>
+    <h2 class="game-title" id="g-title"></h2>
+    <p class="game-rule" id="g-rule"></p>
+    <div class="card board" id="board"></div>
+  </section>
+
+  <!-- ERGEBNIS -->
+  <section id="result" hidden>
+    <div class="hero" style="text-align:center;justify-items:center"><div class="eyebrow" id="r-eyebrow"></div></div>
+    <div class="card result">
+      <div class="big" id="r-big"></div>
+      <p class="sub" id="r-sub"></p>
+      <div class="dots" id="r-dots"></div>
+      <h2 id="r-title"></h2>
+      <p class="txt" id="r-text"></p>
+      <div class="controls">
+        <button class="btn" id="r-again">Noch einmal</button>
+        <button class="btn brass" id="r-next"></button>
+        <button class="btn ghost" id="r-learn">Merkbild ansehen</button>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+/* ================= Grundlagen ================= */
+const $=id=>document.getElementById(id);
+const INK='#1c2333',BRASS='#c4862a',GOOD='#2d7a4c',BAD='#c13d36';
+const LET=['c','d','e','f','g','a','h'];
+const SH={c:'cis',d:'dis',e:'eis',f:'fis',g:'gis',a:'ais',h:'his'};
+const FL={c:'ces',d:'des',e:'es',f:'fes',g:'ges',a:'as',h:'b'};
+const mod=(n,m)=>((n%m)+m)%m;
+const letter=d=>LET[mod(d,7)];                       // d: Stufen über c1 (c1 = 0)
+const oct=d=>Math.floor(d/7)+1;
+const nameOf=(d,a='')=>a==='s'?SH[letter(d)]:a==='f'?FL[letter(d)]:letter(d);
+const octName=d=>oct(d)<=0?letter(d):letter(d)+oct(d);
+const octLabel=d=>oct(d)<=0?'kleines '+letter(d):letter(d)+oct(d);
+const WS=[0,2,4,5,7,9,11];
+const semi=(d,a='')=>WS[mod(d,7)]+12*Math.floor(d/7)+(a==='s'?1:a==='f'?-1:0);
+const hz=(d,a)=>261.63*Math.pow(2,semi(d,a)/12);
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const PY=(d,base)=>base-(d-2)*10;                      // unterste Linie = e1 (d = 2)
+const S={sound:true,level:0,ex:0,play:null};
+const G={};                                            // Zustand der laufenden Übung
+
+let ctx=null;
+function tone(f){
+  if(!S.sound||!f)return;
+  try{
+    ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended')ctx.resume();
+    const t=ctx.currentTime,o=ctx.createOscillator(),o2=ctx.createOscillator(),g=ctx.createGain(),g2=ctx.createGain();
+    o.type='triangle';o2.type='sine';o.frequency.value=f;o2.frequency.value=f*2;g2.gain.value=.2;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.3,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+1.3);
+    o.connect(g);o2.connect(g2);g2.connect(g);g.connect(ctx.destination);
+    o.start(t);o2.start(t);o.stop(t+1.4);o2.stop(t+1.4);
+  }catch(e){}
+}
+document.querySelectorAll('.snd').forEach(x=>x.onclick=()=>{S.sound=!S.sound;document.querySelectorAll('.snd').forEach(y=>y.setAttribute('aria-pressed',String(S.sound)))});
+
+/* ================= Notensatz ================= */
+function treble(x,base,col=INK){                       // Violinschlüssel, Spirale um die g1-Linie
+  const gy=PY(4,base);
+  return `<g transform="translate(${x} ${gy})"><g fill="none" stroke="${col}" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="4.4" d="M7 6 C-2 5 -3 -7 6 -11 C19 -16 30 -4 25 10 C19 25 -14 24 -17 2 C-19 -18 -2 -33 12 -50 C21 -62 23 -80 17 -90 C11 -98 2 -84 4 -68 L17 32"/>
+    <path stroke-width="4" d="M17 32 C19 45 6 50 -1 43"/></g><circle cx="0" cy="40" r="5.5" fill="${col}"/></g>`;
+}
+function staffLines(x1,x2,base,w=1.6,col='#2a3142'){
+  let s='';for(let k=0;k<5;k++)s+=`<line x1="${x1}" x2="${x2}" y1="${PY(2+2*k,base)}" y2="${PY(2+2*k,base)}" stroke="${col}" stroke-width="${w}"/>`;
+  return s+`<line x1="${x2}" x2="${x2}" y1="${PY(10,base)}" y2="${PY(2,base)}" stroke="${col}" stroke-width="2.4"/>`;
+}
+function ledgers(x,d,base,w=22,col='#2a3142'){
+  let s='';
+  for(let q=0;q>=d;q-=2)s+=`<line x1="${x-w}" x2="${x+w}" y1="${PY(q,base)}" y2="${PY(q,base)}" stroke="${col}" stroke-width="1.8"/>`;
+  for(let q=12;q<=d;q+=2)s+=`<line x1="${x-w}" x2="${x+w}" y1="${PY(q,base)}" y2="${PY(q,base)}" stroke="${col}" stroke-width="1.8"/>`;
+  return s;
+}
+let NID=0;
+function note(x,y,fill=INK){
+  const id='n'+(NID++);
+  return `<g transform="translate(${x} ${y})"><mask id="${id}" maskUnits="userSpaceOnUse" x="-22" y="-16" width="44" height="32">
+    <rect x="-22" y="-16" width="44" height="32" fill="#fff"/><ellipse rx="5.6" ry="7.4" transform="rotate(-32)" fill="#000"/></mask>
+    <ellipse rx="14" ry="9.6" fill="${fill}" mask="url(#${id})"/></g>`;
+}
+function sharp(x,y,col=INK){
+  return `<g transform="translate(${x} ${y})" fill="${col}"><rect x="-4.6" y="-17" width="1.9" height="32"/><rect x="2.7" y="-15" width="1.9" height="32"/>
+    <path d="M-9 -3.5 L9 -8.5 L9 -4.5 L-9 0.5Z"/><path d="M-9 6.5 L9 1.5 L9 5.5 L-9 10.5Z"/></g>`;
+}
+function flat(x,y,col=INK){
+  return `<g transform="translate(${x} ${y}) scale(1.3)" fill="${col}"><rect x="-5" y="-25" width="2" height="32"/>
+    <path d="M-4 6 C4 2 9 -3 7 -7 C5.5 -10 1 -9 -4 -4 L-4 -1.5 C0 -5.5 3.5 -6 4 -3.6 C4.5 -0.8 1 2.5 -4 4.2Z"/></g>`;
+}
+const acc=(a,x,y,col)=>a==='s'?sharp(x,y,col):a==='f'?flat(x,y,col):'';
+function noteAt(x,d,a,base,col=INK){const dx=a?8:0,y=PY(d,base);return ledgers(x+dx,d,base)+acc(a,x-22,y,col)+note(x+dx,y,col)}
+
+/* Merkbild: Notensystem mit beschrifteten Noten. items: {d,a,lab:[stamm,endung]|text,sub,col} */
+function learnStaff(items,{aria='',step=0,pad=150}={}){
+  const n=items.length,minD=Math.min(...items.map(i=>i.d),1),maxD=Math.max(...items.map(i=>i.d),11);
+  const base=Math.max(150,PY(2,0)+ (maxD-2)*10+40);
+  const top=PY(maxD,base)-30,labY=Math.max(PY(minD,base)+44,base+70),H=labY+(items.some(i=>i.sub)?26:12);
+  const st=step||Math.min(110,Math.max(62,(720-pad-20)/n)),W=pad+st*n+10;
+  let s=`<svg class="staff-learn" viewBox="0 ${top} ${W} ${H-top}" role="img" aria-label="${aria}">`;
+  s+=staffLines(14,W-14,base)+treble(42,base);
+  items.forEach((it,i)=>{
+    const x=pad+i*st+st/2-6,col=it.col||INK,y=PY(it.d,base);
+    s+=`<g class="pop" style="animation-delay:${(i*.11+.1).toFixed(2)}s"><g class="n" data-d="${it.d}" data-a="${it.a||''}" tabindex="0" role="button" aria-label="Note ${nameOf(it.d,it.a)} anhören">`;
+    s+=`<line x1="${x}" x2="${x}" y1="${y+14}" y2="${labY-26}" stroke="${BRASS}" stroke-width="1.3" stroke-dasharray="3 4" opacity=".6"/>`;
+    s+=noteAt(x,it.d,it.a||'',base,col);
+    s+=`<rect x="${x-st/2}" y="${top}" width="${st}" height="${H-top}" fill="transparent"/>`;
+    const lab=Array.isArray(it.lab)?`${it.lab[0]}<tspan fill="${BRASS}">${it.lab[1]}</tspan>`:it.lab;
+    s+=`<text x="${x}" y="${labY}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="800" font-size="${it.small?22:27}" fill="${INK}">${lab}</text>`;
+    if(it.sub)s+=`<text x="${x}" y="${labY+21}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="12" fill="#857e70">${it.sub}</text>`;
+    s+='</g></g>';
+  });
+  return s+'</svg>';
+}
+
+/* Klaviatur. from/to: Stufen der weißen Tasten. opts: labels ('white'|'all'|'none'), names (Map semi->text), dim (Set semi) */
+function keyboard(from,to,{labels='white',names={},cls='',id='',black=true,targets=null,blackNames=null}={}){
+  const W=46,H=156,BW=28,BH=98,n=to-from+1;
+  let s=`<svg class="kbd-svg ${cls}" ${id?`id="${id}"`:''} viewBox="-2 -2 ${n*W+4} ${H+4}" style="max-width:${n*58}px;${n>=12?`min-width:${n*40}px`:''}" role="group" aria-label="Klaviatur">`;
+  for(let i=0;i<n;i++){
+    const d=from+i,sm=semi(d),x=i*W;
+    const tg=targets&&targets.has(d);
+    s+=`<rect class="key white${tg?' target':''}" data-semi="${sm}" data-d="${d}" ${tg?'data-drop="1"':''} x="${x}" y="0" width="${W}" height="${H}" rx="5" role="button" aria-label="Taste ${letter(d)}"/>`;
+    const lab=names[sm]!==undefined?names[sm]:labels!=='none'?letter(d):'';
+    if(lab)s+=`<text x="${x+W/2}" y="${H-14}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="800" font-size="20" fill="${INK}">${lab}</text>`;
+    if(tg&&names[sm]===undefined)s+=`<circle cx="${x+W/2}" cy="${H-21}" r="13" fill="none" stroke="${BRASS}" stroke-width="2" stroke-dasharray="4 3"/><text x="${x+W/2}" y="${H-15}" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="15" fill="${BRASS}">?</text>`;
+  }
+  if(black)for(let i=0;i<n-1;i++){
+    const d=from+i;if(!['c','d','f','g','a'].includes(letter(d)))continue;
+    const x=(i+1)*W-BW/2,sm=semi(d)+1;
+    s+=`<rect class="key black" data-semi="${sm}" x="${x}" y="0" width="${BW}" height="${BH}" rx="3" role="button" aria-label="Schwarze Taste ${SH[letter(d)]}"/>`;
+    const bl=names[sm]!==undefined?names[sm]:blackNames?blackNames(d):'';
+    if(bl)s+=`<text x="${x+BW/2}" y="${BH-12}" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="700" font-size="${bl.length>3?9:11}" fill="#fbf6ea">${bl}</text>`;
+  }
+  return s+'</svg>';
+}
+function flashKey(svg,sm,cls='hit',ms=900){
+  svg.querySelectorAll(`.key[data-semi="${sm}"]`).forEach(k=>{k.classList.add(cls);if(ms)setTimeout(()=>k.classList.remove(cls),ms)});
+}
+/* Noten im Merkbild antippbar machen, optional mit Klaviatur verbinden */
+function wireLearn(root,kbd){
+  root.querySelectorAll('.n[data-d]').forEach(g=>{
+    const d=+g.dataset.d,a=g.dataset.a;
+    const fire=()=>{tone(hz(d,a));if(kbd)flashKey(kbd,semi(d,a),'hit',1100)};
+    g.addEventListener('click',fire);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fire()}});
+  });
+  if(kbd)kbd.querySelectorAll('.key').forEach(k=>k.addEventListener('pointerdown',()=>{const sm=+k.dataset.semi;tone(261.63*Math.pow(2,sm/12));flashKey(kbd,sm,'hit',500)}));
+}
+const posDesc=d=>({'-3':'unter der 2. Hilfslinie unten','-2':'auf der 2. Hilfslinie unten','-1':'direkt unter der Hilfslinie','0':'auf der Hilfslinie unter dem System','1':'direkt unter der untersten Linie',
+  '2':'auf der 1. Linie','3':'im 1. Zwischenraum','4':'auf der 2. Linie','5':'im 2. Zwischenraum','6':'auf der 3. Linie','7':'im 3. Zwischenraum','8':'auf der 4. Linie','9':'im 4. Zwischenraum','10':'auf der 5. Linie',
+  '11':'direkt über der obersten Linie','12':'auf der 1. Hilfslinie oben','13':'über der 1. Hilfslinie','14':'auf der 2. Hilfslinie oben'})[d];
+const explain=(badge,html)=>`<div class="explain"><div class="badge">${badge}</div><p>${html}</p></div>`;
+const pairs=list=>`<span class="pair-row">${list.map(([a,b,c,w])=>`<span class="pair${w?' warn':''}">${a} <span class="arr">→</span> ${b}<em>${c}</em></span>`).join('')}</span>`;
+const sec=(num,title,html)=>`<div class="learn-sec"><h3><span class="num">${num}</span>${title}</h3>${html}</div>`;
+
+/* ================= Halbton-Tafel: Notensystem direkt über der Klaviatur ================= */
+const HB={};                       // id -> {xs: semi->x, from, to}
+const HB_BASE=120,HB_KY=196,HB_W=84,HB_H=150,HB_BW=44,HB_BH=95,HB_CL=86;
+function halfBoard(from,to,id,{W=HB_W,notes=null}={}){
+  const n=to-from+1,TW=HB_CL+n*W,xs={},BW=Math.round(W*.52);
+  let s=`<svg class="kbd-svg half-svg" id="${id}" viewBox="0 0 ${TW+6} ${HB_KY+HB_H+4}" style="max-width:${Math.round(TW*1.05)}px" role="group" aria-label="Notensystem über einer Klaviatur">`;
+  s+=staffLines(4,TW+2,HB_BASE,1.5)+treble(34,HB_BASE);
+  s+=`<g transform="translate(${HB_CL} ${HB_KY})">`;
+  for(let i=0;i<n;i++){
+    const d=from+i,sm=semi(d),x=i*W;xs[sm]=HB_CL+x+W/2;
+    s+=`<rect class="key white" data-semi="${sm}" data-d="${d}" x="${x}" y="0" width="${W}" height="${HB_H}" rx="6" role="button" aria-label="Taste ${letter(d)}"/>`;
+    s+=`<text x="${x+W/2}" y="${HB_H-14}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="800" font-size="22" fill="${INK}">${letter(d)}</text>`;
+  }
+  for(let i=0;i<n-1;i++){
+    const d=from+i;if(!['c','d','f','g','a'].includes(letter(d)))continue;
+    const x=(i+1)*W-BW/2,sm=semi(d)+1;xs[sm]=HB_CL+(i+1)*W;
+    s+=`<rect class="key black" data-semi="${sm}" x="${x}" y="0" width="${BW}" height="${HB_BH}" rx="4" role="button" aria-label="Schwarze Taste"/>`;
+  }
+  s+='</g>';
+  if(notes)notes.forEach(it=>{ // feste Noten genau über ihrer Taste (antippbar)
+    const x=xs[semi(it.d,it.a)];if(x===undefined)return;
+    const nx=it.a?x+8:x,y=PY(it.d,HB_BASE),col=it.col||INK;
+    s+=`<g class="n" data-d="${it.d}" data-a="${it.a||''}" tabindex="0" role="button" aria-label="Note ${nameOf(it.d,it.a)} anhören">`+
+       ledgers(nx,it.d,HB_BASE,20)+acc(it.a,x-14,y,col)+note(nx,y,col)+
+       `<text x="${x}" y="${HB_KY-10}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="800" font-size="21" fill="${it.labCol||col}">${it.lab||nameOf(it.d,it.a)}</text>`+
+       `<rect x="${x-W/4}" y="10" width="${W/2}" height="${HB_KY-6}" fill="transparent"/></g>`;
+  });
+  s+=`<g id="${id}-ov" pointer-events="none"></g></svg>`;
+  HB[id]={xs,from,to};
+  return s;
+}
+/* Merkbild: Notenbild genau über der passenden Taste */
+const boardMerk=(from,to,notes,W=96)=>`<p class="swipe-hint">← zum Ansehen seitlich wischen →</p><div class="kbd-wrap">${halfBoard(from,to,'kb',{W,notes})}</div>`;
+/* Note mit Farbe und Namen direkt über ihrer Taste einzeichnen */
+function hbMark(id,d,a,col,name){
+  const ov=$(id+'-ov');if(!ov)return;
+  const sm=semi(d,a),x=HB[id].xs[sm];if(x===undefined)return;
+  const nx=a?x+8:x,y=PY(d,HB_BASE);
+  let s=ledgers(nx,d,HB_BASE,20)+acc(a,a==='f'?x-14:x-14,y,col)+note(nx,y,col);
+  s+=`<text x="${x}" y="${HB_KY-10}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="800" font-size="${name.length>2?21:23}" fill="${col}">${name}</text>`;
+  ov.insertAdjacentHTML('beforeend',`<g class="note-in">${s}</g>`);
+  $(id).querySelectorAll(`.key[data-semi="${sm}"]`).forEach(k=>k.classList.add(col===GOOD?'ok':col===BAD?'no':'hit'));
+  hbScroll(id,x);
+}
+/* Am Handy: Tafel so scrollen, dass die aktuelle Taste sichtbar ist */
+function hbScroll(id,x){
+  const sv=$(id),wrap=sv&&sv.closest('.kbd-wrap');if(!wrap||wrap.scrollWidth<=wrap.clientWidth+2)return;
+  const vb=sv.viewBox.baseVal.width,sc=sv.getBoundingClientRect().width/vb;
+  wrap.scrollTo({left:Math.max(0,x*sc-wrap.clientWidth/2),behavior:'smooth'});
+}
+function hbClear(id){const ov=$(id+'-ov');if(ov)ov.innerHTML='';const sv=$(id);if(sv)sv.querySelectorAll('.key').forEach(k=>k.classList.remove('ok','hit','no'))}
+const halfName=(d,dir)=>dir>0?SH[letter(d)]:FL[letter(d)];
+function halfCaption(d,dir){
+  const l=letter(d),n=halfName(d,dir);
+  if(dir>0)return ['e','h'].includes(l)?`${l} → ${n}: Rechts neben ${l} liegt keine schwarze Taste – ${n} ist die weiße Taste ${l==='e'?'f':'c'}.`:`${l} → ${n}: einen Halbton höher ist die schwarze Taste rechts daneben.`;
+  return ['c','f'].includes(l)?`${l} → ${n}: Links neben ${l} liegt keine schwarze Taste – ${n} ist die weiße Taste ${l==='c'?'h':'e'}.`:`${l} → ${n}: einen Halbton tiefer ist die schwarze Taste links daneben.`;
+}
+/* Animation: alle Stammtöne nacheinander */
+let ANIM=[];
+function stopAnim(){ANIM.forEach(clearTimeout);ANIM=[]}
+function playHalf(id,dir){
+  stopAnim();const cap=$(id+'-cap'),btn=$(id+'-play');let t=300;
+  if(btn)btn.textContent='■ Stopp';
+  [0,1,2,3,4,5,6].forEach(d=>{
+    ANIM.push(setTimeout(()=>{hbClear(id);hbMark(id,d,'',GOOD,letter(d));tone(hz(d,''));if(cap)cap.innerHTML=`Stammton <b style="color:${GOOD}">${letter(d)}</b>`},t));
+    ANIM.push(setTimeout(()=>{hbMark(id,d,dir>0?'s':'f',BRASS,halfName(d,dir));tone(hz(d,dir>0?'s':'f'));if(cap)cap.textContent=halfCaption(d,dir)},t+1300));
+    t+=3600;
+  });
+  ANIM.push(setTimeout(()=>{if(btn)btn.textContent='▶ Noch einmal abspielen';if(cap)cap.textContent='Fertig! Alle sieben Stammtöne – jeweils mit dem Halbton '+(dir>0?'darüber.':'darunter.')},t));
+}
+function halfDemo(id,dir,from,to){
+  return `<div class="kbd-wrap">${halfBoard(from,to,id)}</div>
+    <p class="anim-cap" id="${id}-cap" aria-live="polite">Die Animation zeigt jeden Stammton (grün) und den Halbton ${dir>0?'darüber':'darunter'} (orange).</p>
+    <div class="controls"><button class="btn ghost" id="${id}-play">▶ Animation abspielen</button></div>`;
+}
+function wireHalfDemo(id,dir){
+  const b=$(id+'-play');
+  b.onclick=()=>{if(ANIM.length&&b.textContent.startsWith('■')){stopAnim();b.textContent='▶ Animation abspielen'}else playHalf(id,dir)};
+  ANIM.push(setTimeout(()=>playHalf(id,dir),2000));   // Start nach 2 Sekunden
+}
+/* ================= Level-Inhalte ================= */
+const L7_HINT=(d,a)=>letter(d)==='e'?'eis ist ein e mit Kreuz – auf der Klaviatur ist das die Taste f.':letter(d)==='h'?'his ist ein h mit Kreuz – auf der Klaviatur ist das die Taste c.':`${letter(d)} mit Kreuz heißt ${SH[letter(d)]}.`;
+const L9_HINT=(d,a)=>({e:'Ausnahme: e mit ♭ heißt nur es.',a:'Ausnahme: a mit ♭ heißt nur as.',h:'Ausnahme: h mit ♭ heißt einfach b.',c:'ces ist ein c mit ♭ – auf der Klaviatur ist das die Taste h.',f:'fes ist ein f mit ♭ – auf der Klaviatur ist das die Taste e.'})[letter(d)]||`${letter(d)} mit ♭ heißt ${FL[letter(d)]}.`;
+function optsMixed(withFlats){
+  return it=>{
+    const l=letter(it.d),up=LET[(LET.indexOf(l)+1)%7],dn=LET[(LET.indexOf(l)+6)%7];
+    const right=nameOf(it.d,it.a);
+    let c=it.a==='s'?[l,SH[up],up,withFlats?FL[l]:SH[dn]]:it.a==='f'?[l,SH[l],FL[dn],dn]:[SH[l],up,dn,withFlats?FL[l]:SH[dn]];
+    const o=[right];c.forEach(x=>{if(o.length<4&&!o.includes(x))o.push(x)});
+    return shuffle(o);
+  };
+}
+const same=(x,y)=>JSON.stringify(x)===JSON.stringify(y);
+const noRep=a=>{a=shuffle([...a]);for(let t=0;t<200;t++){let b=-1;for(let i=1;i<a.length;i++)if(same(a[i],a[i-1])){b=i;break}if(b<0)break;const j=Math.floor(Math.random()*a.length);[a[b],a[j]]=[a[j],a[b]]}return a};
+/* Teile hintereinander – Reihenfolge der Teile bleibt, an den Nahtstellen keine gleiche Note */
+const chain=(...parts)=>parts.reduce((out,p)=>{p=[...p];const last=out[out.length-1];
+  if(out.length&&p.length>1&&same(p[0],last)){const ok=j=>!same(p[j],last)&&(j===1||!same(p[j],p[1]))&&!same(p[0],p[j-1])&&(j+1>=p.length||!same(p[0],p[j+1]));
+    const j=[...p.keys()].slice(1).find(ok);if(j)[p[0],p[j]]=[p[j],p[0]]}
+  return out.concat(p)},[]);
+const pool=(list,n)=>{const r=shuffle([...list]);while(r.length<n)r.push(list[Math.floor(Math.random()*list.length)]);return noRep(r.slice(0,n))};
+const nat=ds=>ds.map(d=>({d,a:''}));
+const octItems=ds=>ds.map(d=>({d,a:'',oct:true}));
+/* 4 Antworten mit Oktavbezeichnung: richtig, gleicher Buchstabe andere Oktave, Nachbarn */
+/* 3 Antworten mit gleichem Buchstaben in drei Oktaven, z. B. d · d1 · d2 (lo = tiefste Oktave: -7 kleine, 0 eingestrichene) */
+const optsSame=lo=>it=>{const L=((it.d%7)+7)%7;return[lo,lo+7,lo+14].map(o=>octName(L+o))};
+/* 3 Antworten nur aus dem Übungsraum lo–hi: richtige Note und zwei Nachbarn (Stufe, Terz oder Oktave), nach Tonhöhe geordnet */
+const optsRange=(lo,hi)=>it=>{const c=shuffle([1,-1,2,-2,7,-7].map(x=>it.d+x).filter(x=>x>=lo&&x<=hi));return[it.d,...c.slice(0,2)].sort((a,b)=>a-b).map(octName)};
+const H7=it=>`Diese Note heißt ${octName(it.d)} – sie liegt ${posDesc(it.d)}.`;
+function optsOct(it){
+  const r=octName(it.d),c=[it.d+7,it.d-7,it.d+1,it.d-1,it.d+2,it.d-2].filter(x=>x>=-3&&x<=14).map(octName);
+  const o=[r];c.forEach(x=>{if(o.length<4&&!o.includes(x))o.push(x)});return shuffle(o);
+}
+
+
+const LEVELS=[
+ { nr:1, title:'Die Stammtöne', ms:'c d e f g a h – und dann wieder c.', nn:'c d e f g a h', what:'Merkbild', col:INK,
+   eyebrow:'Level 1 · Die sieben Stammtöne', h1:'c d e f g a h – <span class="ini">und wieder c</span>.',
+   lead:'Die Noten ohne Vorzeichen heißen Stammtöne. Es gibt nur sieben: c, d, e, f, g, a, h. Danach beginnt die Reihe wieder von vorn.',
+   body(){
+     const it=[0,1,2,3,4,5,6,7].map(d=>({d,a:'',lab:letter(d),col:d===0?BRASS:INK}));
+     return `<div class="card staff-card"><div class="tagline"><span>Von c1 bis c2</span><span>Tippe eine Note an</span></div>
+       ${boardMerk(0,7,it.map(x=>({d:x.d,a:'',col:x.col,lab:x.lab})))}
+       ${explain('1','Das <strong>c1</strong> steht unter dem Notensystem auf einer eigenen kurzen <strong>Hilfslinie</strong>. Das <strong>d1</strong> hängt direkt unter der untersten Linie.')}</div>`;
+   },
+   ex:[]
+ },
+ { nr:2, title:'Die Tastatur', ms:'Weiße Tasten sind Stammtöne.', nn:'c d e | f g a h', what:'Merkbild · Buchstaben ziehen', col:'#4a5266',
+   eyebrow:'Level 2 · Stammtöne auf der Klaviatur', h1:'Wo liegt das <span class="ini">c</span>?',
+   lead:'Auf der Klaviatur sind die weißen Tasten die Stammtöne. Die schwarzen Tasten liegen immer in Zweier- und Dreiergruppen – daran erkennst du jede Taste.',
+   body(){
+     return `<div class="card staff-card"><div class="tagline"><span>Zwei Oktaven von c1 bis h2</span><span>Tippe eine Taste an</span></div>
+       <div class="kbd-wrap">${keyboard(0,13,{id:'kb'})}</div>
+       ${explain('c','Das <strong>c</strong> liegt immer <strong>links neben den zwei schwarzen Tasten</strong>.')}
+       ${explain('f','Das <strong>f</strong> liegt immer <strong>links neben den drei schwarzen Tasten</strong>.')}
+</div>`;
+   },
+   ex:[{type:'keysdrag',label:'Buchstaben auf die Tasten ziehen',desc:'Ziehe die Stammtöne auf die richtigen weißen Tasten – drei Runden.'}]
+ },
+ { nr:3, title:'Die fünf Linien', ms:'„Ein guter Hase darf fressen.“', nn:'e g h d f', what:'Merkbild · Noten benennen', col:'#2d7a4c',
+   eyebrow:'Level 3 · Die fünf Linien', h1:'<span class="ini">E</span>in <span class="ini">g</span>uter <span class="ini">H</span>ase <span class="ini">d</span>arf <span class="ini">f</span>ressen.',
+   lead:'Die Anfangsbuchstaben des Merkspruchs sind die Noten auf den fünf Linien – von unten nach oben.',
+   body(){
+     const W=['Ein','guter','Hase','darf','fressen'];
+     const it=[2,4,6,8,10].map((d,i)=>({d,a:'',lab:[W[i][0],W[i].slice(1)]}));
+     return `<div class="card staff-card"><div class="tagline"><span>Von unten nach oben lesen</span><span>Tippe eine Note an</span></div>
+       <p class="swipe-hint">← zum Ansehen seitlich wischen →</p><div class="staff-scroll">${learnStaff(it,{aria:'Die fünf Linien: e1, g1, h1, d2, f2'})}</div></div>`;
+   },
+   ex:[{type:'name',label:'Linien-Noten benennen',desc:'10 Noten auf den fünf Linien.',
+        make:()=>({items:nat(noRep([2,4,6,8,10,2,4,6,8,10])),tiles:['e','g','h','d','f'],hint:it=>`Diese Note heißt ${letter(it.d)} – wie „${({2:'Ein',4:'guter',6:'Hase',8:'darf',10:'fressen'})[it.d]}“.`})}]
+ },
+ { nr:4, title:'Die Zwischenräume', ms:'FACE – englisch für Gesicht.', nn:'f a c e', what:'Merkbild · Noten benennen', col:BRASS,
+   eyebrow:'Level 4 · Die vier Zwischenräume', h1:'<span class="ini">F A C E</span> – das Gesicht.',
+   lead:'In den vier Zwischenräumen steht von unten nach oben ein englisches Wort: FACE heißt „Gesicht“.',
+   body(){
+     const it=[3,5,7,9].map(d=>({d,a:'',lab:letter(d).toUpperCase()}));
+     return `<div class="card staff-card"><div class="tagline"><span>Von unten nach oben lesen</span><span>Tippe eine Note an</span></div>
+       <p class="swipe-hint">← zum Ansehen seitlich wischen →</p><div class="staff-scroll">${learnStaff(it,{aria:'Die vier Zwischenräume: f1, a1, c2, e2'})}</div></div>`;
+   },
+   ex:[{type:'name',label:'Zwischenraum-Noten benennen',desc:'8 Noten in den vier Zwischenräumen.',
+        make:()=>({items:nat(noRep([3,5,7,9,3,5,7,9])),tiles:['f','a','c','e'],hint:it=>`Diese Note heißt ${letter(it.d)} – F-A-C-E.`})}]
+ },
+ { nr:5, title:'Hilfslinien unten', ms:'Vom c1 abwärts bis zum kleinen g.', nn:'g a h c1', what:'Merkbild · Noten benennen', col:'#8a5a12',
+   eyebrow:'Level 5 · Hilfslinien unter dem System', h1:'Unter dem <span class="ini">System</span>.',
+   lead:'Wenn eine Note zu tief für die fünf Linien ist, bekommt sie kurze Hilfslinien. Du kennst schon das c1 – von dort geht es Stufe für Stufe abwärts.',
+   body(){
+     const lo=[-3,-2,-1,0,1].map(d=>({d,a:'',lab:letter(d),sub:octLabel(d),col:d<0?BRASS:INK,small:true}));
+     return `<div class="card staff-card"><div class="tagline"><span>Vom d1 abwärts lesen</span><span>Tippe eine Note an</span></div>
+       <p class="swipe-hint">← zum Ansehen seitlich wischen →</p><div class="staff-scroll">${learnStaff(lo,{aria:'Unter dem System: kleines g, a, h, c1 und d1',step:96})}</div>
+       ${explain('↓','Unter dem <strong>c1</strong> geht es abwärts weiter: <strong>h</strong> hängt unter der Hilfslinie, <strong>a</strong> sitzt auf der 2. Hilfslinie, <strong>g</strong> hängt darunter.')}</div>`;
+   },
+   ex:[{type:'name',label:'Noten unter dem System benennen',desc:'10 Noten vom kleinen g bis d1.',
+        make:()=>({items:octItems(pool([-3,-2,-1,0,1,-3,-2,-1],10)),options:optsOct,hint:it=>`Diese Note heißt ${octLabel(it.d)} – sie liegt ${posDesc(it.d)}.`})}]
+ },
+ { nr:6, title:'Hilfslinien oben', ms:'Vom f2 aufwärts bis c3.', nn:'g2 a2 h2 c3', what:'Merkbild · Noten benennen', col:'#8a5a12',
+   eyebrow:'Level 6 · Hilfslinien über dem System', h1:'Über dem <span class="ini">System</span>.',
+   lead:'Auch nach oben geht es mit Hilfslinien weiter. Du kennst das f2 auf der obersten Linie – von dort zählst du Stufe für Stufe aufwärts.',
+   body(){
+     const hi=[10,11,12,13,14].map(d=>({d,a:'',lab:letter(d),sub:octName(d),col:d>11?BRASS:INK,small:true}));
+     return `<div class="card staff-card"><div class="tagline"><span>Vom f2 aufwärts lesen</span><span>Tippe eine Note an</span></div>
+       <p class="swipe-hint">← zum Ansehen seitlich wischen →</p><div class="staff-scroll">${learnStaff(hi,{aria:'Über dem System: f2, g2, a2, h2, c3',step:96})}</div>
+       ${explain('↑','Über der obersten Linie sitzt das <strong>g2</strong>. Dann: <strong>a2</strong> auf der 1. Hilfslinie, <strong>h2</strong> darüber, <strong>c3</strong> auf der 2. Hilfslinie.')}</div>`;
+   },
+   ex:[{type:'name',label:'Noten über dem System benennen',desc:'10 Noten von f2 bis c3.',
+        make:()=>({items:octItems(pool([10,11,12,13,14,12,13,14],10)),options:optsOct,hint:it=>`Diese Note heißt ${octName(it.d)} – sie liegt ${posDesc(it.d)}.`})}]
+ },
+ { nr:0, title:'Noten erkennen', col:'#286650',
+   eyebrow:'Level 0 · Noten erkennen', h1:'Wie heißt <span class="ini">diese Note</span>?',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'name',label:'Leicht · c1 bis c2',merk:[0,7],merkErr:true,make:()=>({items:octItems(pool([0,1,2,3,4,5,6,7],10)),options:optsRange(0,7),hint:H7})},
+       {type:'name',label:'Mittel · c2 bis c3',merk:[7,14],merkErr:true,make:()=>({items:octItems(pool([7,8,9,10,11,12,13,14],10)),options:optsRange(7,14),hint:H7})},
+       {type:'name',label:'Schwer · g bis c3',merk:[-3,14],merkErr:true,make:()=>({items:octItems(pool([...Array(18).keys()].map(k=>k-3),10)),options:it=>optsSame(it.d>=14?0:-7)(it),hint:H7})}]
+ },
+ { nr:7, tag:'Spiel', game:true, free:true, title:'Noten setzen', ms:'Der Name steht da – du setzt die Note.', nn:'c1 bis c3', what:'leicht · schwer', col:'#286650',
+   eyebrow:'Level 7 · Noten setzen', h1:'Jetzt <span class="ini">andersherum</span>.',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'place',score:true,merkErr:true,label:'Leicht · c1 bis c2',desc:'Erst das Merkbild von c1 bis c2 ansehen, dann 10 Noten setzen.',merk:[0,7],make:()=>({items:pool([0,1,2,3,4,5,6,7],10)})},
+       {type:'place',score:true,merkErr:true,label:'Schwer · c2 bis c3',desc:'Erst das Merkbild von c2 bis c3 ansehen, dann 10 Noten setzen – mit Hilfslinien.',merk:[7,14],make:()=>({items:pool([7,8,9,10,11,12,13,14],10)})}]
+ },
+ { nr:0, tag:'Spiel', game:true, free:true, title:'Noten-Brücke', col:'#2f6fd6',
+   eyebrow:'Spiel · Noten-Brücke', h1:'Lauf über die <span class="ini">Brücke</span>!',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'bridge',label:'Level 1 · c1 bis c2',from:0,to:7},{type:'bridge',label:'Level 2 · c2 bis c3',from:7,to:14}]
+ },
+ { nr:0, id:'Notenflug-frei', tag:'Spiel', game:true, free:true, title:'Notenflug', col:BRASS,
+   eyebrow:'Spiel · Notenflug', h1:'Fang die Note, <span class="ini">bevor sie fällt</span>!',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'fly',label:'Leicht · c1 bis c2',from:0,to:7,dur:7000}]
+ },
+ { nr:0, tag:'Zwischentest', test:true, mid:true, title:'Zwischentest', col:INK,
+   eyebrow:'Zwischentest', h1:'',
+   lead:'Test über dein bisheriges Wissen.',
+   body(){return ''},
+   ex:[{type:'test',label:'Zwischentest',maxErr:2,make:()=>TESTS.mid||(TESTS.mid=buildMid())}]
+ },
+ { nr:8, title:'Noten mit Kreuz ♯', ms:'Halbton höher – und „-is“ anhängen.', nn:'cis dis eis fis …', what:'3 Schritte mit Übungen', col:BAD, isNew:true,
+   eyebrow:'Level 8 · Das Kreuz ♯', h1:'Ein Kreuz – <span class="ini">einen Halbton höher</span>.',
+   lead:'',
+   steps:[
+    { title:'Was macht das Kreuz?',
+      body(){
+        return `<div class="card staff-card">
+          ${explain('♯','Das Kreuz macht eine Note um einen <strong>Halbton höher</strong>. Auf der Klaviatur ist das <strong>die nächste Taste rechts</strong>.')}
+          <div class="tagline" style="margin-top:12px"><span>Schau zu: Stammton <b style="color:#2d7a4c">grün</b> → Halbton höher <b style="color:#c4862a">orange</b></span><span></span></div>
+          ${halfDemo('hb',1,0,7)}</div>`;
+      },
+      after(){wireHalfDemo('hb',1)},
+      ex:[{type:'half',label:'Einen Halbton höher',desc:'Der Stammton leuchtet grün. Tippe die Taste, die einen Halbton höher liegt – alle sieben Stammtöne kommen einmal dran, e und h ganz am Schluss.',make:()=>({items:chain(shuffle([0,1,3,4,5]),shuffle([2,6])),dir:1,from:0,to:7})}]
+    },
+    { title:'Wie heißt die Note?',
+      body(){
+        return `<div class="card staff-card">
+          ${explain('is','Lies zuerst den Stammton, als gäbe es kein Kreuz. Dann hängst du <strong>„-is“</strong> an.')}
+          ${pairs([['c','c','is'],['d','d','is'],['e','e','is'],['f','f','is'],['g','g','is'],['a','a','is'],['h','h','is']])}</div>`;
+      },
+      ex:[{type:'match',label:'Namen zuordnen',desc:'Ordne jedem Stammton seinen Namen mit Kreuz zu – alle sieben auf einer Seite.',make:()=>({pairs:LET.map(x=>[x,SH[x]]),sym:'♯'})}]
+    },
+    { title:'Kreuz-Noten im Notensystem',
+      body(){
+        const it=[0,1,2,3,4,5,6,7].map(d=>({d,a:'s',lab:[letter(d),'is'],sub:octName(d),col:['e','h'].includes(letter(d))?BAD:INK}));
+        return `<div class="card staff-card"><div class="tagline"><span>cis1 bis cis2 – mit eis und his</span><span>Tippe eine Note an</span></div>
+          ${boardMerk(0,8,it.map(x=>({d:x.d,a:'s',col:x.col,lab:SH[letter(x.d)],labCol:x.col===BAD?BAD:BRASS})))}
+          ${explain('✎','Das Kreuz steht immer <strong>direkt vor der Note</strong> – auf derselben Linie oder im selben Zwischenraum wie die Note.')}
+          ${explain('!','Auch <strong>eis</strong> und <strong>his</strong> gehören dazu (rot). Sie liegen auf weißen Tasten: eis = Taste f, his = Taste c.')}
+          ${explain('↑','Am Ende der Übung kommen auch Noten von <strong>c2 bis a2</strong> dran – gleiche Namen, nur eine Oktave höher.')}</div>`;
+      },
+      ex:[{type:'name',label:'Kreuz-Noten benennen',desc:'15 Kreuz-Noten: zuerst von cis1 bis cis2 – auch eis und his –, am Ende auch höher bis ais2.',
+           make:()=>({items:chain(pool([0,1,2,3,4,5,6,7],10),pool([7,8,9,10,11,12],5)).map(d=>({d,a:'s'})),tiles:Object.values(SH),hint:it=>L7_HINT(it.d)})},
+          {type:'keystap',label:'Auf der Klaviatur zeigen',desc:'Tippe die Taste zur Kreuz-Note an – eis und his kommen am Schluss.',
+           make:()=>({items:chain(pool([0,1,3,4,5,7],6),shuffle([2,6])).map(d=>({d,a:'s'})),from:0,to:8,hint:it=>L7_HINT(it.d)})}]
+    }
+   ]
+ },
+ { nr:9, title:'Notenwörter mit ♯', ms:'Welches Wort steckt in den Noten?', nn:'FISCH · EIS …', what:'Spiel · 6 Wörter', col:'#286650',
+   eyebrow:'Level 9 · Notenwörter mit Kreuz', h1:'Wörter aus <span class="ini">Noten</span>.',
+   lead:'',
+   body(){
+     return `<div class="card staff-card">${explain('♯','Eine Note mit Kreuz bekommt „-is“: aus f wird <strong>fis</strong>, aus e wird <strong>eis</strong>. So wird fis – c – h zu <strong>FISCH</strong>.')}</div>`;
+   },
+   ex:[{type:'words',label:'Wörter knacken',desc:'6 Notenwörter, 5 davon mit Kreuz.',make:()=>({words:[...pool(['fis-c-h','fis-c-h-e','eis','eis-c-a-f-e','eis-f-e-e','eis-f-a-c-h','eis-d-a-c-h','fis-c-h-c-a-f-e'],5),...pool(['a-f-f-e','c-h-e-f','d-a-c-h','f-a-c-h','h-e-f-e','c-a-f-e'],1)]})}]
+ },
+ { nr:10, title:'Noten mit ♭', ms:'Halbton tiefer – und „-es“ anhängen.', nn:'ces des es fes …', what:'3 Schritte mit Übungen', col:BAD, isNew:true,
+   eyebrow:'Level 10 · Das ♭', h1:'Ein ♭ – <span class="ini">einen Halbton tiefer</span>.',
+   lead:'',
+   steps:[
+    { title:'Was macht das ♭?',
+      body(){
+        return `<div class="card staff-card">
+          ${explain('♭','Das ♭ macht eine Note um einen <strong>Halbton tiefer</strong>. Auf der Klaviatur ist das <strong>die nächste Taste links</strong>.')}
+          <div class="tagline" style="margin-top:12px"><span>Schau zu: Stammton <b style="color:#2d7a4c">grün</b> → Halbton tiefer <b style="color:#c4862a">orange</b></span><span></span></div>
+          ${halfDemo('hb',-1,-1,6)}</div>`;
+      },
+      after(){wireHalfDemo('hb',-1)},
+      ex:[{type:'half',label:'Einen Halbton tiefer',desc:'Der Stammton leuchtet grün. Tippe die Taste, die einen Halbton tiefer liegt – alle sieben Stammtöne kommen einmal dran, c und f ganz am Schluss.',make:()=>({items:chain(shuffle([1,2,4,5,6]),shuffle([0,3])),dir:-1,from:-1,to:6})}]
+    },
+    { title:'Wie heißt die Note?',
+      body(){
+        const it=[2,5,6].map(d=>({d,a:'f',lab:letter(d)==='h'?['','b']:[letter(d),'s'],sub:'aus '+letter(d),col:BAD}));
+        return `<div class="card staff-card">
+          ${explain('es','Lies zuerst den Stammton, als gäbe es kein ♭. Dann hängst du <strong>„-es“</strong> an.')}
+          ${pairs([['c','c','es'],['d','d','es'],['f','f','es'],['g','g','es']])}
+          ${explain('!','<strong>Drei Ausnahmen</strong> – hier klingt „-es“ komisch, darum sind die Namen kürzer. Diese drei musst du dir merken:')}
+          ${pairs([['e','e','s',1],['a','a','s',1],['h','','b',1]])}
+          <div class="staff-scroll">${learnStaff(it,{aria:'es1, as1 und b1',step:130})}</div></div>`;
+      },
+      ex:[{type:'match',label:'Namen zuordnen',desc:'Ordne jedem Stammton seinen Namen mit ♭ zu – alle sieben auf einer Seite. Denk an die Ausnahmen!',make:()=>({pairs:LET.map(x=>[x,FL[x]]),sym:'♭'})}]
+    },
+    { title:'♭-Noten im Notensystem',
+      body(){
+        const it=[0,1,2,3,4,5,6].map(d=>{const x=letter(d),f=FL[x];return{d,a:'f',lab:x==='h'?['','b']:[x,f.slice(1)],sub:octName(d),col:['c','f'].includes(x)?BAD:INK}});
+        return `<div class="card staff-card"><div class="tagline"><span>ces1 bis b1 – mit ces und fes</span><span>Tippe eine Note an</span></div>
+          ${boardMerk(-1,7,it.map(x=>({d:x.d,a:'f',col:x.col,lab:FL[letter(x.d)],labCol:x.col===BAD?BAD:BRASS})))}
+          ${explain('✎','Das ♭ steht immer <strong>direkt vor der Note</strong> – auf derselben Linie oder im selben Zwischenraum wie die Note.')}
+          ${explain('!','Auch <strong>ces</strong> und <strong>fes</strong> gehören dazu (rot). Sie liegen auf weißen Tasten: ces = Taste h, fes = Taste e.')}
+          ${explain('↑','Am Ende der Übung kommen auch Noten von <strong>c2 bis a2</strong> dran – gleiche Namen, nur eine Oktave höher.')}</div>`;
+      },
+      ex:[{type:'name',label:'♭-Noten benennen',desc:'15 ♭-Noten: zuerst von ces1 bis b1 – auch ces und fes –, am Ende auch höher bis as2.',
+           make:()=>({items:chain(pool([0,1,2,3,4,5,6],10),pool([7,8,9,10,11,12],5)).map(d=>({d,a:'f'})),tiles:Object.values(FL),hint:it=>L9_HINT(it.d)})},
+          {type:'keystap',label:'Auf der Klaviatur zeigen',desc:'Tippe die Taste zur ♭-Note an – ces und fes kommen am Schluss.',
+           make:()=>({items:chain(pool([1,2,4,5,6],6),shuffle([0,3])).map(d=>({d,a:'f'})),from:-1,to:7,hint:it=>L9_HINT(it.d)})}]
+    }
+   ]
+ },
+ { nr:11, title:'Notenwörter mit ♭', ms:'HASE, ASCHE, GAS …', nn:'HASE · BACH …', what:'Spiel · 6 Wörter', col:'#286650',
+   eyebrow:'Level 11 · Notenwörter mit b', h1:'Noch mehr <span class="ini">Wörter</span>.',
+   lead:'',
+   body(){
+     return `<div class="card staff-card">${explain('♭','Ein h mit ♭ heißt <strong>b</strong>, ein a mit ♭ heißt <strong>as</strong>, ein e mit ♭ heißt <strong>es</strong>. So wird h – as – e zu <strong>HASE</strong>.')}</div>`;
+   },
+   ex:[{type:'words',label:'Wörter knacken',desc:'6 Notenwörter mit ♭-Noten.',make:()=>({words:pool(['h-as-e','as-c-h-e','g-as','b-a-d','b-a-c-h','es-c-h-e','d-as','b-as-e','a-as','fes-c-h','g-es-c-h-a-h','a-b-g-as-e'],6)})}]
+ },
+ { nr:0, tag:'Abschlusstest', test:true, final:true, title:'Abschlusstest', col:INK,
+   eyebrow:'Abschlusstest', h1:'Zeig, was du <span class="ini">kannst</span>.',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'test',label:'Abschlusstest',maxErr:3,make:()=>TESTS.fin||(TESTS.fin=buildFinal())}]
+ },
+ { nr:14, tag:'Spiel 2', game:true, title:'Gleicher Ton – zwei Namen', col:BRASS,
+   eyebrow:'Spiel 2 · Für Fortgeschrittene', h1:'Gleiche Taste, <span class="ini">zwei Namen</span>.',
+   lead:'',
+   body(){return `<div class="card staff-card">${explain('=','<strong>fis</strong> und <strong>ges</strong>, <strong>gis</strong> und <strong>as</strong>, <strong>eis</strong> und <strong>f</strong> … – gleicher Ton, anderer Name.')}</div>`},
+   ex:[{type:'enh',label:'Leicht · 4 Paare',np:4,easy:true},{type:'enh',label:'Schwer · 6 Paare',np:6}]
+ },
+ { nr:15, tag:'Spiel 3', game:true, title:'Melodie hören und lesen', col:BRASS,
+   eyebrow:'Spiel 3 · Für Fortgeschrittene', h1:'Hören und <span class="ini">lesen</span>.',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'melody',label:'3 Töne',len:3}]
+ },
+ { nr:0, tag:'Spiel', game:true, title:'Noten-Brücke mit ♯ und ♭', col:'#2f6fd6',
+   eyebrow:'Spiel · Noten-Brücke mit Vorzeichen', h1:'Über die Brücke – <span class="ini">mit ♯ und ♭</span>!',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'bridge',label:'Mit Kreuz ♯',from:0,to:6,acc:'s'},{type:'bridge',label:'Mit ♭',from:0,to:6,acc:'f'}]
+ },
+ { nr:0, tag:'Spiel', game:true, title:'Notenflug', col:BRASS,
+   eyebrow:'Spiel · Für Fortgeschrittene', h1:'Fang die Note, <span class="ini">bevor sie fällt</span>!',
+   lead:'',
+   body(){return ''},
+   ex:[{type:'fly',label:'Leicht · c1 bis c3',from:0,to:14,dur:10000,min:7000,step:100},{type:'fly',label:'Schwer · ♯ und ♭ von c1 bis f2',from:0,to:10,kfrom:-1,kto:11,acc:true,dur:10000,min:7000,step:100}]
+ },
+];
+
+/* Nummern und Bezeichnungen automatisch */
+(()=>{let n=1,g=1;LEVELS.forEach(L=>{L.id=L.id||L.title;
+  if(L.free){L.tag='Spiel';L.eyebrow=L.eyebrow.replace(/^Spiel( \d+)?/,L.tag)}
+  else if(L.game){L.tag='Spiel';L.eyebrow=L.eyebrow.replace(/^Spiel( \d+)?/,L.tag)}
+  else if(!L.test){L.nr=n++;L.eyebrow=L.eyebrow.replace(/^Level \d+/,'Level '+L.nr)}})})();
+
+/* ---- Tests: einmal pro Seitenaufruf erzeugt, Wiederholung = gleicher Test ---- */
+const TESTS={};
+const pick1=l=>l[Math.floor(Math.random()*l.length)];
+const topicO=d=>d<=0?'Hilfslinien unten':d>=12?'Hilfslinien oben':d<7?'Oktavlage c1–c2':'Oktavlage c2–c3';
+const qL=d=>({d,a:'',kind:'name',topic:d%2===0?'Linien':'Zwischenräume',opts:d%2===0?['e','g','h','d','f']:['f','a','c','e']});   // nur Buchstabe
+const qO=d=>{const it={d,a:'',oct:true,kind:'name',topic:topicO(d)};it.opts=optsOct(it);return it};                          // mit Oktave
+const qA=(d,a,flats=true)=>{const it={d,a,kind:'name',topic:a==='s'?'Noten mit Kreuz ♯':'Noten mit ♭'};it.opts=optsMixed(flats)(it);return it};
+const qK=(d,a='')=>({d,a,kind:'key',topic:a==='s'?'Tastatur · Kreuz ♯':a==='f'?'Tastatur · ♭':'Tastatur'});
+const pk=(l,k)=>shuffle([...l]).slice(0,k);
+function buildMid(){            // 20 Fragen in Levelreihenfolge
+  return{from:-1,to:8,items:[
+    ...noRep(pk([0,1,2,3,4,5,6],3)).map(d=>qK(d)),          // Tastatur
+    ...pk([2,4,6,8,10],3).map(qL),                         // Linien
+    ...pk([3,5,7,9],3).map(qL),                            // Zwischenräume
+    ...pk([-3,-2,-1,0],3).map(qO),                         // Hilfslinien unten
+    ...pk([12,13,14],3).map(qO),                           // Hilfslinien oben
+    ...pk([1,2,3,4,5,6],3).map(qO),                        // Oktavlage c1–c2
+    ...pk([7,8,9,10,11],2).map(qO)]};                      // Oktavlage c2–c3
+}
+const SHW=['fis-c-h','fis-c-h-e','eis-c-a-f-e','eis-f-e-e','eis-f-a-c-h','eis-d-a-c-h'];
+const FLW=['h-as-e','as-c-h-e','g-as','b-a-d','b-a-c-h','es-c-h-e','d-as','b-as-e','fes-c-h','a-b-g-as-e'];
+const qW=(list,topic)=>{const [w,...rest]=shuffle([...list]),ans=w.replace(/-/g,'').toUpperCase();
+  return{kind:'name',topic,word:w.split('-').map(tok),ans,opts:shuffle([ans,...rest.slice(0,3).map(x=>x.replace(/-/g,'').toUpperCase())])}};
+const twoRanges=()=>{const a=pk([0,1,2,3,4,5,6],3);return[...a,...pk([7,8,9,10,11,12].filter(d=>!a.includes(d%7)),2)]};   // kein Name doppelt
+function buildFinal(){          // 25 Fragen in Levelreihenfolge
+  return{from:-1,to:8,items:[
+    qK(pick1([0,1,2,3,4,5,6])),                                  // Level 2 Tastatur
+    qL(pick1([2,4,6,8,10])),                                     // Level 3 Linien
+    qL(pick1([3,5,7,9])),                                        // Level 4 Zwischenräume
+    ...pk([-3,-2,-1,0],2).map(qO),                               // Level 5 Hilfslinien unten
+    ...pk([12,13,14],2).map(qO),                                 // Level 6 Hilfslinien oben
+    qO(pick1([1,2,3,4,5,6])),qO(pick1([7,8,9,10,11])),           // Level 7 Oktavlage
+    ...pk([0,1,3,4,5],1).map(d=>qK(d,'s')),...pk([2,6],1).map(d=>qK(d,'s')),   // Level 8 Halbton höher auf der Tastatur (eis/his zuletzt)
+    ...twoRanges().map(d=>qA(d,'s',false)),                      //         Kreuz benennen: 3× c1–c2, 2× c2–a2
+    qW(SHW,'Notenwort mit ♯'),                                   // Level 9
+    ...pk([1,2,4,5,6],1).map(d=>qK(d,'f')),...pk([0,3],1).map(d=>qK(d,'f')),   // Level 10 Halbton tiefer auf der Tastatur (ces/fes zuletzt)
+    ...twoRanges().map(d=>qA(d,'f')),                            //          ♭ benennen: 3× c1–c2, 2× c2–a2
+    qW(FLW,'Notenwort mit ♭')]};                                 // Level 11
+}
+/* ================= Fortschritt ================= */
+const MAX_ERR=2;                                   // höchstens 2 Fehler zum Bestehen
+const ROUND_ERR=1;                                 // in Runden: höchstens 1 Fehler, sonst Neustart der Runde
+/* Neustart: alter Fortschritt (violin-prog2, Name, Rekorde) wird einmalig gelöscht */
+try{if(!localStorage.getItem('violin-reset5')){Object.keys(localStorage).filter(k=>k.startsWith('violin-')).forEach(k=>localStorage.removeItem(k));localStorage.setItem('violin-reset4','1')}}catch(e){}
+let prog={};try{prog=JSON.parse(localStorage.getItem('violin-prog3')||'{}')}catch(e){}
+function saveProg(){try{localStorage.setItem('violin-prog3',JSON.stringify(prog))}catch(e){}}
+const exKey=(i,st,k)=>`${LEVELS[i].id}|${st}|${k}`;
+const tagOf=L=>L.tag||`Level ${L.nr}`;
+const TEST_I=()=>LEVELS.findIndex(L=>L.final);
+const MID_I=()=>LEVELS.findIndex(L=>L.mid);
+const testPassed=()=>exDone(TEST_I(),0,0);
+const midPassed=()=>exDone(MID_I(),0,0);
+const LOCKS=true;   // true = Schülerfassung mit Sperren, false = alles frei
+// Welt 1: der Reihe nach ab Level 1 · Zwischentest: immer offen · Welt 2 und Abschlusstest: nach dem Zwischentest der Reihe nach
+const prevDone=i=>{const m=MID_I(),a=i>m?m:0;return(i<=m||midPassed())&&LEVELS.slice(a,i).every((L,j)=>L.game||levelDone(a+j))};
+const FINAL_I=()=>LEVELS.findIndex(L=>L.final);
+const locked=i=>!LOCKS||LEVELS[i].free||LEVELS[i].mid?false:LEVELS[i].game?!prevDone(FINAL_I()):!prevDone(i);
+const exDone=(i,st,k)=>!!prog[exKey(i,st,k)];
+const stepsOf=L=>L.steps||[{body:L.body,ex:L.ex||[],after:L.after}];
+const stepDone=(i,st)=>stepsOf(LEVELS[i])[st].ex.every((_,k)=>exDone(i,st,k));
+const stepOpen=(i,st)=>{for(let k=0;k<st;k++)if(!stepDone(i,k))return false;return true};
+const exOpen=(i,st,k)=>!LOCKS||LEVELS[i].game||stepOpen(i,st)&&(k===0||exDone(i,st,k-1));
+const allEx=i=>stepsOf(LEVELS[i]).flatMap((p,st)=>p.ex.map((_,k)=>[st,k]));
+const levelDone=i=>{const a=allEx(i);return a.length?a.every(([st,k])=>exDone(i,st,k)):!!prog['seen-'+i]};
+
+/* ================= Navigation ================= */
+const worldOf=i=>{const L=LEVELS[i];if(!L)return'';const W=WORLDS.find(W=>W.sel(L,i));return W?W.cls.split(' ').pop():''};
+function show(id){if(id==='learn'||id==='game')homeLabel();['home','learn','game','result','proof'].forEach(s=>$(s).hidden=s!==id);document.body.dataset.view=id;document.body.dataset.world=id==='home'||id==='proof'?'':worldOf(S.level);window.scrollTo({top:0})}
+function stopTimers(){clearInterval(G.iv);clearTimeout(G.timer);clearTimeout(G.t2);cancelAnimationFrame(G.raf);G.run=false;stopAnim()}
+function goHome(){stopTimers();show("home");renderHome()}
+function backHome(){ // zurück zur Karte, genau an die Stelle des Levels bzw. Spiels
+  const i=S.level;goHome();
+  requestAnimationFrame(()=>{const n=document.querySelector(`#worlds [data-lv="${i}"]`);if(n)n.scrollIntoView({block:'center'})});
+}
+function homeLabel(){const L=LEVELS[S.level];const t=L&&L.game&&!L.free?'🎮 Spielplatz':'🏠 Übersicht';['tohome','g-home'].forEach(id=>$(id).textContent=t)}
+function openLevel(i,st=0){
+  if(!nameOk(NAME))return openSignin();
+  if(locked(i))return goHome();
+  if(!stepOpen(i,st))st=0;
+  stopTimers();S.level=i;S.step=st;const L=LEVELS[i],steps=stepsOf(L),P=steps[st],multi=steps.length>1;
+  if(!allEx(i).length){prog['seen-'+i]=true;saveProg()}
+  $('l-eyebrow').textContent='';$('l-eyebrow').hidden=true;$('l-pill').textContent=tagOf(L)+(L.test||L.game?'':' · '+L.title)+(multi?` · Schritt ${st+1}/${steps.length}`:'');
+  $('l-title').innerHTML=multi?`<span class="ini">${st+1}.</span> ${P.title}`:L.h1;$('l-title').hidden=!multi&&!L.h1;
+  $('l-lead').textContent=multi&&st>0?'':L.lead;$('l-lead').hidden=(multi&&st>0)||!L.lead;
+  const nav=multi?`<div class="stepnav" role="tablist">${steps.map((p,k)=>{const open=stepOpen(i,k),ok=stepDone(i,k);
+    return `<button class="stp${k===st?' on':''}${ok?' ok':''}" data-st="${k}" aria-selected="${k===st}" title="${p.title}" ${open?'':'disabled'}><b>${ok?'✓':open?k+1:'🔒'}</b><span>${p.title}</span></button>`}).join('')}</div>`:'';
+  $('l-body').innerHTML=nav+P.body();
+  $('l-body').querySelectorAll('[data-st]:not([disabled])').forEach(b=>b.onclick=()=>openLevel(i,+b.dataset.st));
+  wireLearn($('l-body'),$('l-body').querySelector('#kb'));
+  if(P.after)P.after();
+  $('l-ex').className='levels'+(P.ex.length===1?' single':'');
+  $('l-ex').innerHTML=P.ex.map((x,k)=>{const ok=exDone(i,st,k),open=exOpen(i,st,k);
+    return `<button class="card level${open&&!ok?' primary':''}${ok?' passed':''}" data-ex="${k}" ${open?'':'disabled'}>
+    <span class="num">Übung${P.ex.length>1?' '+(k+1):''}${ok?' · ✓ geschafft':open?'':' · 🔒 erst Übung '+k}</span><span class="ttl">${x.label}</span><span class="go">${PAUSE&&PAUSE.li===i&&PAUSE.st===(S.step||0)&&PAUSE.k===k?'Weitermachen →':ok?'Noch einmal →':'Los geht’s →'}</span></button>`}).join('');
+  $('l-ex').querySelectorAll('[data-ex]:not([disabled])').forEach(b=>b.onclick=()=>startEx(i,+b.dataset.ex));
+  const hasPrevStep=st>0,hasNextStep=st<steps.length-1;
+  const ni=nextIdx(i);const canNext=hasNextStep?stepDone(i,st):(levelDone(i)&&ni>=0&&!locked(ni));
+  $('l-prev').textContent=hasPrevStep?'← vorheriger Schritt':'← Übersicht';
+  $('l-next').textContent=hasNextStep?'nächster Schritt →':i<LEVELS.length-1?'nächstes Level →':'zur Übersicht →';
+  $('l-prev').disabled=false;$('l-prev').hidden=!hasPrevStep;
+  $('l-next').disabled=!(canNext||(!hasNextStep&&i===LEVELS.length-1&&levelDone(i)));
+  $('l-lock').hidden=!$('l-next').disabled;
+  if(L.game){$('l-next').hidden=true;$('l-lock').hidden=true}else $('l-next').hidden=false;
+  if(L.mid)$('l-lock').hidden=true;
+  $('l-lock').textContent=hasNextStep||!levelDone(i)?`🔒 Weiter geht es, wenn du die Übung mit höchstens ${P.ex[0]?.maxErr??MAX_ERR} Fehlern geschafft hast.`:'🎉 Alles geschafft – am Spielplatz kannst du weiter üben.';
+  show('learn');
+}
+$('l-prev').onclick=()=>S.step>0?openLevel(S.level,S.step-1):goHome();
+function nextIdx(i){let j=i+1;while(j<LEVELS.length&&LEVELS[j].free&&!LEVELS[i].free)j++;return j<LEVELS.length?j:-1}
+$('l-next').onclick=()=>S.step<stepsOf(LEVELS[S.level]).length-1?openLevel(S.level,S.step+1):nextIdx(S.level)>=0?openLevel(nextIdx(S.level),0):goHome();
+$('tohome').onclick=backHome;$('home-link').onclick=goHome;$('g-home').onclick=backHome;
+let PAUSE=null,AUTO=null;const RESUME={name:()=>renderName(),keystap:()=>renderTap(),half:()=>renderHalf(),match:()=>renderMatch(),place:()=>renderPlace(),words:()=>renderWords(),keysdrag:()=>renderDrag()};
+$('back').onclick=()=>{
+  const L=LEVELS[S.level];
+  if(!L.test&&!L.game&&RESUME[G.type]&&document.body.dataset.view==='game'){
+    if(G.pend){const f=G.pend;stopTimers();f()}                       // laufende Antwort abschließen
+    if(document.body.dataset.view==='game'){stopTimers();PAUSE={li:S.level,st:S.step||0,k:S.ex,G:Object.assign({},G),intro:!!$('gostart')}}
+  }
+  openLevel(S.level,S.step);
+};
+function nextStep(){
+  const L=LEVELS[S.level],steps=stepsOf(L),P=steps[S.step];
+  if(S.ex<P.ex.length-1)return{label:L.game?P.ex[S.ex+1].label:'Übung '+(S.ex+2),go:()=>startEx(S.level,S.ex+1)};
+  if(S.step<steps.length-1)return{label:'Schritt '+(S.step+2),go:()=>openLevel(S.level,S.step+1)};
+  const ni=nextIdx(S.level);if(ni>=0&&!locked(ni))return{label:tagOf(LEVELS[ni]),go:()=>openLevel(ni)};
+  return{label:'Übersicht',go:goHome};
+}
+
+const WORLDS=[
+  {name:'Welt 1 · Notenwald',icon:'🌲',cls:'w1',sel:(L,i)=>!L.test&&(!L.game||L.free)&&i<MID_I()},
+  {name:'Das Tor',icon:'🏰',cls:'gate',sel:L=>L.mid},
+  {name:'Welt 2 · Vorzeichen-Gipfel',icon:'⛰️',cls:'w2',sel:(L,i)=>!L.test&&!L.game&&i>MID_I()},
+  {name:'Die Schatzburg',icon:'👑',cls:'gate gold',sel:L=>L.final},
+  {name:'Spielplatz',icon:'🎮',cls:'play',sel:L=>L.game&&!L.free}];
+const GICON={'Noten setzen':'✏️','Noten-Brücke':'🌉','Noten-Brücke mit ♯ und ♭':'🌉','Gleicher Ton – zwei Namen':'🃏','Melodie hören und lesen':'🎵','Notenflug':'🏀'};
+/* ---------- Szenen der Abenteuer-Karte ---------- */
+let RND=1;const rnd=()=>(RND=(RND*16807)%2147483647)/2147483647;
+function snake(n,W,rowH=218,top=150,fix){
+  const cols=fix||(W>=860?5:W>=620?4:W>=440?3:2),mx=W<440&&!fix?68:90,pts=[];
+  for(let k=0;k<n;k++){const r=Math.floor(k/cols),c=k%cols,cc=r%2?cols-1-c:c;
+    const x=cols===1?W/2:mx+cc*(W-2*mx)/(cols-1);pts.push([x,top+r*rowH+(c%2?22:0)])}
+  return{pts,H:top+Math.ceil(n/cols)*rowH-10,cols};
+}
+function smooth(pts){
+  if(pts.length<2)return'';let d=`M${pts[0][0]} ${pts[0][1]}`;
+  for(let k=1;k<pts.length;k++){const [x0,y0]=pts[k-1],[x1,y1]=pts[k];
+    if(Math.abs(y1-y0)>60){const ex=x0<120?-60:60;d+=` C${x0+ex} ${y0} ${x1+ex} ${y1} ${x1} ${y1}`}else d+=` C${(x0+x1)/2} ${y0} ${(x0+x1)/2} ${y1} ${x1} ${y1}`}
+  return d;
+}
+const tree=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-4" y="0" width="8" height="16" fill="#7a5230"/><path d="M0 -46 L24 -8 H-24Z" fill="#2f8f46"/><path d="M0 -62 L19 -26 H-19Z" fill="#3aa856"/></g>`;
+const bush=(x,y)=>`<g transform="translate(${x} ${y})"><circle r="11" fill="#55b85f"/><circle cx="12" cy="3" r="9" fill="#4aa856"/><circle cx="-11" cy="4" r="8" fill="#62c46c"/></g>`;
+function placeNodes(items,pts,cur){return items.map(([L,i],k)=>`<div class="spot" style="left:${pts[k][0]}px;top:${pts[k][1]}px">${node(L,i,cur)}</div>`).join('')}
+function forestScene(items,cur,W){
+  RND=7;const {pts,H}=snake(items.length,W),d=smooth(pts);
+  let deco='';
+  for(let k=0;k<Math.round(W*H/9000);k++){const x=rnd()*W,y=30+rnd()*(H-20);
+    if(pts.some(([px,py])=>Math.hypot(px-x,(py-y)*1.3)<95))continue;deco+=rnd()<.7?tree(x,y,.7+rnd()*.5):bush(x,y)}
+  return `<div class="scene forest" style="height:${H}px"><svg width="${W}" height="${H}" aria-hidden="true">
+    <rect width="${W}" height="${H}" rx="18" fill="#c9ecb5"/>${deco}
+    <path d="${d}" stroke="#b98a4a" stroke-width="52" fill="none" stroke-linecap="round"/>
+    <path d="${d}" stroke="#e9c98a" stroke-width="42" fill="none" stroke-linecap="round"/>
+    <path d="${d}" stroke="#f6e2b3" stroke-width="4" fill="none" stroke-dasharray="2 18" stroke-linecap="round"/></svg>${placeNodes(items,pts,cur)}</div>`;
+}
+function mountainScene(items,cur,W){
+  RND=3;const {pts,H}=snake(items.length,W,228,150),d=smooth(pts);
+  let m='';const peaks=Math.max(3,Math.round(W/170));
+  for(let k=0;k<peaks;k++){const x=(k+.5)*W/peaks+(rnd()-.5)*60,h=H*(.55+rnd()*.35),w=W/peaks*1.1;
+    m+=`<path d="M${x-w} ${H} L${x} ${H-h} L${x+w} ${H}Z" fill="${k%2?'#8a94b8':'#9aa3c6'}"/><path d="M${x-w*.22} ${H-h*.78} L${x} ${H-h} L${x+w*.22} ${H-h*.78} L${x+w*.1} ${H-h*.72} L${x} ${H-h*.8} L${x-w*.1} ${H-h*.72}Z" fill="#fff"/>`}
+  let rocks='';for(let k=0;k<Math.round(W*H/14000);k++){const x=rnd()*W,y=40+rnd()*(H-40);if(pts.some(([px,py])=>Math.hypot(px-x,py-y)<85))continue;
+    rocks+=rnd()<.5?`<path d="M${x-14} ${y} L${x-4} ${y-14} L${x+10} ${y-10} L${x+16} ${y}Z" fill="#6f7894"/>`:`<g transform="translate(${x} ${y}) scale(.6)"><rect x="-4" y="0" width="8" height="14" fill="#5b4632"/><path d="M0 -40 L18 -4 H-18Z" fill="#2c6b52"/></g>`}
+  return `<div class="scene mountain" style="height:${H}px"><svg width="${W}" height="${H}" aria-hidden="true">
+    <defs><linearGradient id="msky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cbd6ff"/><stop offset="1" stop-color="#eef0ff"/></linearGradient></defs>
+    <rect width="${W}" height="${H}" rx="18" fill="url(#msky)"/>${m}${rocks}
+    <path d="${d}" stroke="#5b6078" stroke-width="44" fill="none" stroke-linecap="round"/>
+    <path d="${d}" stroke="#a7a1a0" stroke-width="36" fill="none" stroke-linecap="round"/>
+    <path d="${d}" stroke="#7f7a7a" stroke-width="5" fill="none" stroke-dasharray="10 14" stroke-linecap="round"/></svg>${placeNodes(items,pts,cur)}</div>`;
+}
+function gateScene(items,cur,W){
+  const H=340,cx=W/2,gw=Math.min(150,W*.36),top=110;
+  const cren=(x0,x1,y)=>{let s='';for(let x=x0;x<x1-8;x+=24)s+=`<rect x="${x}" y="${y-16}" width="14" height="16" fill="#9a8f84"/>`;return s};
+  const stones=(x0,y0,w,h)=>{let s='';for(let y=y0+14;y<y0+h;y+=22)for(let x=x0+((y/22)%2?0:18);x<x0+w;x+=36)s+=`<rect x="${x}" y="${y}" width="32" height="18" rx="3" fill="none" stroke="#8d8279" stroke-width="1.5" opacity=".5"/>`;return s};
+  return `<div class="scene gate" style="height:${H}px"><svg width="${W}" height="${H}" aria-hidden="true">
+    <rect width="${W}" height="${H}" rx="18" fill="#ffe9c9"/><rect y="${H-60}" width="${W}" height="60" fill="#a8d88e"/>
+    <path d="M${cx-60} ${H} Q${cx} ${H-40} ${cx-30} ${H-70} L${cx+30} ${H-70} Q${cx} ${H-40} ${cx+60} ${H}Z" fill="#e9c98a"/>
+    <rect x="0" y="${top+60}" width="${W}" height="${H-top-120}" fill="#b5aa9f"/>${cren(0,W,top+60)}${stones(0,top+60,W,H-top-120)}
+    <rect x="${cx-gw/2-70}" y="${top}" width="70" height="${H-top-60}" fill="#a59a8f"/>${cren(cx-gw/2-70,cx-gw/2,top)}
+    <rect x="${cx+gw/2}" y="${top}" width="70" height="${H-top-60}" fill="#a59a8f"/>${cren(cx+gw/2,cx+gw/2+70,top)}
+    <rect x="${cx-gw/2}" y="${top+20}" width="${gw}" height="${H-top-80}" fill="#b5aa9f"/>${cren(cx-gw/2,cx+gw/2,top+20)}
+    <path d="M${cx-gw/2+18} ${H-60} V${top+110} A${gw/2-18} ${gw/2-18} 0 0 1 ${cx+gw/2-18} ${top+110} V${H-60}Z" fill="#3b2a1e"/>
+    <g stroke="#2a2a2a" stroke-width="4" opacity=".55">${[...Array(5)].map((_,k)=>`<line x1="${cx-gw/2+28+k*(gw-56)/4}" y1="${top+70}" x2="${cx-gw/2+28+k*(gw-56)/4}" y2="${top+105}"/>`).join('')}</g>
+    <line x1="${cx-gw/2-35}" y1="${top}" x2="${cx-gw/2-35}" y2="${top-40}" stroke="#555" stroke-width="3"/><path d="M${cx-gw/2-35} ${top-40} h30 l-8 9 l8 9 h-30Z" fill="#e5484d"/>
+    <line x1="${cx+gw/2+35}" y1="${top}" x2="${cx+gw/2+35}" y2="${top-40}" stroke="#555" stroke-width="3"/><path d="M${cx+gw/2+35} ${top-40} h30 l-8 9 l8 9 h-30Z" fill="#4a3ad1"/>
+    </svg>${placeNodes(items,[[cx,H-150]],cur)}</div>`;
+}
+let DUO_H=0;
+function castleScene(items,cur,W){
+  const H=Math.max(470,DUO_H),cx=W/2,base=H-70;
+  const tower=(x,w,h,col)=>`<rect x="${x-w/2}" y="${base-h}" width="${w}" height="${h}" fill="${col}"/><path d="M${x-w/2-8} ${base-h} L${x} ${base-h-w*.9} L${x+w/2+8} ${base-h}Z" fill="#5b3df5"/>
+    <line x1="${x}" y1="${base-h-w*.9}" x2="${x}" y2="${base-h-w*.9-28}" stroke="#555" stroke-width="2.5"/><path d="M${x} ${base-h-w*.9-28} h22 l-6 7 l6 7 h-22Z" fill="#ffd23f"/>
+    <rect x="${x-8}" y="${base-h+30}" width="16" height="24" rx="8" fill="#3b2a1e"/>`;
+  const tw=Math.min(70,W*.14);
+  return `<div class="scene castle" style="height:${H}px"><svg width="${W}" height="${H}" aria-hidden="true">
+    <defs><linearGradient id="csky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe7a8"/><stop offset="1" stop-color="#fff6dc"/></linearGradient></defs>
+    <rect width="${W}" height="${H}" rx="18" fill="url(#csky)"/>
+    <circle cx="${W-70}" cy="60" r="34" fill="#ffd23f" opacity=".8"/>
+    <rect y="${base}" width="${W}" height="${H-base}" fill="#8fd07a"/>
+    <path d="M${cx-50} ${H} Q${cx} ${base+30} ${cx-28} ${base} H${cx+28} Q${cx} ${base+30} ${cx+50} ${H}Z" fill="#e9c98a"/>
+    <rect x="${cx-W*.32}" y="${base-150}" width="${W*.64}" height="150" fill="#e8d3a8"/>
+    ${[...Array(Math.floor(W*.64/26))].map((_,k)=>`<rect x="${cx-W*.32+k*26}" y="${base-166}" width="16" height="16" fill="#e8d3a8"/>`).join('')}
+    ${tower(cx-W*.32,tw,230,'#dcc192')}${tower(cx+W*.32,tw,230,'#dcc192')}${tower(cx-W*.14,tw*.9,200,'#e2cb9f')}${tower(cx+W*.14,tw*.9,200,'#e2cb9f')}${tower(cx,tw*1.2,280,'#efdcb3')}
+    <path d="M${cx-44} ${base} V${base-70} A44 44 0 0 1 ${cx+44} ${base-70} V${base}Z" fill="#5a3b22"/>
+    <g transform="translate(${cx+W*.22} ${base+22})"><rect x="-30" y="-24" width="60" height="34" rx="4" fill="#a0622d" stroke="#5a3b22" stroke-width="3"/><path d="M-30 -24 Q0 -50 30 -24Z" fill="#c07a37" stroke="#5a3b22" stroke-width="3"/>
+      <rect x="-6" y="-26" width="12" height="14" fill="#ffd23f"/>${[...Array(7)].map((_,k)=>`<circle cx="${-26+k*9}" cy="${-30-(k%2)*5}" r="5" fill="#ffd23f" stroke="#c99a00"/>`).join('')}</g>
+    ${[...Array(6)].map((_,k)=>`<text x="${40+k*(W-80)/5}" y="${120+(k%2)*40}" font-size="20" class="spark">✨</text>`).join('')}
+    </svg>${placeNodes(items,[[cx,base-128]],cur)}</div>`;
+}
+function playScene(items,cur,W){
+  RND=11;const {pts,H}=snake(items.length,W,218,180,W<620?2:null);
+  const fw=(x,y,r)=>{let s=`<g transform="translate(${x} ${y})"><line x1="-${r*.6}" y1="${r+40}" x2="0" y2="0" stroke="#7a5230" stroke-width="6"/><line x1="${r*.6}" y1="${r+40}" x2="0" y2="0" stroke="#7a5230" stroke-width="6"/>
+    <circle r="${r}" fill="none" stroke="#e5484d" stroke-width="5"/>`;const cols=['#ffd23f','#2bb3c9','#5b3df5','#2fa35a','#ff9f1c','#e5484d','#ff6fb5','#4a90e2'];
+    for(let k=0;k<8;k++){const a=k/8*Math.PI*2,cx=Math.cos(a)*r,cy=Math.sin(a)*r;s+=`<line x1="0" y1="0" x2="${cx}" y2="${cy}" stroke="#e5484d" stroke-width="2"/><rect x="${cx-9}" y="${cy}" width="18" height="14" rx="4" fill="${cols[k]}"/>`}
+    return s+'<circle r="7" fill="#555"/></g>'};
+  const tent=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-46 0 L0 -56 L46 0Z" fill="#e5484d"/><path d="M-30 0 L0 -56 L-10 0Z M10 0 L0 -56 L30 0Z" fill="#fff"/><rect x="-42" y="0" width="84" height="40" fill="#ffe9c9"/><path d="M-12 40 V12 Q0 2 12 12 V40Z" fill="#7a3b2e"/><line x1="0" y1="-56" x2="0" y2="-76" stroke="#555" stroke-width="2"/><path d="M0 -76 h18 l-5 6 l5 6 h-18Z" fill="#ffd23f"/></g>`;
+  const bal=(x,y,c)=>`<g transform="translate(${x} ${y})" class="balloon"><path d="M0 22 q4 14 -2 28" stroke="#888" fill="none"/><ellipse rx="13" ry="17" fill="${c}"/><ellipse cx="-4" cy="-6" rx="3" ry="5" fill="#fff" opacity=".5"/></g>`;
+  let deco=fw(W-90,90,52)+(W>=500?tent(70,H-40):'');
+  ['#e5484d','#ffd23f','#2bb3c9','#5b3df5','#ff6fb5'].forEach((c,k)=>{const x=40+rnd()*(W-80),y=40+rnd()*(H-120);if(!pts.some(([px,py])=>Math.hypot(px-x,py-y)<90))deco+=bal(x,y,c)});
+  return `<div class="scene playland" style="height:${H}px"><svg width="${W}" height="${H}" aria-hidden="true">
+    <defs><linearGradient id="psky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9f0ff"/><stop offset=".6" stop-color="#e9fbff"/><stop offset="1" stop-color="#b9e6a3"/></linearGradient></defs>
+    <rect width="${W}" height="${H}" rx="18" fill="url(#psky)"/>
+    ${[...Array(Math.ceil(W/40))].map((_,k)=>`<path d="M${k*40} 0 L${k*40+20} 22 L${k*40+40} 0Z" fill="${['#e5484d','#ffd23f','#2bb3c9','#5b3df5'][k%4]}"/>`).join('')}
+    ${deco}</svg>${placeNodes(items,pts,cur)}</div>`;
+}
+WORLDS[4].scene=playScene;
+WORLDS[0].scene=forestScene;WORLDS[1].scene=gateScene;WORLDS[2].scene=mountainScene;WORLDS[3].scene=castleScene;
+const ICON=L=>L.final?'👑':L.mid?'🏰':L.game?(GICON[L.title]||'🎮'):L.nr;
+function node(L,i,cur){
+  const ex=allEx(i),n=ex.filter(([st,k])=>exDone(i,st,k)).length,full=levelDone(i),lk=locked(i);
+  const stars=ex.length?`<span class="stars${ex.length>4?' many':''}">${ex.map(([st,k])=>exDone(i,st,k)?'★':'☆').join('')}</span>`:'';
+  return `<button class="node${full?' done':''}${lk?' locked':''}${i===cur?' cur':''}${L.game?' gm':''}" data-lv="${i}" ${lk?'disabled':''} aria-label="${tagOf(L)}: ${L.title}${full?', geschafft':lk?', gesperrt':''}">
+    <span class="bub">${lk?'🔒':full&&!L.game&&!L.test?'✓':ICON(L)}</span>${i===cur?'<span class="here">Hier geht’s weiter!</span>':''}
+    <span class="nlab">${L.test||(L.game&&!L.free)?'':`<b>${tagOf(L)}</b>`}${L.title}</span>${stars}</button>`;
+}
+let RZ;window.addEventListener('resize',()=>{clearTimeout(RZ);RZ=setTimeout(()=>{if(!$('home').hidden)renderHome()},200)});
+let WBOX={},USED={};
+function renderHome(again){if(!again)WBOX={};
+  const lv=LEVELS.map((L,i)=>[L,i]),cur=LEVELS.findIndex((L,i)=>!L.game&&!levelDone(i));
+  const all=lv.flatMap(([L,i])=>allEx(i).map(([st,k])=>exDone(i,st,k))),got=all.filter(Boolean).length;
+  $('hud-stars').textContent=got;$('hud-max').textContent=all.length;$('hud-bar').style.width=(all.length?got/all.length*100:0)+'%';
+  const FULL=$('worlds').clientWidth||900;
+  $('worlds').innerHTML=WORLDS.map(W=>{const items=lv.filter(([L,i])=>W.sel(L,i));if(!items.length)return'';
+    const note=!LOCKS?'':W.cls==='w1'?'<p class="wnote">🔑 Die Levels öffnen sich der Reihe nach.</p>':W.cls==='w2'?(midPassed()?'<p class="wnote open">🔓 Offen – du hast den Zwischentest bestanden!</p>':'<p class="wnote">🔒 Erst spielbar, wenn du den Zwischentest am Tor bestanden hast.</p>')
+      :W.cls==='play'||W.cls==='gate gold'?(prevDone(FINAL_I())?`<p class="wnote open">🔓 Offen – ${W.cls==='play'?'hier kannst du vor dem Abschlusstest üben!':'du hast alle Levels mit Vorzeichen geschafft!'}</p>`:'<p class="wnote">🔒 Öffnet sich, sobald du alle Levels mit Vorzeichen geschafft hast.</p>'):'';
+    const full=FULL,duo=full>=700&&(W.cls==='play'||W.cls==='gate gold'),box=WBOX[W.cls]||(duo?Math.floor((full-20)/2):full);USED[W.cls]=box;
+    if(W.cls==='gate gold'){const np=lv.filter(([L])=>L.game&&!L.free).length;DUO_H=duo?snake(np,box,218,180,box<620?2:null).H:0}
+    const body=W.scene?W.scene(items,cur,box):`<div class="trail">${items.map(([L,i])=>node(L,i,cur)).join('')}</div>`;
+    return `<section class="world ${W.cls}"><h2><span>${W.icon}</span>${W.name}</h2>${note}${body}</section>`}).join('')
+    .replace(FULL>=700?/(<section class="world gate gold">[\s\S]*?<\/section>)(<section class="world play">[\s\S]*?<\/section>)/:/^$/,'<div class="duo">$1$2</div>');
+  /* Kontrolle: passt jede Szene genau in ihre Karte? Sonst mit gemessener Breite neu zeichnen */
+  let fix=false;document.querySelectorAll('#worlds .world').forEach(sec=>{const c=[...sec.classList].filter(x=>x!=='world').join(' '),w=sec.clientWidth;if(w&&Math.abs(w-USED[c])>2&&!again){WBOX[c]=w;fix=true}});
+  if(fix)return renderHome(true);
+  document.querySelectorAll('#worlds [data-lv]:not([disabled])').forEach(b=>b.onclick=()=>openLevel(+b.dataset.lv));
+  const any=got>0||levelDone(0);
+  $('cover-start').textContent=cur<0?'Ab auf den Spielplatz! 🎮':any?`Weiter: ${tagOf(LEVELS[cur])} ▶`:'Abenteuer starten ▶';
+  $('cover-start').onclick=()=>cur<0?document.querySelector('.world.play').scrollIntoView({behavior:'smooth'}):openLevel(cur);
+}
+(function coverStaff(){
+  const base=150;let s=`<svg class="cover-staff" viewBox="0 25 900 200" role="img" aria-label="Violinschlüssel mit allen Noten vom kleinen g bis c3">`;
+  s+=staffLines(10,890,base,1.5,'#ffffff66').replace(/stroke-width="2.4"/,'stroke-width="0"');
+  s+=treble(40,base,'#fbf6ea');
+  for(let d=-3;d<=14;d++){
+    const x=120+(d+3)*45,y=PY(d,base),c=(d<1||d>11)?'#e9b866':'#fbf6ea';
+    s+=`<g class="pop" style="animation-delay:${((d+3)*.05+.1).toFixed(2)}s">${ledgers(x,d,base,18,'#ffffff99')}${note(x,y,c)}</g>`;
+  }
+  $('coverstaff').innerHTML=s+'</svg>';
+})();
+
+/* ================= Nachweis / Fortschrittscode ================= */
+const B32='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const PL=()=>LEVELS.map((L,i)=>[L,i]).filter(([L])=>!L.game).map(([L,i])=>[i,allEx(i).length]);  // Levels und Tests
+const cntOf=([i,n])=>n?allEx(i).filter(([st,k])=>exDone(i,st,k)).length:(levelDone(i)?1:0);
+function hashStr(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+const normName=n=>n.trim().toLowerCase().replace(/\s+/g,' ');
+const SPACE=()=>PL().reduce((m,[,n])=>m*(Math.max(n,1)+1),1);
+const salt=name=>hashStr(normName(name)+'|notenwerkstatt-v4');
+function makeCode(name,cnt){
+  let v=0;PL().forEach(([,n],k)=>{v=v*(Math.max(n,1)+1)+cnt[k]});
+  const M=32**4;v=(v+salt(name))%M;let s='';for(let k=0;k<4;k++){s=B32[v%32]+s;v=Math.floor(v/32)}
+  const h=hashStr(normName(name)+'|'+s+'|chk');return s.slice(0,3)+'-'+s[3]+B32[h&31]+B32[(h>>5)&31];
+}
+function readCode(name,code){
+  const raw=code.toUpperCase().replace(/[^A-Z0-9]/g,'');if(raw.length!==6)return null;
+  const s=raw.slice(0,4),h=hashStr(normName(name)+'|'+s+'|chk');if(raw.slice(4)!==B32[h&31]+B32[(h>>5)&31])return null;
+  let v=0;for(const c of s){const x=B32.indexOf(c);if(x<0)return null;v=v*32+x}
+  const M=32**4;v=((v-salt(name))%M+M)%M;if(v>=SPACE())return null;
+  const pl=PL(),cnt=[];for(let k=pl.length-1;k>=0;k--){const r=Math.max(pl[k][1],1)+1;cnt[k]=v%r;v=Math.floor(v/r)}
+  return cnt;
+}
+function proofList(cnt){
+  return PL().map(([i,n],k)=>{const L=LEVELS[i],tot=Math.max(n,1),got=cnt[k],full=got===tot;
+    return `<div class="pf-row${full?' ok':''}"><span class="pf-ic">${full?'✅':got?'🟡':'⬜'}</span><span class="pf-t"><b>${tagOf(L)}</b> ${L.title}</span><span class="pf-st">${n?'★'.repeat(got)+'☆'.repeat(n-got):''}</span></div>`}).join('');
+}
+const myCnt=()=>PL().map(cntOf);
+const sumTxt=cnt=>{const pl=PL(),ex=pl.reduce((a,[,n])=>a+n,0),got=pl.reduce((a,[,n],k)=>a+(n?cnt[k]:0),0);return[got,ex]};
+let NAME='';try{NAME=localStorage.getItem('violin-name')||''}catch(_){}
+const RX_FIRST=/^[A-ZÄÖÜ][a-zäöüß]+(-[A-ZÄÖÜ][a-zäöüß]+)?$/,RX_CLASS=/^[1-9][0-9]?[a-z]$/;
+const firstOk=v=>RX_FIRST.test(v.trim())&&v.trim().length>=2,classOk=v=>RX_CLASS.test(v.trim());
+const nameOk=n=>{const m=(n||'').trim().split(' ');return m.length===2&&firstOk(m[0])&&classOk(m[1])};
+const firstMsg=v=>!v.trim()?'':/^[a-zäöüß]/.test(v.trim())?'Bitte mit großem Anfangsbuchstaben schreiben, z. B. Lena.':/\s|\d/.test(v.trim())?'Nur den Vornamen – ohne Nachnamen und ohne Zahlen.':/[A-ZÄÖÜ]{2}/.test(v.trim())?'Nur der erste Buchstabe groß, z. B. Lena.':!firstOk(v)?'Nur Buchstaben: großer Anfangsbuchstabe, dann klein.':'';
+const classMsg=v=>!v.trim()?'':/^[1-9][0-9]?[A-Z]$/.test(v.trim())?'Den Buchstaben bitte klein schreiben, z. B. 3b.':!classOk(v)?'Zahl und ein kleiner Buchstabe, z. B. 3b.':'';
+function setName(n){NAME=n;try{localStorage.setItem('violin-name',NAME)}catch(_){}}
+function codeLine(){const box=$('pf-code');if(nameOk(NAME)){box.className='pf-code';box.textContent=makeCode(NAME,myCnt())}else{box.className='pf-code empty';box.textContent='Bitte zuerst anmelden.'}$('pf-copy').disabled=!nameOk(NAME)}
+function renderProof(){
+  const cnt=myCnt(),[n,ex]=sumTxt(cnt);
+  $('pf-who').textContent=nameOk(NAME)?NAME.replace(' ',' · Klasse '):'noch nicht angemeldet';
+  const lv=LEVELS.filter((L,i)=>!L.game&&levelDone(i)).length,tot=LEVELS.filter(L=>!L.game).length;
+  $('pf-sum').innerHTML=`<span>⭐ ${n} von ${ex} Übungen</span><span>🏁 ${lv} von ${tot} Stationen</span><span>${testPassed()?'👑 Abschlusstest bestanden':midPassed()?'🏰 Zwischentest bestanden':'🏰 Zwischentest offen'}</span>`;
+  $('pf-list').innerHTML=proofList(cnt);codeLine();
+}
+/* Anmeldung: ohne gültigen Vornamen + Klasse kein Start */
+let SI_AFTER=null;
+function openSignin(after){
+  SI_AFTER=after||null;const m=(NAME||'').trim().split(' ');
+  $('si-first').value=nameOk(NAME)?m[0]:'';$('si-class').value=nameOk(NAME)?m[1]:'';$('si-code').value='';
+  $('si-cancel').hidden=!nameOk(NAME);$('si-h').textContent=nameOk(NAME)?'Name ändern':'Bevor es losgeht …';
+  $('signin').hidden=false;document.body.classList.add('modal');siCheck();setTimeout(()=>$('si-first').focus(),50);
+}
+function closeSignin(){$('signin').hidden=true;document.body.classList.remove('modal')}
+function siCheck(){
+  const f=$('si-first').value,c=$('si-class').value;
+  $('si-first-err').textContent=firstMsg(f);$('si-class-err').textContent=classMsg(c);
+  $('si-first').classList.toggle('bad',!!firstMsg(f));$('si-class').classList.toggle('bad',!!classMsg(c));
+  $('si-first').classList.toggle('good',firstOk(f));$('si-class').classList.toggle('good',classOk(c));
+  $('si-code-err').textContent='';$('si-go').disabled=!(firstOk(f)&&classOk(c));
+}
+['si-first','si-class','si-code'].forEach(id=>$(id).oninput=siCheck);
+['si-first','si-class'].forEach(id=>$(id).onkeydown=e=>{if(e.key==='Enter'&&!$('si-go').disabled)$('si-go').click()});
+$('si-cancel').onclick=closeSignin;
+$('si-go').onclick=()=>{
+  const n=$('si-first').value.trim()+' '+$('si-class').value.trim();if(!nameOk(n))return;
+  const code=$('si-code').value.trim();
+  if(code){const cnt=readCode(n,code);if(!cnt){$('si-code-err').textContent='Dieser Code passt nicht zu diesem Namen. Prüfe Vorname, Klasse und Code.';return}applyCnt(cnt)}
+  const viaCode=!!code;
+  const wasProof=!$('proof').hidden&&!$('si-cancel').hidden;setName(n);closeSignin();
+  if(wasProof)renderProof();else if(viaCode){goHome();window.scrollTo({top:0})}else openHeft();   // mit gültigem Code: keine Heft-Frage
+};
+function applyCnt(cnt){PL().forEach(([i,n],k)=>{const c=cnt[k];if(!n){if(c)prog['seen-'+i]=true;return}allEx(i).slice(0,c).forEach(([st,e])=>prog[exKey(i,st,e)]=true)});saveProg()}
+/* Vor dem Start: Name und Code im Heft? */
+function openHeft(){
+  $('hf-h').textContent='Hallo '+NAME.split(' ')[0]+'!';$('hf-name').textContent=NAME.replace(' ',' · Klasse ');
+  $('hf-code').textContent=makeCode(NAME,myCnt());$('hf-ok').checked=false;$('hf-go').disabled=true;
+  $('heft').hidden=false;document.body.classList.add('modal');
+}
+$('hf-ok').onchange=()=>$('hf-go').disabled=!$('hf-ok').checked;
+$('hf-go').onclick=()=>{$('heft').hidden=true;document.body.classList.remove('modal');goHome();window.scrollTo({top:0})};
+$('hf-other').onclick=()=>{$('heft').hidden=true;openSignin()};
+$('proof-open').onclick=()=>{show('proof');renderProof()};
+$('proof-home').onclick=goHome;
+$('pf-change').onclick=()=>openSignin();
+$('pf-copy').onclick=async()=>{try{await navigator.clipboard.writeText(`${NAME.trim()}: ${$('pf-code').textContent}`);$('pf-copy').textContent='✓ Kopiert'}catch(_){$('pf-copy').textContent='Bitte abschreiben'}setTimeout(()=>$('pf-copy').textContent='Code kopieren',1800)};
+let LOADED=null;
+$('in-check').onclick=()=>{
+  const nm=$('in-first').value.trim()+' '+$('in-class').value.trim(),cd=$('in-code').value,fb=$('in-fb');
+  if(!nameOk(nm)){fb.className='feedback no';fb.textContent='Vorname mit großem Anfangsbuchstaben und Klasse wie 3b eintragen.';$('in-load').hidden=true;$('in-list').innerHTML='';return}
+  const bits=cd.trim()?readCode(nm,cd):null;
+  LOADED=bits;$('in-load').hidden=!bits;
+  if(!bits){fb.className='feedback no';fb.textContent='Dieser Code passt nicht zu diesem Namen. Prüfe Schreibweise von Name und Code.';$('in-list').innerHTML='';return}
+  const [n,ex]=sumTxt(bits);fb.className='feedback ok';fb.textContent=`✓ Gültiger Code von „${nm.trim()}“: ${n} von ${ex} Übungen geschafft.`;
+  $('in-list').innerHTML=proofList(bits);
+};
+$('in-load').onclick=()=>{
+  if(!LOADED)return;applyCnt(LOADED);
+  setName($('in-first').value.trim()+' '+$('in-class').value.trim());
+  $('in-fb').textContent='✓ Fortschritt übernommen! Du kannst dort weitermachen, wo du aufgehört hast.';$('in-load').hidden=true;renderProof();
+};
+
+/* ================= Übungen ================= */
+function segs(n,i,res){return `<div class="segs" aria-hidden="true" style="grid-template-columns:repeat(${n},1fr);gap:${n>14?3:5}px">`+Array.from({length:n},(_,k)=>`<span class="seg ${k<res.length?(res[k]?'ok':'no'):k===i?'cur':''}"></span>`).join('')+'</div>'}
+function startEx(li,k){
+  stopTimers();S.level=li;S.ex=k;const L=LEVELS[li],E=stepsOf(L)[S.step||0].ex[k];
+  $('pill').textContent=tagOf(L)===L.title?L.title:`${tagOf(L)} · ${L.title}`;
+  $('back').textContent=L.test||L.game?'← zurück':'← Merkbild';$('g-title').textContent=E.label.replace(/^\d · /,'');$('g-rule').textContent='';$('g-rule').hidden=true;
+    Object.keys(G).forEach(x=>delete G[x]);
+  if(PAUSE&&PAUSE.li===li&&PAUSE.st===(S.step||0)&&PAUSE.k===k){      // dort weitermachen, wo man war
+    const P=PAUSE;PAUSE=null;Object.assign(G,P.G);G.pend=null;show('game');
+    if(P.intro&&G.merk&&G.type==='name')merkIntro(renderName,'Jetzt Noten benennen');else if(P.intro&&G.type==='place')initPlace();else RESUME[G.type]();
+    const f=$('fb');if(f&&!P.intro){f.className='feedback ok';f.textContent='Weiter geht’s – genau dort, wo du warst.'}return;
+  }
+  if(PAUSE&&PAUSE.li===li)PAUSE=null;
+  Object.assign(G,E.make?E.make():{},{type:E.type,i:0,res:[]});
+  G.merk=E.merk;G.merkErr=!!E.merkErr;G.accMode=!!E.accMode;G.maxErr=E.maxErr??MAX_ERR;G.E=E;show('game');({name:()=>G.merk&&!G.merkErr?merkIntro(renderName,'Jetzt Noten benennen'):renderName(),fly:initFly,cards:initCards,bridge:initBridge,keysdrag:initDrag,keystap:initTap,place:initPlace,words:initWords,half:initHalf,match:initMatch,test:()=>renderCur(),enh:initEnh,melody:initMelody})[E.type]();
+}
+function feedback(ok,text){const f=$('fb');if(!f)return;f.className='feedback '+(ok?'ok':'no');f.textContent=text}
+function afterAnswer(ok,next){
+  const run=()=>{G.pend=null;next()};G.pend=run;
+  if(ok)G.timer=setTimeout(run,G.type==='half'?2600:1300);
+  else{const b=$('nextbtn');b.hidden=false;b.onclick=()=>{stopTimers();run()};b.focus()}
+}
+const statusRow=(label,n)=>(G.type==='test'&&G.items[G.i]?.topic?`<div class="topic-chip">Thema: <b>${G.items[G.i].topic}</b></div>`:'')+`<div class="status"><div class="round">${label} ${G.i+1} <span>von ${n}</span></div>${segs(n,G.i,G.res)}<div class="tally">${G.res.filter(Boolean).length} richtig</div></div>`;
+const nextBtn='<div class="controls"><button class="btn brass" id="nextbtn" hidden>Weiter →</button></div>';
+
+/* ---- Typ 1: Note benennen ---- */
+const rightName=it=>it.ans?it.ans:it.oct?octName(it.d):nameOf(it.d,it.a);
+function exStaff(it,reveal){
+  const base=150,x=210;
+  let s=`<svg class="staff-ex" viewBox="0 10 360 205" role="img" aria-label="Eine Note im Violinschlüssel">`;
+  s+=staffLines(12,348,base,1.8)+treble(40,base);
+  s+=`<g class="note-in">${noteAt(x,it.d,it.a,base,reveal?reveal:INK)}</g>`;
+  if(reveal)s+=`<text class="lbl" x="${x+40}" y="${PY(it.d,base)+6}">${rightName(it)}</text>`;
+  return s+'</svg>';
+}
+function initName(){renderName()}
+function renderCur(){if(G.type==='test')return G.items[G.i].kind==='key'?renderTap():renderName();return G.type==='keystap'?renderTap():renderName()}
+const qLabel=()=>G.type==='test'?'Frage':'Note';
+function renderName(){
+  const it=G.items[G.i],n=G.items.length,opts=it.opts||(G.options?G.options(it):G.tiles);
+  $('board').innerHTML=`${statusRow(qLabel(),n)}
+    ${G.merk&&!G.merkErr?`<details class="merk-peek"><summary>Merkbild ${octName(G.merk[0])}–${octName(G.merk[1])} einblenden</summary><div class="staff-scroll">${merkPlace()}</div></details>`:''}
+    <div class="ex-stage"><div class="staff-box" id="exstaff">${it.word?`<div class="prompt-q small">Welches Wort ergeben die Noten?</div>${wordStaff(it.word)}`:it.prompt?`<div class="prompt-q">${it.prompt}</div>`:exStaff(it)}</div>
+      <div class="answer-zone"><span class="q">Deine Antwort</span><button class="slot empty${it.word?' wide':''}" id="slot" aria-label="Antwortkästchen"></button></div></div>
+    <div class="bank" id="bank">${opts.map(v=>`<button class="tile${it.word?' wordt':opts.some(o=>o.length>1)?' long':''}" data-v="${v}" aria-label="${v}">${v}</button>`).join('')}</div>
+    <p class="helper">Antippen oder ins Kästchen ziehen.</p>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p><div id="merkerr"></div>${nextBtn}`;
+  G.locked=false;
+  document.querySelectorAll('#bank .tile').forEach(b=>dragTile(b,b.dataset.v,el=>el.closest('#slot'),()=>answerName(b.dataset.v),()=>answerName(b.dataset.v)));
+}
+function answerName(v){
+  if(G.locked)return;G.locked=true;
+  const it=G.items[G.i],right=rightName(it),ok=v===right;
+  G.res.push(ok);if(!it.word)tone(hz(it.d,it.a));
+  const slot=$('slot');slot.textContent=v;slot.className='slot filled '+(ok?'good':'bad')+(it.word?' wide':'');
+  document.querySelectorAll('#bank .tile').forEach(b=>{b.disabled=true;if(b.dataset.v===right)b.classList.add('right')});
+  if(!it.prompt&&!it.word)$('exstaff').innerHTML=exStaff(it,ok?GOOD:BAD);
+  feedback(ok,ok?`Richtig! Das ist ${right}.`:(G.hint?G.hint(it):`Diese Note heißt ${right}.`));
+  if(!ok&&G.merkErr&&G.merk){            // Merkbild nur bei Fehlern: Ausschnitt rund um die gesuchte Note (grün)
+    let a=Math.max(G.merk[0],it.d-3),b=Math.min(G.merk[1],a+6);a=Math.max(G.merk[0],b-6);
+    $('merkerr').innerHTML=`<div class="merk-err"><b>Merkbild</b>${merkPlace(it.d,[a,b])}</div>`;
+  }
+  $('board').querySelector('.status').outerHTML=statusRow(qLabel(),G.items.length);
+  afterAnswer(ok,()=>{if(G.i<G.items.length-1){G.i++;renderCur()}else finishEx()});
+}
+/* Ziehen oder Tippen für Kacheln */
+function dragTile(b,v,isTarget,onDrop,onTap){
+  let dragged=false;
+  b.addEventListener('click',()=>{if(dragged){dragged=false;return}onTap()});
+  b.addEventListener('pointerdown',e=>{
+    if(e.button!==0||b.disabled)return;const sx=e.clientX,sy=e.clientY;let ghost=null,over=null;dragged=false;
+    try{b.setPointerCapture(e.pointerId)}catch(_){}
+    const move=ev=>{
+      if(!ghost&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>6){ghost=document.createElement('div');ghost.className='drag-ghost'+(v.length>1?' long':'');ghost.textContent=v;document.body.append(ghost);dragged=true}
+      if(ghost){ghost.style.left=ev.clientX-34+'px';ghost.style.top=ev.clientY-36+'px';
+        const el=document.elementFromPoint(ev.clientX,ev.clientY),t=el?isTarget(el):null;
+        if(over&&over!==t)over.classList.remove('over');over=t;if(t)t.classList.add('over')}
+    };
+    const fin=c=>{if(ghost){ghost.remove();if(over){over.classList.remove('over');if(!c)onDrop(over)}}
+      b.removeEventListener('pointermove',move);b.removeEventListener('pointerup',up);b.removeEventListener('pointercancel',cn)};
+    const up=()=>fin(false),cn=()=>fin(true);
+    b.addEventListener('pointermove',move);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',cn);
+  });
+}
+
+/* ---- Typ 2: Buchstaben auf die Tastatur ziehen ---- */
+function initDrag(){
+  const r2=shuffle([...Array(14).keys()]).slice(0,6),r3=shuffle([...Array(14).keys()]).filter(d=>!r2.includes(d)).slice(0,6);
+  G.rounds=[{from:0,to:6,targets:[0,1,2,3,4,5,6]},{from:0,to:13,targets:r2},{from:0,to:13,targets:r3}];
+  G.r=0;G.total=G.rounds.reduce((s,r)=>s+r.targets.length,0);renderDrag();
+}
+function renderDrag(){
+  const R=G.rounds[G.r];R.filled=R.filled||{};R.miss=R.miss||{};
+  const names={};Object.keys(R.filled).forEach(d=>names[semi(+d)]=letter(+d));
+  const left=R.targets.filter(d=>!R.filled[d]);
+  $('board').innerHTML=`<div class="status"><div class="round">Runde ${G.r+1} <span>von 3</span></div>${segs(3,G.r,G.rounds.slice(0,G.r).map(()=>true))}<div class="tally">${left.length} Tasten offen</div></div>
+    <div class="kbd-wrap">${keyboard(R.from,R.to,{labels:'none',names,id:'dk',targets:new Set(left)})}</div>
+    <div class="merk-pop" id="merkpop" hidden><b>Merkbild</b>${keyboard(0,7,{id:'mk'})}<p>c liegt links neben den <strong>zwei</strong> schwarzen Tasten, f links neben den <strong>drei</strong>.</p></div>
+    <p class="selected-hint" id="selhint"></p>
+    <div class="bank" id="bank">${LET.map(l=>`<button class="tile" data-v="${l}">${l}</button>`).join('')}</div>
+    <p class="helper">Ziehe einen Buchstaben auf eine Taste mit ?. Oder: Buchstabe antippen, dann Taste antippen.</p>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>
+    <div class="controls"><button class="btn brass" id="nextbtn" hidden>${G.r<2?'Nächste Runde →':'Zur Auswertung →'}</button></div>`;
+  const kb=$('dk');
+  kb.querySelectorAll('.key[data-drop]').forEach(k=>k.addEventListener('click',()=>{if(G.sel)dropLetter(G.sel,+k.dataset.d)}));
+  document.querySelectorAll('#bank .tile').forEach(b=>dragTile(b,b.dataset.v,el=>el.closest('.key[data-drop]'),k=>dropLetter(b.dataset.v,+k.dataset.d),()=>{
+    G.sel=b.dataset.v;document.querySelectorAll('#bank .tile').forEach(x=>x.classList.toggle('selected',x===b));$('selhint').textContent=`„${G.sel}“ gewählt – jetzt eine Taste mit ? antippen.`}));
+  if(!left.length){$('nextbtn').hidden=false;$('nextbtn').onclick=()=>{if(G.r<2){G.r++;G.sel=null;renderDrag()}else finishEx()};
+    feedback(true,Object.keys(R.miss).length?'Runde geschafft!':'Super – alles beim ersten Versuch!')}
+}
+function dropLetter(v,d){
+  const R=G.rounds[G.r];if(G.locked||R.filled[d]||!R.targets.includes(d))return;
+  const kb=$('dk');
+  if(v===letter(d)){R.filled[d]=true;tone(hz(d,''));G.sel=null;renderDrag();if(R.targets.some(t=>!R.filled[t]))feedback(true,`Richtig, das ist ${v}!`)}
+  else{
+    R.miss[d]=true;R.err=(R.err||0)+1;flashKey(kb,semi(d),'no',900);
+    const mp=$('merkpop');if(mp){mp.hidden=false;flashKey($('mk'),semi(d%7),'hit',2600);clearTimeout(G.mpT);G.mpT=setTimeout(()=>{const m=$('merkpop');if(m)m.hidden=true},2800)}
+    if(R.err>ROUND_ERR){ // zu viele Fehler: diese Runde sofort neu
+      G.locked=true;document.querySelectorAll('#bank .tile').forEach(b=>b.disabled=true);
+      feedback(false,'Nochmal – du schaffst das!');
+      G.timer=setTimeout(restartRound,1800);
+    }else feedback(false,`Das ist nicht ${v} – schau aufs Merkbild.`+(R.err===ROUND_ERR?' Achtung: Beim nächsten Fehler beginnt die Runde neu.':''));
+  }
+}
+function restartRound(){
+  const R=G.rounds[G.r];
+  if(G.r>0){const others=G.rounds.filter((_,k)=>k!==G.r).flatMap(r=>r.targets);R.targets=shuffle([...Array(14).keys()].filter(d=>G.r===1||!others.includes(d))).slice(0,6)}
+  R.filled={};R.miss={};R.err=0;G.sel=null;G.locked=false;G.restarts=(G.restarts||0)+1;renderDrag();
+  feedback(true,'Nochmal – du schaffst das!');
+}
+
+/* ---- Typ 3: Note → Taste tippen ---- */
+function initTap(){renderTap()}
+function renderTap(){
+  const it=G.items[G.i],n=G.items.length;
+  $('board').innerHTML=`${statusRow(qLabel(),n)}
+    <div class="staff-box" id="exstaff" style="max-width:420px;margin:auto;width:100%">${exStaff(it)}</div>
+    <p class="task-note">Tippe die passende Taste an.</p>
+    <div class="kbd-wrap" id="tkwrap">${keyboard(G.from,G.to,{labels:it.a?'white':'none',id:'tk',cls:'tapkb'})}</div>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>${nextBtn}`;
+  G.locked=false;
+  $('tk').querySelectorAll('.key').forEach(k=>k.addEventListener('click',()=>answerTap(+k.dataset.semi)));
+  const w=$('tkwrap');w.scrollLeft=(w.scrollWidth-w.clientWidth)/2;
+}
+function answerTap(sm){
+  if(G.locked)return;G.locked=true;
+  const it=G.items[G.i],right=semi(it.d,it.a),ok=sm===right,kb=$('tk');
+  G.res.push(ok);tone(hz(it.d,it.a));
+  flashKey(kb,right,'ok',0);if(!ok)flashKey(kb,sm,'no',0);
+  $('exstaff').innerHTML=exStaff(it,ok?GOOD:BAD);
+  const nm=nameOf(it.d,it.a);
+  const sp=['e','h','c','f'].includes(letter(it.d))&&it.a&&G.hint?' '+G.hint(it):'';
+  feedback(ok,ok?`Richtig! Das ist ${nm}.`+sp:`Das ist ${nm} – die richtige Taste leuchtet grün.`+sp);
+  $('board').querySelector('.status').outerHTML=statusRow(qLabel(),G.items.length);
+  afterAnswer(ok,()=>{if(G.i<G.items.length-1){G.i++;renderCur()}else finishEx()});
+}
+
+/* ---- Typ 3b: Halbton höher auf der Klaviatur ---- */
+function initHalf(){renderHalf()}
+function renderHalf(){
+  const d=G.items[G.i],n=G.items.length,dir=G.dir||1,a=dir>0?'s':'f';
+  $('board').innerHTML=`${statusRow('Aufgabe',n)}
+    <p class="task-note">Der Stammton <b style="display:inline;font-size:inherit;color:${GOOD}">${letter(d)}</b> leuchtet grün. Tippe die Taste <strong>einen Halbton ${dir>0?'höher':'tiefer'}</strong>.</p>
+    <div class="kbd-wrap">${halfBoard(G.from,G.to,'hx')}</div>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>${nextBtn}`;
+  G.locked=false;hbMark('hx',d,'',GOOD,letter(d));
+  $('hx').querySelectorAll('.key').forEach(k=>k.addEventListener('click',()=>{
+    if(G.locked)return;G.locked=true;
+    const sm=+k.dataset.semi,right=semi(d,a),ok=sm===right,nm=halfName(d,dir);
+    G.res.push(ok);
+    if(!ok)k.classList.add('no');
+    hbMark('hx',d,a,BRASS,nm);tone(hz(d,a));
+    feedback(ok,ok?`Richtig! ${halfCaption(d,dir)}`:`Nicht ganz. ${halfCaption(d,dir)}`);
+    $('board').querySelector('.status').outerHTML=statusRow('Aufgabe',n);
+    afterAnswer(ok,()=>{if(G.i<n-1){G.i++;renderHalf()}else finishEx()});
+  }));
+}
+
+/* ---- Typ 3c: Zuordnen Stammton -> Name mit Vorzeichen ---- */
+function initMatch(){G.order=shuffle(G.pairs.map((_,k)=>k));G.bank=shuffle(G.pairs.map(p=>p[1]));G.placed={};G.miss={};G.sel=null;renderMatch()}
+function renderMatch(){
+  const n=G.pairs.length,doneN=Object.keys(G.placed).length,left=G.bank.filter(v=>!Object.values(G.placed).includes(v));
+  $('board').innerHTML=`<div class="status"><div class="round">Zugeordnet <span>${doneN} von ${n}</span></div><div class="tally">${(m=>m+(m===1?' Fehlversuch':' Fehlversuche'))(Object.keys(G.miss).length)}</div></div>
+    <div class="match-grid">${G.order.map(k=>{const [b,v]=G.pairs[k],p=G.placed[k];
+      return `<div class="mrow"><span class="mbase">${b}</span><span class="mop">+ ${G.sym} =</span>
+        <button class="mslot${p?' good':''}" data-k="${k}" ${p?'disabled':''} aria-label="${b} mit ${G.sym==='♯'?'Kreuz':'b'}">${p||'?'}</button></div>`}).join('')}</div>
+    <p class="selected-hint" id="selhint">${G.sel?`„${G.sel}“ gewählt – jetzt das passende Kästchen antippen.`:''}</p>
+    <div class="bank" id="bank">${left.map(v=>`<button class="tile long${G.sel===v?' selected':''}" data-v="${v}">${v}</button>`).join('')}</div>
+    <p class="helper">Ziehe jeden Namen zum passenden Stammton – oder Namen antippen, dann Kästchen antippen.</p>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>
+    <div class="controls"><button class="btn brass" id="nextbtn" ${doneN===n?'':'hidden'}>Zur Auswertung →</button></div>`;
+  document.querySelectorAll('.mslot:not([disabled])').forEach(s=>s.addEventListener('click',()=>{if(G.sel)placeMatch(G.sel,+s.dataset.k)}));
+  document.querySelectorAll('#bank .tile').forEach(b=>dragTile(b,b.dataset.v,el=>el.closest('.mslot:not([disabled])'),s=>placeMatch(b.dataset.v,+s.dataset.k),()=>{G.sel=b.dataset.v;renderMatch()}));
+  if(doneN===n){$('nextbtn').onclick=finishEx;feedback(true,Object.keys(G.miss).length?'Alles zugeordnet!':'Super – alles beim ersten Versuch richtig!')}
+}
+function placeMatch(v,k){
+  const [b,right]=G.pairs[k];
+  if(v===right){G.placed[k]=v;G.sel=null;renderMatch();if(Object.keys(G.placed).length<G.pairs.length)feedback(true,`Richtig: ${b} + ${G.sym} = ${v}`)}
+  else{G.miss[k]=true;G.sel=null;renderMatch();
+    const s=document.querySelector(`.mslot[data-k="${k}"]`);if(s){s.classList.add('bad');setTimeout(()=>s.classList.remove('bad'),700)}
+    const hint=G.sym==='♭'&&['e','a','h'].includes(b)?` Denk an die Ausnahme!`:'';
+    feedback(false,`${v} passt nicht zu ${b}.${hint}`)}
+}
+
+/* ---- Typ 4: Noten setzen ---- */
+function merkPlace(hl,win){
+  const [a,b]=win||G.merk||[0,7];
+  return learnStaff([...Array(b-a+1).keys()].map(k=>({d:a+k,a:'',lab:octName(a+k),small:true,col:a+k===hl?GOOD:(a+k<1||a+k>11)?BRASS:INK,labCol:a+k===hl?GOOD:undefined})),{aria:`Merkbild von ${octName(a)} bis ${octName(b)}`,step:66});
+}
+const pItem=x=>typeof x==='number'?{d:x,a:''}:x;
+const pLabel=t=>t.a?nameOf(t.d,t.a)+oct(t.d):octLabel(t.d);
+function initPlace(){
+  G.pos=null;G.acc='';G.checked=false;G.peek=false;
+  if(G.E.score){G.score=0;try{G.high=+localStorage.getItem(hsKey())||0}catch(_){G.high=0}}if(G.accMode||G.merkErr)return renderPlace();merkIntro(renderPlace,'Jetzt Noten setzen');
+}
+function merkIntro(go,label){
+  const [a,b]=G.merk||[0,7];
+  $('board').innerHTML=`<div class="tagline" style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted)"><span>Merkbild: ${octName(a)} bis ${octName(b)}</span><span>Tippe eine Note an</span></div>
+    <p class="swipe-hint">← zum Ansehen seitlich wischen →</p><div class="staff-scroll" id="merk">${merkPlace()}</div>
+    <div class="controls"><button class="btn brass" id="gostart">${label} →</button></div>`;
+  wireLearn($('merk'),null);$('gostart').onclick=go;
+}
+function renderPlace(){
+  const t=pItem(G.items[G.i]),n=G.items.length;
+  $('board').innerHTML=`${statusRow('Note',n)}
+    ${G.E.score?`<div class="bk-top two"><div class="bk-box pts big"><b>★ Punkte</b><span id="pscore">${G.score}</span></div><div class="bk-box hs big"><b>👑 Highscore</b><span>${G.high}</span></div></div>`:''}
+    <div class="target">Setze die Note<b>${pLabel(t)}</b></div>
+    <details class="merk-peek" id="ppeek"${G.accMode||G.merkErr?' hidden':''}><summary>Merkbild ${octName((G.merk||[0,7])[0])}–${octName((G.merk||[0,7])[1])} einblenden</summary><div class="staff-scroll">${merkPlace()}</div></details>
+    <div class="place-box"><svg id="psvg" class="place-svg" viewBox="0 20 420 200" tabindex="0" role="application" aria-label="Notensystem: Tippe auf eine Linie oder einen Zwischenraum. Pfeiltasten verschieben, Enter prüft."></svg></div>
+    ${G.accMode?`<div class="accs" role="group" aria-label="Vorzeichen"><button class="acc" data-a="">ohne</button><button class="acc" data-a="s">♯</button><button class="acc" data-a="f">♭</button></div>`:''}
+    <div class="controls"><button class="btn ghost" id="pup">▲ höher</button><button class="btn ghost" id="pdown">▼ tiefer</button><button class="btn" id="pcheck">Prüfen ✓</button></div>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p><div id="merkerr"></div>${nextBtn}`;
+  drawPlace();
+  const svg=$('psvg'),base=160;
+  const dFrom=e=>{const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform(svg.getScreenCTM().inverse());return Math.max(-3,Math.min(14,Math.round((base-p.y)/10)+2))};
+  svg.addEventListener('pointermove',e=>{if(G.checked)return;const h=svg.querySelector('#hover');if(h){h.setAttribute('transform',`translate(0 ${PY(dFrom(e),base)})`);h.style.opacity=.3}});
+  svg.addEventListener('pointerleave',()=>{const h=svg.querySelector('#hover');if(h)h.style.opacity=0});
+  svg.addEventListener('pointerdown',e=>{if(G.checked)return;G.pos=dFrom(e);tone(hz(G.pos,G.acc));drawPlace()});
+  const nudge=k=>{if(G.checked)return;G.pos=G.pos==null?4:Math.max(-3,Math.min(14,G.pos+k));tone(hz(G.pos,''));drawPlace()};
+  svg.addEventListener('keydown',e=>{if(e.key==='ArrowUp'){e.preventDefault();nudge(1)}else if(e.key==='ArrowDown'){e.preventDefault();nudge(-1)}else if(e.key==='Enter')checkPlace()});
+  $('pup').onclick=()=>nudge(1);$('pdown').onclick=()=>nudge(-1);$('pcheck').onclick=checkPlace;
+  document.querySelectorAll('.acc').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.a===G.acc));b.onclick=()=>{if(G.checked)return;G.acc=b.dataset.a;
+    document.querySelectorAll('.acc').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));if(G.pos!=null)tone(hz(G.pos,G.acc));drawPlace()}});
+}
+function drawPlace(){
+  const t=pItem(G.items[G.i]),d=t.d,base=160,x=230,okp=()=>G.pos===d&&(G.acc||'')===t.a;
+  let s=staffLines(12,408,base,1.8)+treble(40,base);
+  [0,-2,12,14].forEach(q=>s+=`<line x1="${x-26}" x2="${x+26}" y1="${PY(q,base)}" y2="${PY(q,base)}" stroke="#2a3142" stroke-width="1.3" stroke-dasharray="4 4" opacity=".3"/>`);
+  s+=`<g id="hover" style="opacity:0" pointer-events="none"><ellipse cx="${x}" cy="0" rx="14" ry="9.6" fill="${BRASS}"/></g>`;
+  if(G.pos!=null){const ok=G.checked?okp():null;s+=noteAt(x,G.pos,G.acc||'',base,ok===null?BRASS:ok?GOOD:BAD)}
+  if(G.checked&&!okp()){s+=noteAt(340,d,t.a,base,GOOD)+`<text x="340" y="${d>=10?PY(d,base)+32:PY(d,base)-18}" text-anchor="middle" font-family="Figtree" font-weight="700" font-size="15" fill="${GOOD}">${t.a?nameOf(d,t.a)+oct(d):octName(d)}</text>`}
+  s+=`<rect x="100" y="${PY(14,base)-14}" width="310" height="${PY(-3,base)-PY(14,base)+28}" fill="transparent"/>`;
+  $('psvg').innerHTML=s;$('pcheck').disabled=G.pos==null||G.checked;$('pup').disabled=$('pdown').disabled=G.checked;
+}
+function checkPlace(){
+  if(G.checked||G.pos==null)return;G.checked=true;
+  const t=pItem(G.items[G.i]),d=t.d,ok=G.pos===d&&(G.acc||'')===t.a;G.res.push(ok);tone(hz(d,t.a));drawPlace();
+  if(G.E.score){G.score+=ok?10:-5;const ps=$('pscore');ps.textContent=G.score;ps.parentElement.classList.remove('up','down');void ps.offsetWidth;ps.parentElement.classList.add(ok?'up':'down')}
+  const L=pLabel(t),accTxt=t.a==='s'?', mit ♯':t.a==='f'?', mit ♭':'';
+  const msg=ok?`Richtig! ${L} liegt ${posDesc(d)}${accTxt}.`:G.pos===d?`Richtige Stelle – aber das Vorzeichen stimmt nicht. ${L} braucht ${t.a==='s'?'ein ♯':t.a==='f'?'ein ♭':'kein Vorzeichen'}.`:letter(G.pos)===letter(d)&&(G.acc||'')===t.a?`Fast – richtiger Buchstabe, aber falsche Oktave. ${L} liegt ${posDesc(d)}${accTxt}.`:`Nicht ganz. ${L} liegt ${posDesc(d)}${accTxt} – siehe grüne Note.`;
+  feedback(ok,msg);
+  if(!ok&&G.merkErr&&G.merk){let a=Math.max(G.merk[0],d-3),b=Math.min(G.merk[1],a+6);a=Math.max(G.merk[0],b-6);$('merkerr').innerHTML=`<div class="merk-err"><b>Merkbild</b>${merkPlace(d,[a,b])}</div>`}
+  $('board').querySelector('.status').outerHTML=statusRow('Note',G.items.length);
+  afterAnswer(ok,()=>{if(G.i<G.items.length-1){G.i++;G.pos=null;G.acc='';G.checked=false;G.peek=false;renderPlace()}else finishEx()});
+}
+
+/* ---- Typ 5: Notenwörter (ohne Ton) ---- */
+const LPOS={c:[0,7],d:[1,8],e:[2,9],f:[3,10],g:[4,11],a:[5],h:[6]};
+function tok(t){
+  if(t==='b')return{t,d:6,a:'f'};
+  if(t.length===1)return{t,d:LPOS[t][Math.floor(Math.random()*LPOS[t].length)],a:''};
+  const a=t.endsWith('is')?'s':'f';return{t,d:LET.indexOf(t[0]),a};
+}
+function wordStaff(w){
+  const N=w.length,W=Math.max(150+N*90,400),base=140;
+  let s=`<svg class="staff-ex word-q" viewBox="0 40 ${W} 160" role="img" aria-label="Notenwort mit ${N} Noten">`+staffLines(16,W-16,base,1.6)+treble(40,base);
+  w.forEach((c,i)=>{s+=noteAt(165+i*90,c.d,c.a,base,INK)});return s+'</svg>';
+}
+const wtext=w=>w.map(c=>c.t).join('').toUpperCase();
+function initWords(){G.words=shuffle(G.words).map(w=>w.split('-').map(tok));G.ans=[];renderWords()}
+function renderWords(){
+  const w=G.words[G.i],n=G.words.length,done=G.ans.length===w.length,N=w.length,W=Math.max(150+N*100,460),base=140;
+  let s=`<svg class="word-svg" style="min-width:${Math.min(W*.62,N*(innerWidth<520?52:78))}px" viewBox="0 20 ${W} 206" role="img" aria-label="Notenwort mit ${N} Noten">`;
+  if(!done)s+=`<rect x="${170+G.ans.length*100-44}" y="24" width="88" height="198" rx="12" fill="#f4e3c4"/>`;
+  s+=staffLines(16,W-16,base,1.6)+treble(40,base);
+  w.forEach((c,i)=>{const x=170+i*100,a=G.ans[i],col=a?(a.ok?GOOD:BAD):i===G.ans.length?BRASS:INK;
+    s+=noteAt(x,c.d,c.a,base,col);
+    s+=`<rect x="${x-34}" y="182" width="68" height="38" rx="9" fill="${a?(a.ok?'#d8efdf':'#f8dcd8'):'#fff'}" stroke="${a?(a.ok?GOOD:BAD):i===G.ans.length?BRASS:'#cdbf9f'}" stroke-width="2"/>`;
+    if(a)s+=`<text x="${x}" y="208" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="800" font-size="${c.t.length>1?21:25}" fill="${a.ok?GOOD:BAD}">${c.t}</text>`});
+  s+='</svg>';
+  const extra=[];w.forEach(c=>{if(c.a){const l=letter(c.d);[c.t,c.a==='s'?SH[LET[(LET.indexOf(l)+1)%7]]:SH[l]].forEach(x=>{if(!extra.includes(x))extra.push(x)})}});
+  const tile=l=>`<button class="tile${l.length>1?' long':''}" data-l="${l}">${l}</button>`;
+  $('board').innerHTML=`<div class="status"><div class="round">Wort ${G.i+1} <span>von ${n}</span></div>${segs(n,G.i,G.res)}<div class="tally">${G.res.filter(Boolean).length} fehlerfrei</div></div>
+    <div class="place-box" style="overflow-x:auto">${s}</div>${done?`<div class="word-reveal">${wtext(w)}</div>`:''}
+    <div${done?' hidden':''}><div class="bank">${LET.map(tile).join('')}</div>${extra.length?`<div class="bank extra">${shuffle(extra).map(tile).join('')}</div>`:''}
+      <p class="helper">Namen antippen.</p></div>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>
+    <div class="controls"${done?'':' hidden'}><button class="btn brass" id="wnext">${G.i<n-1?'Nächstes Wort →':'Zur Auswertung →'}</button></div>`;
+  document.querySelectorAll('#board .tile[data-l]').forEach(b=>b.onclick=()=>wordLetter(b.dataset.l));
+  if(done){$('wnext').onclick=()=>{if(G.i<n-1){G.i++;G.ans=[];renderWords()}else finishEx()};$('wnext').focus()}
+}
+function wordLetter(l){
+  const w=G.words[G.i];if(G.ans.length>=w.length)return;
+  const c=w[G.ans.length],ok=l===c.t;G.ans.push({ok});
+  const msg=ok?'':c.t==='b'?'Ein h mit ♭ heißt b!':c.a==='s'?`Diese Note hat ein Kreuz: Sie heißt ${c.t}.`:c.a==='f'?`Diese Note hat ein ♭: Sie heißt ${c.t}.`:`Diese Note heißt ${c.t}.`;
+  if(G.ans.length===w.length){const all=G.ans.every(a=>a.ok);G.res.push(all);renderWords();feedback(true,(all?'Super! ':msg+' ')+'Das Wort heißt '+wtext(w)+'.')}
+  else{renderWords();if(msg)feedback(false,msg)}
+}
+
+/* ---- Spiel: Gleicher Ton – zwei Namen (Memory) ---- */
+const ENH=[[{d:0,a:'s'},{d:1,a:'f'}],[{d:1,a:'s'},{d:2,a:'f'}],[{d:3,a:'s'},{d:4,a:'f'}],[{d:4,a:'s'},{d:5,a:'f'}],[{d:5,a:'s'},{d:6,a:'f'}],
+  [{d:2,a:'s'},{d:3,a:''}],[{d:6,a:'s'},{d:7,a:''}],[{d:7,a:'f'},{d:6,a:''}],[{d:3,a:'f'},{d:2,a:''}]];
+function memCard(it){
+  const base=104,x=it.a?120:112;
+  return `<svg viewBox="0 18 170 120" class="mem-svg" aria-hidden="true">${staffLines(6,164,base,1.5)}
+    <g transform="translate(26 ${PY(4,base)}) scale(.62) translate(-26 ${-PY(4,base)})">${treble(26,base)}</g>${noteAt(x,it.d,it.a,base)}</svg>`;
+}
+function initEnh(){
+  G.np=G.E.np||6;const pairs=shuffle(ENH.slice(0,G.E.easy?5:9)).slice(0,G.np);
+  G.cards=shuffle(pairs.flatMap((p,k)=>p.map(it=>({k,...it}))));G.open=[];G.found=new Set();G.moves=0;G.busy=false;renderEnh();
+}
+function renderEnh(){
+  $('board').innerHTML=`<div class="status"><div class="round">Paare <span>${G.found.size} von ${G.np}</span></div><div class="tally">${G.moves} ${G.moves===1?'Zug':'Züge'}</div></div>
+    <p class="task-note">Finde zwei Noten, die auf <strong>derselben Taste</strong> liegen.</p>
+    <div class="mem-grid">${G.cards.map((c,i)=>{const up=G.open.includes(i)||G.found.has(c.k),done=G.found.has(c.k);
+      return `<button class="mem-card${up?' up':''}${done?' done':''}" data-i="${i}" ${done?'disabled':''} aria-label="${up?'Note '+nameOf(c.d,c.a):'Verdeckte Karte '+(i+1)}">
+        <span class="mem-inner"><span class="mem-back" aria-hidden="true">♪</span><span class="mem-face">${memCard(c)}${done?`<span class="mem-lab">${nameOf(c.d,c.a)}</span>`:''}</span></span></button>`}).join('')}</div>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>`;
+  document.querySelectorAll('.mem-card').forEach(b=>b.onclick=()=>flipEnh(+b.dataset.i));
+}
+function flipEnh(i){
+  if(G.busy||G.open.includes(i)||G.found.has(G.cards[i].k))return;
+  const c=G.cards[i];tone(hz(c.d,c.a));G.open.push(i);
+  if(G.open.length<2)return renderEnh();
+  G.moves++;const [a,b]=G.open.map(x=>G.cards[x]);renderEnh();
+  if(a.k===b.k){G.found.add(a.k);G.open=[];renderEnh();feedback(true,`${nameOf(a.d,a.a)} und ${nameOf(b.d,b.a)} liegen auf derselben Taste!`);
+    if(G.found.size===G.np)G.timer=setTimeout(finishEx,1400)}
+  else{G.busy=true;feedback(false,'Diese beiden klingen verschieden – merk dir die Karten!');G.timer=setTimeout(()=>{G.open=[];G.busy=false;renderEnh()},1400)}
+}
+
+/* ---- Spiel: Melodie hören und lesen ---- */
+function melStaff(m,col=INK){
+  const base=130,W=110+m.length*62;
+  let s=`<svg viewBox="0 10 ${W} 168" class="mel-svg" aria-hidden="true">${staffLines(6,W-6,base,1.5)}${treble(32,base,col)}`;
+  m.forEach((d,i)=>s+=noteAt(100+i*62,d,'',base,col));return s+'</svg>';
+}
+/* Melodien: 3 Töne – Tonschritte und Tonwiederholungen, nur sehr selten eine Terz (höchstens eine) */
+const thirds=m=>m.slice(1).filter((d,k)=>Math.abs(d-m[k])===2).length;
+const melOk=m=>m.every(d=>d>=0&&d<=7)&&m.slice(1).every((d,k)=>Math.abs(d-m[k])<=2)&&thirds(m)<=1&&new Set(m).size>1;
+const T3=.1;   // Anteil der Melodien (und falschen Notenbilder) mit einer Terz
+function makeMelody(){
+  const len=G.E.len||3,want=Math.random()<T3?1:0;
+  for(;;){const m=[Math.floor(Math.random()*8)];while(m.length<len)m.push(m[m.length-1]+[-2,-1,0,1,2][Math.floor(Math.random()*5)]);if(melOk(m)&&thirds(m)===want)return m}
+}
+function variant(m){   // falsche Notenbilder: ein oder zwei Töne um einen Schritt verändert, Terzen nur sehr selten
+  const c=[];for(let k=1;k<m.length;k++)for(const x of[-1,1]){const v=m.slice();v[k]+=x;c.push(v);
+    for(let j=k+1;j<m.length;j++)for(const y of[-1,1]){const w=v.slice();w[j]+=y;c.push(w)}}
+  const ok=c.filter(v=>v.join()!==m.join()&&melOk(v)),plain=ok.filter(v=>thirds(v)===0);
+  const from=plain.length&&Math.random()>=T3?plain:ok;return from[Math.floor(Math.random()*from.length)];
+}
+function initMelody(){
+  G.items=Array.from({length:8},()=>{const m=makeMelody(),o=[m];while(o.length<3){const v=variant(m);if(!o.some(x=>x.join()===v.join()))o.push(v)}return{m,opts:shuffle(o)}});
+  renderMelody();
+}
+function playMel(m){stopAnim();m.forEach((d,i)=>ANIM.push(setTimeout(()=>tone(hz(d,'')),i*1100)))}
+function renderMelody(){
+  const it=G.items[G.i],n=G.items.length;
+  $('board').innerHTML=`${statusRow('Melodie',n)}
+    <p class="task-note">Hör dir die Melodie an. Welches Notenbild passt dazu?</p>
+    <div class="controls"><button class="btn brass" id="mplay">▶ Melodie anhören</button></div>
+    ${S.sound?'':'<p class="selected-hint">Schalte oben den Ton ein, um die Melodie zu hören.</p>'}
+    <div class="mel-opts">${it.opts.map((m,k)=>`<button class="mel-opt" data-k="${k}"><span class="mel-tag">${'ABC'[k]}</span>${melStaff(m)}</button>`).join('')}</div>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>${nextBtn}`;
+  G.locked=false;$('mplay').onclick=()=>playMel(it.m);
+  document.querySelectorAll('.mel-opt').forEach(b=>b.onclick=()=>{
+    if(G.locked)return;G.locked=true;const pick=it.opts[+b.dataset.k],ok=pick.join()===it.m.join();G.res.push(ok);
+    document.querySelectorAll('.mel-opt').forEach(x=>{const mm=it.opts[+x.dataset.k];if(mm.join()===it.m.join())x.classList.add('right');x.disabled=true});
+    if(!ok)b.classList.add('wrong');
+    feedback(ok,ok?'Richtig gehört und gelesen!':'Nicht ganz – das grün markierte Notenbild passt. Hör noch einmal genau hin.');
+    $('board').querySelector('.status').outerHTML=statusRow('Melodie',n);
+    afterAnswer(ok,()=>{if(G.i<n-1){G.i++;renderMelody()}else finishEx()});
+  });
+  ANIM.push(setTimeout(()=>playMel(it.m),800));
+}
+
+/* ---- Spiel: Notenflug ---- */
+const FB=165,FX0=700,FX1=245,HOOP={x:100,y:62},POND={x:120,y:262};
+function flyStage(){
+  let net='';for(let k=0;k<=6;k++){const x1=HOOP.x-34+k*11.3,x2=HOOP.x-22+k*7.3;net+=`<path d="M${x1} ${HOOP.y} L${x2} ${HOOP.y+44}"/>`}
+  for(let r=1;r<=3;r++){const y=HOOP.y+r*11,w=34-r*4;net+=`<path d="M${HOOP.x-w} ${y} Q${HOOP.x} ${y+5} ${HOOP.x+w} ${y}"/>`}
+  return `<svg class="fly-svg" id="fsvg" viewBox="0 0 720 300" role="img" aria-label="Notenzeile mit Basketballkorb und Teich">
+    <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe6ff"/><stop offset="1" stop-color="#eef9ff"/></linearGradient>
+      <linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fb3e8"/><stop offset="1" stop-color="#1f6fb2"/></linearGradient>
+      <linearGradient id="pole" x1="0" x2="1"><stop offset="0" stop-color="#8a96a3"/><stop offset=".5" stop-color="#d9e0e6"/><stop offset="1" stop-color="#6f7a86"/></linearGradient></defs>
+    <rect width="720" height="300" fill="url(#sky)"/>
+    <ellipse cx="560" cy="40" rx="46" ry="14" fill="#fff" opacity=".8"/><ellipse cx="600" cy="32" rx="30" ry="12" fill="#fff" opacity=".8"/>
+    <rect x="12" y="20" width="10" height="230" fill="url(#pole)"/>
+    <rect x="22" y="22" width="50" height="56" rx="3" fill="#fff" stroke="#9aa5b1" stroke-width="2"/><rect x="34" y="40" width="26" height="22" fill="none" stroke="#e2452f" stroke-width="2.5"/>
+    <path d="M60 ${HOOP.y} L${HOOP.x-34} ${HOOP.y}" stroke="#555" stroke-width="3"/>
+    <ellipse cx="${HOOP.x}" cy="${HOOP.y}" rx="34" ry="8" fill="none" stroke="#c2481d" stroke-width="3" opacity=".6"/>
+    <path d="M0 250 Q60 238 120 248 T240 246 L240 300 L0 300Z" fill="#6ab04c"/>
+    <g class="pond"><path d="M30 262 Q120 236 230 262 Q240 290 130 294 Q20 292 30 262Z" fill="url(#wat)" stroke="#2b5e8a" stroke-width="2"/>
+      <path class="wave" d="M60 268 q10 -5 20 0 t20 0 t20 0 t20 0 t20 0 t20 0" stroke="#bfe8ff" stroke-width="2" fill="none" opacity=".8"/>
+      <path class="wave w2" d="M75 280 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0" stroke="#bfe8ff" stroke-width="2" fill="none" opacity=".6"/></g>
+    <path d="M240 250 Q480 232 720 252 L720 300 L240 300Z" fill="#7bc25a"/>
+    <rect x="${FX1-55}" y="28" width="${720-FX1+55}" height="210" rx="14" fill="#fffdf5" opacity=".92"/>
+    ${staffLines(FX1-50,712,FB,1.8).replace(/stroke-width="2.4"/,'stroke-width="0"')}${treble(FX1-25,FB)}
+    <g id="fnote"></g><g id="fsplash"></g>
+    <g stroke="#fff" stroke-width="1.6" fill="none" opacity=".95">${net}</g>
+    <path d="M${HOOP.x-34} ${HOOP.y} A34 8 0 0 0 ${HOOP.x+34} ${HOOP.y}" fill="none" stroke="#e2581f" stroke-width="4"/></svg>`;
+}
+function initFly(){
+  const ds=[...Array(G.E.to-G.E.from+1).keys()].map(k=>G.E.from+k);
+  G.items=G.E.acc?pool(ds.flatMap(d=>[{d,a:'s'},{d,a:'f'}]),15):pool(ds,15).map(d=>({d,a:''}));G.i=0;G.res=[];G.run=false;G.started=false;
+  $('board').innerHTML=`${statusRow('Note',15)}
+    <div class="fly-wrap">${flyStage()}</div>
+    <div class="kbd-wrap fly-kbd">${keyboard(G.E.kfrom??G.E.from,G.E.kto??G.E.to,{id:'fk',labels:(G.E.kto??G.E.to)>7?'none':'white'})}</div>
+    <div class="controls"><button class="btn brass" id="fstart">▶ Start</button><button class="btn ghost" id="fpause" hidden>❚❚ Pause</button></div>
+    <p class="feedback" id="fb" role="status" aria-live="polite">Drücke die passende Taste, bevor die Note ins Wasser fällt. Du hast einen Fehlversuch.</p>`;
+  $('fk').querySelectorAll('.key').forEach(k=>k.addEventListener('pointerdown',ev=>{ev.preventDefault();flyKey(+k.dataset.semi,k)}));
+  $('fstart').onclick=()=>{$('fstart').hidden=true;$('fpause').hidden=false;if(!G.started){G.started=true;nextFly()}else{G.run=true;G.last=performance.now();G.raf=requestAnimationFrame(flyStep)}};
+  $('fpause').onclick=()=>{if(G.run){G.run=false;cancelAnimationFrame(G.raf);$('fpause').hidden=true;$('fstart').hidden=false;$('fstart').textContent='▶ Weiter'}};
+}
+const flyName=c=>c.a?nameOf(c.d,c.a)+oct(c.d):octName(c.d);
+function drawFly(x,y,col){$('fnote').setAttribute('transform',`translate(${x} ${y})`);$('fnote').innerHTML=noteAt(0,G.cur.d,G.cur.a,FB,col);$('fsplash').innerHTML=''}
+function nextFly(){
+  if(G.i>=G.items.length)return finishEx();
+  G.cur={d:G.items[G.i].d,a:G.items[G.i].a,el:0,wrong:false,done:false};G.dur=Math.max(G.E.min||3500,G.E.dur-G.i*(G.E.step??120));
+  drawFly(FX0,0,INK);G.run=true;G.last=performance.now();G.raf=requestAnimationFrame(flyStep);
+}
+function flyStep(t){
+  if(!G.run)return;const c=G.cur;c.el+=t-G.last;G.last=t;
+  const x=FX0-(FX0-FX1)*Math.min(1,c.el/G.dur);$('fnote').setAttribute('transform',`translate(${x} 0)`);
+  if(c.el>=G.dur)return flyEnd(false);
+  G.raf=requestAnimationFrame(flyStep);
+}
+function flyPath(path,col,ms,done){ // Notenkopf entlang einer Bahn bewegen (absolute Koordinaten)
+  const t0=performance.now();$('fnote').innerHTML=note(0,0,col);
+  const f=t=>{const p=Math.min(1,(t-t0)/ms),[x,y,sc]=path(p);$('fnote').setAttribute('transform',`translate(${x} ${y}) scale(${sc})`);if(p<1)G.raf=requestAnimationFrame(f);else done()};
+  G.raf=requestAnimationFrame(f);
+}
+const qb=(a,b,c,p)=>(1-p)*(1-p)*a+2*(1-p)*p*b+p*p*c;
+function flyEnd(hit){
+  const c=G.cur;if(c.done)return;c.done=true;G.run=false;cancelAnimationFrame(G.raf);
+  const ok=hit&&!c.wrong;G.res.push(ok);
+  const x=FX0-(FX0-FX1)*Math.min(1,c.el/G.dur),py=PY(c.d,FB);$('fsplash').innerHTML='';
+  if(hit){tone(hz(c.d,c.a));feedback(ok,ok?`Korb! Das war ${flyName(c)}.`:`Im Korb – aber erst nach einem Fehlversuch. Das war ${flyName(c)}.`);
+    flyPath(p=>p<.7?(q=>[qb(x,(x+HOOP.x)/2,HOOP.x,q),qb(py,Math.min(py,HOOP.y)-110,HOOP.y-22,q),1])(p/.7):(q=>[HOOP.x,HOOP.y-22+q*62,1-q*.25])((p-.7)/.3),GOOD,900,after)}
+  else{feedback(false,`Platsch – ins Wasser! Das war ${flyName(c)}.`);flashKey($('fk'),semi(c.d,c.a),'ok',1200);
+    flyPath(p=>[qb(x,x-60,POND.x,p),qb(py,py-30,POND.y,p),1-p*.2],BAD,800,()=>{$('fnote').innerHTML='';$('fsplash').innerHTML=`<g class="splash" transform="translate(${POND.x} ${POND.y})"><ellipse rx="10" ry="3" fill="none" stroke="#fff" stroke-width="2.5"/><ellipse rx="22" ry="6" fill="none" stroke="#e8f6ff" stroke-width="2"/><path d="M-6 -4 l-6 -14 M0 -5 l0 -18 M6 -4 l6 -14" stroke="#bfe8ff" stroke-width="3" stroke-linecap="round"/></g>`;after()})}
+  function after(){$('board').querySelector('.status').outerHTML=statusRow('Note',15);G.i++;G.timer=setTimeout(()=>{$('fnote').innerHTML='';$('fsplash').innerHTML='';nextFly()},hit?600:1300)}
+}
+function flyKey(sm,k){
+  const c=G.cur;tone(261.63*Math.pow(2,sm/12));
+  if(!G.run||!c||c.done)return;
+  if(sm===semi(c.d,c.a)){flashKey($('fk'),sm,'ok',500);flyEnd(true)}
+  else if(c.wrong){flashKey($('fk'),sm,'no',500);flyEnd(false)}          // zweiter Fehlversuch: ab ins Wasser
+  else{c.wrong=true;flashKey($('fk'),sm,'no',500);feedback(false,'Falsche Taste – du hast noch einen Versuch!')}
+}
+
+/* ---- Spiel: Besiege die Karten ---- */
+const CARD_SET=3,CARD_N=15,CARD_TIME=50;
+function hsKey(){return 'violin-hs-'+G.type+'-'+G.E.label}
+function initCards(){
+  const ds=[...Array(G.E.to-G.E.from+1).keys()].map(k=>G.E.from+k);
+  G.deck=pool(ds,CARD_N);G.i=0;G.beaten=0;G.err=0;G.score=0;G.streak=0;G.time=CARD_TIME;G.started=false;
+  try{G.high=+localStorage.getItem(hsKey())||0}catch(_){G.high=0}
+  renderCards();
+}
+function cardOpts(d){
+  const o=[octName(d)];[d+1,d-1,d+2,d-2,d+7,d-7].filter(x=>x>=G.E.from-2&&x<=G.E.to+2).map(octName).forEach(x=>{if(o.length<3&&!o.includes(x))o.push(x)});
+  return shuffle(o);
+}
+function renderCards(){
+  const set=Math.floor(G.i/CARD_SET),start=set*CARD_SET,d=G.deck[G.i];
+  const cards=G.deck.slice(start,start+CARD_SET).map((cd,k)=>{const idx=start+k,beat=idx<G.i,cur=idx===G.i;
+    return `<div class="bk-card${beat?' beat':''}${cur?' cur':''}"><span>${beat?octName(cd):'?'}</span></div>`}).join('');
+  $('board').innerHTML=`
+    <div class="bk-top">
+      <div class="bk-box lvl"><b>Karten</b><span>${G.beaten}/${CARD_N}</span></div>
+      <div class="bk-box pts"><b>★ Punkte</b><span id="bkpts">${G.score}</span></div>
+      <div class="bk-box tim"><b>Zeit</b><span id="bktime">${G.time}</span></div>
+    </div>
+    <div class="bk-high">👑 Highscore ${G.high}</div>
+    <div class="bk-cards">${cards}</div>
+    <div class="staff-box bk-staff">${G.started?exStaff({d,a:''}):'<div class="prompt-q">Bereit? Du hast 50 Sekunden.</div>'}</div>
+    <div class="bk-ans" id="bkans">${G.started?cardOpts(d).map(v=>`<button class="bk-btn" data-v="${v}">${v}</button>`).join(''):'<button class="btn brass" id="bkgo">▶ Start</button>'}</div>
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>`;
+  if(!G.started){$('bkgo').onclick=()=>{G.started=true;G.iv=setInterval(tickCards,1000);renderCards()};return}
+  document.querySelectorAll('.bk-btn').forEach(b=>b.onclick=()=>answerCard(b));
+}
+function tickCards(){G.time--;const t=$('bktime');if(t){t.textContent=G.time;t.parentElement.classList.toggle('low',G.time<=10)}if(G.time<=0)endCards()}
+function answerCard(b){
+  if(G.busy)return;const d=G.deck[G.i],ok=b.dataset.v===octName(d);
+  if(ok){
+    G.busy=true;G.streak++;G.beaten++;const pts=10+Math.min(G.streak-1,5)*2;G.score+=pts;tone(hz(d,''));
+    b.classList.add('good');const cur=document.querySelector('.bk-card.cur');if(cur){cur.classList.add('beat','flip');cur.querySelector('span').textContent=octName(d)}
+    feedback(true,`Karte besiegt! +${pts}`);$('bkpts').textContent=G.score;
+    G.timer=setTimeout(()=>{G.busy=false;G.i++;if(G.i>=G.deck.length)endCards();else renderCards()},650);
+  }else{
+    G.err++;G.streak=0;b.classList.add('bad');b.disabled=true;feedback(false,`Nicht ${b.dataset.v} – versuch es noch einmal!`);
+  }
+}
+function endCards(){
+  clearInterval(G.iv);if(G.ended)return;G.ended=true;
+  if(G.beaten===G.deck.length)G.score+=Math.max(0,G.time)*2;
+  G.newHigh=G.score>G.high;if(G.newHigh){try{localStorage.setItem(hsKey(),G.score)}catch(_){}}
+  finishEx();
+}
+
+/* ---- Spiel: Noten-Brücke (Paare finden) ---- */
+const BR_ROUNDS=5,BR_PAIRS=3,BR_TIME=60;
+function initBridge(){
+  const ds=[...Array(G.E.to-G.E.from+1).keys()].map(k=>G.E.from+k);
+  G.deck=[];for(let r=0;r<BR_ROUNDS;r++)G.deck.push(...shuffle(ds.slice()).slice(0,BR_PAIRS));G.acc=G.E.acc||'';
+  const must=G.acc==='s'?[2,6,2,6]:G.acc==='f'?[0,3,0,3]:[];   // eis/his bzw. ces/fes je zweimal
+  must.forEach((d,n)=>{const r=(n*2+1)%BR_ROUNDS,rd=G.deck.slice(r*BR_PAIRS,r*BR_PAIRS+BR_PAIRS);if(!rd.includes(d))G.deck[r*BR_PAIRS+Math.floor(Math.random()*BR_PAIRS)]=d});
+  for(let r=0;r<BR_ROUNDS;r++){const rd=G.deck.slice(r*BR_PAIRS,r*BR_PAIRS+BR_PAIRS);if(new Set(rd).size<rd.length){const rest=shuffle(ds.filter(x=>!rd.includes(x)));rd.forEach((x,k)=>{if(rd.indexOf(x)!==k)G.deck[r*BR_PAIRS+k]=rest.pop()})}}
+  G.r=0;G.beaten=0;G.err=0;G.score=0;G.time=BR_TIME;G.started=false;G.sel=null;G.busy=false;
+  try{G.high=+localStorage.getItem(hsKey())||0}catch(_){G.high=0}
+  newBridgeRound();
+}
+function newBridgeRound(){
+  const ds=G.deck.slice(G.r*BR_PAIRS,G.r*BR_PAIRS+BR_PAIRS);
+  G.tiles=shuffle(ds.flatMap((d,k)=>[{k,d,a:G.acc,kind:'note'},{k,d,a:G.acc,kind:'name'}]));G.found=new Set();G.sel=null;renderBridge();
+}
+function bridgeSvg(){
+  const n=BR_ROUNDS,pos=G.r+(G.found.size/BR_PAIRS);
+  let s=`<svg class="br-svg" viewBox="0 0 600 70" aria-hidden="true"><rect x="0" y="44" width="600" height="26" fill="#2f6fd6" opacity=".25"/>`;
+  for(let i=0;i<24;i++)s+=`<rect x="${20+i*23.5}" y="34" width="20" height="14" rx="2" fill="${i/24<pos/n?'#a8743b':'#7a5230'}"/>`;
+  s+=`<path d="M20 34 Q300 10 584 34" stroke="#6b4a2a" stroke-width="2.5" fill="none"/><text x="582" y="28" font-size="22">🏁</text>`;
+  s+=`<text x="${8+Math.min(pos/n,1)*548}" y="32" font-size="26" class="runner">🏃</text></svg>`;
+  return s;
+}
+function renderBridge(){
+  $('board').innerHTML=`
+    <div class="bk-top">
+      <div class="bk-box lvl"><b>Brücke</b><span>${Math.min(G.r+1,BR_ROUNDS)}/${BR_ROUNDS}</span></div>
+      <div class="bk-box pts"><b>★ Punkte</b><span id="bkpts">${G.score}</span></div>
+      <div class="bk-box tim"><b>Zeit</b><span id="bktime">${G.time}</span><i class="br-bar"><i id="brbar" style="width:${G.time/BR_TIME*100}%"></i></i></div>
+    </div>
+    <div class="bk-high">👑 Highscore ${G.high}</div>
+    ${bridgeSvg()}
+    ${G.started?`<div class="br-grid">${G.tiles.map((t,i)=>{const done=G.found.has(t.k);
+      return `<button class="br-tile${done?' done':''}${G.sel===i?' sel':''}" data-i="${i}" ${done?'disabled':''} aria-label="${t.kind==='name'?brName(t):'Notenkarte'}">${t.kind==='name'?`<span>${brName(t)}</span>`:memCardV(t.d,t.a)}</button>`}).join('')}</div>`
+      :`<div class="prompt-q" style="min-height:120px">Finde die Paare: Note und Name gehören zusammen. Du hast ${BR_TIME} Sekunden für ${BR_ROUNDS} Brückenteile.</div><div class="controls"><button class="btn brass" id="bkgo">▶ Start</button></div>`}
+    <p class="feedback" id="fb" role="status" aria-live="polite"></p>`;
+  if(!G.started){$('bkgo').onclick=()=>{G.started=true;G.iv=setInterval(tickBridge,1000);renderBridge()};return}
+  document.querySelectorAll('.br-tile:not([disabled])').forEach(b=>b.onclick=()=>pickBridge(+b.dataset.i));
+}
+const brName=t=>t.a?nameOf(t.d,t.a):octName(t.d);
+function memCardV(d,a=''){
+  const base=104,x=112,top=Math.min(18,PY(d,base)-16),bot=Math.max(138,PY(d,base)+16);
+  return `<svg viewBox="0 ${top} 170 ${bot-top}" class="mem-svg" aria-hidden="true">${staffLines(6,164,base,1.5)}
+    <g transform="translate(26 ${PY(4,base)}) scale(.62) translate(-26 ${-PY(4,base)})">${treble(26,base)}</g>${noteAt(x,d,a,base)}</svg>`;
+}
+function tickBridge(){G.time--;const t=$('bktime');if(t){t.textContent=G.time;t.parentElement.classList.toggle('low',G.time<=10);$('brbar').style.width=G.time/BR_TIME*100+'%'}if(G.time<=0)endBridge()}
+function pickBridge(i){
+  if(G.busy)return;const t=G.tiles[i];
+  if(G.sel===null){G.sel=i;if(t.kind==='note')tone(hz(t.d,t.a||''));renderBridge();return}
+  if(G.sel===i){G.sel=null;renderBridge();return}
+  const a=G.tiles[G.sel];
+  if(a.kind===t.kind){G.sel=i;if(t.kind==='note')tone(hz(t.d,t.a||''));renderBridge();return}
+  if(a.k===t.k){G.found.add(t.k);G.beaten++;G.score+=10;G.sel=null;tone(hz(t.d,t.a||''));renderBridge();feedback(true,`Richtig: ${brName(t)}! +10`);
+    if(G.found.size===BR_PAIRS){G.busy=true;G.timer=setTimeout(()=>{G.busy=false;G.r++;if(G.r>=BR_ROUNDS)endBridge();else newBridgeRound()},700)}}
+  else{G.err++;G.busy=true;const x=G.sel;G.sel=null;
+    [x,i].forEach(j=>document.querySelector(`.br-tile[data-i="${j}"]`)?.classList.add('bad'));
+    feedback(false,'Diese beiden passen nicht zusammen.');G.timer=setTimeout(()=>{G.busy=false;renderBridge()},700)}
+}
+function endBridge(){
+  clearInterval(G.iv);if(G.ended)return;G.ended=true;
+  if(G.beaten===G.deck.length)G.score+=Math.max(0,G.time)*2;
+  G.newHigh=G.score>G.high;if(G.newHigh){try{localStorage.setItem(hsKey(),G.score)}catch(_){}}
+  finishEx();
+}
+
+/* ================= Auswertung ================= */
+function finishEx(){
+  stopTimers();const L=LEVELS[S.level],steps=stepsOf(L),E=steps[S.step].ex[S.ex];
+  let c,N,dots;
+  if(G.type==='match'){N=G.pairs.length;c=N-Object.keys(G.miss).length;dots=G.pairs.map((_,k)=>!G.miss[k])}
+  else if(G.type==='keysdrag'){N=G.total;c=G.rounds.reduce((s,r)=>s+r.targets.filter(d=>!r.miss[d]).length,0);dots=G.rounds.flatMap(r=>r.targets.map(d=>!r.miss[d]))}
+  else if(G.type==='enh'){N=G.np;c=N;dots=[]}
+  else if(G.type==='cards'||G.type==='bridge'){N=G.deck.length;c=G.beaten;dots=[]}
+  else{N=G.res.length;c=G.res.filter(Boolean).length;dots=G.res}
+  const lim=G.maxErr??MAX_ERR;
+  if(G.type==='place'&&G.E.score){G.score=Math.max(0,G.score);G.newHigh=G.score>G.high;if(G.newHigh){try{localStorage.setItem(hsKey(),G.score)}catch(_){}}}
+  const err=(G.type==='cards'||G.type==='bridge')?G.err:G.type==='keysdrag'?G.rounds.reduce((s,r)=>s+(r.err||0),0):N-c,pass=G.type==='keysdrag'?G.rounds.every(r=>(r.err||0)<=ROUND_ERR):G.type==='enh'?true:(G.type==='cards'||G.type==='bridge')?(c===N&&err<=lim):err<=lim;
+  if(pass){prog[exKey(S.level,S.step,S.ex)]=true;saveProg()}
+  show('result');
+  $('r-eyebrow').textContent=`${tagOf(L)}${steps.length>1?' · Schritt '+(S.step+1):''} · ${E.label}`;
+  const pts=G.type==='place'&&G.E.score;
+  $('r-big').innerHTML=pts?`${G.score}<small> Punkte</small>`:(G.type==='cards'||G.type==='bridge')?`${G.score}<small> Punkte</small>`:G.type==='enh'?`${G.moves}<small> Züge</small>`:`${c}<small> / ${N}</small>`;
+  $('r-sub').textContent=pts?`${c} von ${N} richtig${G.newHigh?' · 👑 neuer Highscore!':` · 👑 Highscore ${G.high}`}`:(G.type==='cards'||G.type==='bridge')?`${c} von ${N} ${G.type==='bridge'?'Paaren gefunden':'Karten besiegt'} · ${err===1?'1 Fehler':err+' Fehler'}${G.newHigh?' · 👑 neuer Highscore!':` · 👑 Highscore ${G.high}`}`:G.type==='enh'?`Alle ${G.np} Paare gefunden`:err===0?'ohne Fehler':err===1?'1 Fehler':`${err} Fehler`;
+  $('r-dots').className='dots'+(N>16?' many':'');
+  $('r-dots').innerHTML=dots.map((o,i)=>`<span class="dot ${o?'ok':''}" role="img" aria-label="${i+1}: ${o?'richtig':'falsch'}">${o?'✓':'✕'}</span>`).join('');
+  $('r-title').textContent=pass?(err===0?'Perfekt – geschafft!':'Geschafft!'):'Noch nicht geschafft';
+  $('r-text').textContent=pass?'':`Du darfst höchstens ${lim} Fehler machen. Schau dir das Merkbild noch einmal an und versuche es erneut.`;
+  $('r-text').hidden=pass;
+  const ns=nextStep();
+  $('r-next').hidden=!pass;$('r-next').textContent=`Weiter: ${ns.label} →`;$('r-next').onclick=ns.go;
+  $('r-again').textContent=pass?'Noch einmal':'Noch einmal versuchen';
+  $('r-again').className='btn'+(pass?'':' brass');
+  $('r-again').onclick=()=>{clearInterval(AUTO);PAUSE=null;startEx(S.level,S.ex)};$('r-learn').onclick=()=>openLevel(S.level,S.step);$('r-learn').hidden=false;
+  clearInterval(AUTO);
+  if(L.game&&!L.free){$('r-learn').hidden=true}
+  if(L.game){                                   // freie Spiele und Spielplatz
+    const more=S.ex<steps[S.step].ex.length-1&&pass;
+    $('r-learn').hidden=true;$('r-again').textContent=pass?'Noch einmal':'Nochmal üben';$('r-again').className='btn brass';
+    $('r-text').hidden=pass;$('r-text').textContent=pass?'':'Möchtest du nochmal üben?';
+    $('r-next').hidden=false;
+    if(more){$('r-next').textContent=`Weiter: ${steps[S.step].ex[S.ex+1].label} →`;$('r-next').onclick=()=>startEx(S.level,S.ex+1)}
+    else{$('r-next').textContent=L.free?'🏠 Zur Übersicht':'🎮 Zurück zum Spielplatz';$('r-next').onclick=backHome}
+  }
+  /* Nach „geschafft“: 6 Sekunden für „Noch einmal“, dann automatisch weiter –
+     zur nächsten Übung bzw. zum nächsten Schritt, am Ende des Levels zur Übersicht (nicht auf dem Spielplatz) */
+  if(pass&&!(L.game&&!L.free)){
+    const end=S.step===steps.length-1&&S.ex===steps[S.step].ex.length-1,ns=nextStep();
+    const go=end?backHome:ns.go,where=end?'zurück zur Übersicht':`weiter mit ${ns.label}`;
+    let t=6;const msg=()=>`Noch einmal? Sonst geht es in ${t} Sekunde${t===1?'':'n'} ${where}.`;
+    $('r-text').hidden=false;$('r-text').textContent=msg();
+    $('r-next').hidden=false;$('r-next').textContent=end?'🏠 Jetzt zur Übersicht':`Weiter: ${ns.label} →`;$('r-next').onclick=()=>{clearInterval(AUTO);go()};
+    AUTO=setInterval(()=>{if(document.body.dataset.view!=='result'){clearInterval(AUTO);return}t--;if(t<=0){clearInterval(AUTO);go()}else $('r-text').textContent=msg()},1000);
+  }
+
+}
+renderHome();
+if(!nameOk(NAME))openSignin();
+</script>
+</body>
+</html>
